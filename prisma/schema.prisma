@@ -1,0 +1,91 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  directUrl    = env("DATABASE_DIRECT_URL")
+  relationMode = "prisma"
+}
+
+enum UserPosition {
+  MEMBER
+  EXEC
+  ADMIN
+}
+
+enum ExecPosition {
+  PRESIDENT
+  VICE_PRESIDENT
+  EVENT_COORDINATOR
+  SECRETARY
+  TREASURER
+}
+
+model ExecDetails {
+  user  User   @relation(fields: [email], references: [email])
+  email String @id
+
+  position    ExecPosition
+  description String       @db.VarChar(5000)
+  selfieURL   String
+
+  @@index([email])
+}
+
+model User {
+  email         String            @id
+  name          String
+  preferredName String
+  prefect       String
+  pronouns      String
+  gradYear      Int
+  position      UserPosition      @default(MEMBER)
+  registeredAt  DateTime          @default(now())
+  events        EventAttendance[] @relation("EventAttendee")
+  birthday      String
+  referredBy    String?
+  sgoSticker    Boolean
+  execDetails   ExecDetails?
+  miscPoints    Float             @default(0)
+  didOsis       Boolean           @default(false)
+
+  eventAlerts Boolean
+  lastUpdated DateTime @default(now())
+}
+
+model Event {
+  id             String            @id @default(cuid())
+  name           String
+  description    String            @db.VarChar(4000)
+  maxPoints      Float
+  maxHours       Float
+  attendees      EventAttendance[]
+  eventTime      DateTime
+  finishTime     DateTime?
+  limit          Int?
+  imageURL       String?
+  serviceLetters String?
+
+  messageID String? @unique
+
+  address   String   @db.VarChar(1000)
+  createdAt DateTime @default(now())
+}
+
+model EventAttendance {
+  user         User      @relation("EventAttendee", fields: [userEmail], references: [email])
+  userEmail    String
+  event        Event     @relation(fields: [eventId], references: [id])
+  eventId      String
+  earnedPoints Float     @default(0)
+  earnedHours  Float     @default(0)
+  registeredAt DateTime  @default(now())
+  attendedAt   DateTime?
+
+  @@id([userEmail, eventId])
+  @@index([userEmail])
+  @@index([eventId])
+  @@map("EventAttendee")
+}
