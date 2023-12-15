@@ -1,3 +1,6 @@
-# only monopolies keep their code private source
+# who tf copyrights their dam website?
+monopolies.
+# who tf privatizes a friggin club?
+monopolies.
 
-fuck the captialists
+my point? don't be a hypercaptialist.
