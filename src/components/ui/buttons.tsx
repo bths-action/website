@@ -18,7 +18,7 @@ export const TransparentButton: FC<TransparentButtonProps> = (props) => {
     <motion.button
       {...props}
       className={
-        "rounded-full dark:text-white text-black " + (props.className || "")
+        "rounded-full dark:text-white text-black" + (props.className || "")
       }
       initial={{
         backgroundColor: "rgba(128,128,128,0)",

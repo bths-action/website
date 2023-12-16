@@ -25,7 +25,7 @@ const ThemeButton: FC<{
       onClick={() => {
         if (mounted) setTheme(resolvedTheme == "dark" ? "light" : "dark");
       }}
-      className="p-1.5 w-10 lg:w-auto h-10 flex items-center justify-center lg:justify-between my-2"
+      className="rounded-full px-0.5 md:px-4 py-2 w-full md:rounded-none"
     >
       <FaRegMoon className=" h-full w-6 hidden dark:inline" />
       <MdOutlineWbSunny className=" h-full inline dark:hidden" />
@@ -86,7 +86,7 @@ export const Navbar: FC<PropsWithChildren> = ({ children }) => {
   });
   // vertical navbar
   return (
-    <nav className="flex items-center justify-around md:justify-start md:flex-col md:h-[100dvh] w-screen md:w-20 lg:w-60 bottom-0 bg-gray-100 dark:bg-gray-900 py-2 md:relative absolute flex-row z-30 b">
+    <nav className="flex items-center justify-around md:justify-start md:flex-col md:h-[100dvh] w-screen md:w-20 lg:w-60 bottom-0 bg-gray-100 dark:bg-gray-900 py-2 md:relative absolute flex-row z-30">
       <Link href="/" className="hidden md:inline-block">
         <Image
           src="/icon.png"
@@ -96,13 +96,13 @@ export const Navbar: FC<PropsWithChildren> = ({ children }) => {
           className="rounded-full w-12 h-12"
         />
       </Link>
-      <div className="flex items-center justify-around md:justify-start md:flex-col md:h-[calc(100dvh-60px)] md:overflow-auto flex-1">
+      <div className="flex items-center justify-around md:justify-start w-full md:flex-col md:h-[calc(100dvh-60px)] md:overflow-auto flex-1">
         {Object.entries(NAV_LINKS).map(
           ([location, { href, icon: Icon, text }]) => (
             <TransparentButton
               key={href}
               id={location}
-              className="rounded-full p-1 my-2"
+              className="rounded-full px-0.5 md:px-4 py-2 md:rounded-none w-full"
             >
               <Link href={href} className="inline">
                 <Icon className="h-full inline w-6" />
@@ -117,7 +117,7 @@ export const Navbar: FC<PropsWithChildren> = ({ children }) => {
         whileHover={{
           scale: 1.1,
         }}
-        className="rounded-full md:my-2 h-10 w-10 mx-3"
+        className="rounded-full md:my-2 h-10 w-10 mx-2"
       >
         <img
           src={
