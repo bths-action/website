@@ -1,18 +1,8 @@
-import { AuthOptions, User } from "next-auth";
+import { AuthOptions } from "next-auth";
 import Auth0Provider, { Auth0Profile } from "next-auth/providers/auth0";
 
 export const AUTH_OPTIONS: AuthOptions = {
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        const castUser = user as unknown as User & {
-          id: string;
-        };
-        token.id = castUser.id;
-      }
-      return token;
-    },
-
     async signIn({ user }) {
       if (
         user.email?.endsWith("@nycstudents.net") ||

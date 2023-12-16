@@ -1,5 +1,5 @@
 import { initTRPC } from "@trpc/server";
-import { createContext } from "./[trpc]/route";
+import { createContext } from "./";
 
 const t = initTRPC.context<typeof createContext>().create();
 
