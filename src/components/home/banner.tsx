@@ -7,7 +7,7 @@ import { FC } from "react";
 export const Banner: FC = () => {
   return (
     <div className="relative w-full min-h-[570px] h-[90vh] rounded-xl -mt-20 mb-20">
-      <div className="absolute w-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center banner z-20">
+      <div className="absolute w-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center banner z-20 p-2">
         <motion.h1
           className="mt-6 text-white mx-auto inline-block rounded-full bg-black bg-opacity-50 p-5"
           initial={{ opacity: 0, scale: 0.5 }}

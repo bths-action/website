@@ -1,3 +1,4 @@
+"use client";
 import { FC } from "react";
 import {
   HTMLMotionProps,
@@ -17,9 +18,9 @@ export const TransparentButton: FC<TransparentButtonProps> = (props) => {
   return (
     <motion.button
       {...props}
-      className={
-        "rounded-full dark:text-white text-black" + (props.className || "")
-      }
+      className={`rounded-full dark:text-white text-black ${
+        props.className || ""
+      }`}
       initial={{
         backgroundColor: "rgba(128,128,128,0)",
         ...props.initial,
