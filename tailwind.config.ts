@@ -9,6 +9,11 @@ const config: Config = {
   darkMode: "class",
   theme: {
     extend: {
+      screens: {
+        xs: "475px",
+        xxs: "320px",
+      },
+
       fontFamily: {
         figtree: ["var(--font-figtree)"],
         anybody: ["var(--font-anybody)"],

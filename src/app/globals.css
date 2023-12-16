@@ -4,10 +4,10 @@
 
 @layer base {
   * {
-    @apply font-figtree text-lg text-center;
+    @apply font-figtree text-lg text-center transition-[background] duration-200 ease-in-out;
   }
   main {
-    @apply dark:bg-gray-900 dark:text-white;
+    @apply dark:bg-black dark:text-white;
     @apply bg-white text-black;
   }
 

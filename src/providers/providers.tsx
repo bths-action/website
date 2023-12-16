@@ -5,11 +5,12 @@ import {
   type PusherProviderProps,
 } from "@harelpls/use-pusher";
 import { SessionProvider } from "next-auth/react";
-import { FC, PropsWithChildren } from "react";
+import { FC, PropsWithChildren, useState } from "react";
 import { MDXProvider } from "@mdx-js/react";
 import { MDXComponents } from "mdx/types";
 import { AppProgressBar as NextNProgress } from "next-nprogress-bar";
 import { ThemeProvider } from "next-themes";
+import { LocationProvider, Locations } from "./location";
 
 const PusherProvider = $PusherProvider as FC<
   PropsWithChildren<PusherProviderProps>
@@ -36,6 +37,7 @@ const components: MDXComponents = {
 };
 
 export const AppProviders: FC<PropsWithChildren> = ({ children }) => {
+  const locationState = useState("home" as Locations);
   return (
     <PusherProvider
       clientKey={process.env.NEXT_PUBLIC_PUSHER_KEY!}
@@ -43,7 +45,11 @@ export const AppProviders: FC<PropsWithChildren> = ({ children }) => {
     >
       <ThemeProvider attribute="class" storageKey="theme" defaultTheme="light">
         <MDXProvider components={components}>
-          <SessionProvider>{children}</SessionProvider>
+          <SessionProvider>
+            <LocationProvider value={locationState}>
+              {children}
+            </LocationProvider>
+          </SessionProvider>
         </MDXProvider>
       </ThemeProvider>
     </PusherProvider>
