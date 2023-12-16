@@ -5,12 +5,13 @@ import {
   type PusherProviderProps,
 } from "@harelpls/use-pusher";
 import { SessionProvider } from "next-auth/react";
-import { FC, PropsWithChildren, useState } from "react";
+import { FC, PropsWithChildren, Suspense, useState } from "react";
 import { MDXProvider } from "@mdx-js/react";
 import { MDXComponents } from "mdx/types";
-import { AppProgressBar as NextNProgress } from "next-nprogress-bar";
+import NextTopLoader from "nextjs-toploader";
 import { ThemeProvider } from "next-themes";
 import { LocationProvider, Locations } from "./location";
+import { TRPCProvider } from "./trpc";
 
 const PusherProvider = $PusherProvider as FC<
   PropsWithChildren<PusherProviderProps>
@@ -47,7 +48,16 @@ export const AppProviders: FC<PropsWithChildren> = ({ children }) => {
         <MDXProvider components={components}>
           <SessionProvider>
             <LocationProvider value={locationState}>
-              {children}
+              <TRPCProvider>
+                <Suspense>
+                  <NextTopLoader
+                    showSpinner={false}
+                    color="lightblue"
+                    height={5}
+                  />
+                </Suspense>
+                {children}
+              </TRPCProvider>
             </LocationProvider>
           </SessionProvider>
         </MDXProvider>
@@ -55,7 +65,3 @@ export const AppProviders: FC<PropsWithChildren> = ({ children }) => {
     </PusherProvider>
   );
 };
-
-export const LoadingBar = () => (
-  <NextNProgress options={{}} color="lightblue" height="5px" />
-);

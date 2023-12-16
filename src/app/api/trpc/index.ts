@@ -2,8 +2,8 @@ import { publicProcedure, router } from "./trpc";
 
 export const appRouter = router({
   //generate smth random
-  random: publicProcedure.query(async () => {
-    return Math.random();
+  hello: publicProcedure.query(async ({ ctx }) => {
+    return ctx.session;
   }),
 });
 
