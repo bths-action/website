@@ -25,10 +25,10 @@ const ThemeButton: FC<{
       onClick={() => {
         if (mounted) setTheme(resolvedTheme == "dark" ? "light" : "dark");
       }}
-      className="rounded-full px-0.5 md:px-4 py-2 w-full md:rounded-none"
+      className="rounded-full px-0.5 md:px-4 py-2 w-full md:rounded-none lg:text-left"
     >
-      <FaRegMoon className=" h-full w-6 hidden dark:inline" />
-      <MdOutlineWbSunny className=" h-full inline dark:hidden" />
+      <FaRegMoon className=" h-full w-7 hidden dark:inline" />
+      <MdOutlineWbSunny className=" h-full w-7 inline dark:hidden" />
       <span className="ml-1 lg:inline hidden">Toggle Theme</span>
     </TransparentButton>
   );
@@ -102,10 +102,10 @@ export const Navbar: FC<PropsWithChildren> = ({ children }) => {
             <TransparentButton
               key={href}
               id={location}
-              className="rounded-full px-0.5 md:px-4 py-2 md:rounded-none w-full"
+              className="rounded-full md:px-4 py-2 md:rounded-none w-full lg:text-left"
             >
               <Link href={href} className="inline">
-                <Icon className="h-full inline w-6" />
+                <Icon className="h-full inline w-7" />
                 <span className="ml-1 lg:inline hidden">{text}</span>
               </Link>
             </TransparentButton>
