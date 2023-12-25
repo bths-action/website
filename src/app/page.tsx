@@ -3,7 +3,7 @@ import { Banner } from "@/components/home/banner";
 
 const Home: FC = () => {
   return (
-    <main>
+    <main className="pt-0">
       <Banner />
     </main>
   );

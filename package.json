@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",
+    "build": "prisma generate --no-engine && next build",
     "start": "next start",
     "lint": "next lint",
     "db": "prisma generate --no-engine && prisma db push"
@@ -21,6 +21,7 @@
     "@trpc/react-query": "^10.44.1",
     "@trpc/server": "^10.44.1",
     "@types/mdx": "^2.0.10",
+    "formik": "^2.4.5",
     "framer-motion": "^10.16.16",
     "next": "14.0.4",
     "next-auth": "^4.24.5",
@@ -32,6 +33,7 @@
     "react-icons": "^4.12.0",
     "rehype-slug": "^6.0.0",
     "remark-gfm": "^4.0.0",
+    "superjson": "^2.2.1",
     "zod": "^3.22.4"
   },
   "devDependencies": {

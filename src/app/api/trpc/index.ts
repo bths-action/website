@@ -1,20 +1,15 @@
-import { getServerSession } from "next-auth";
-import { publicProcedure, router } from "./trpc";
-import { AUTH_OPTIONS } from "../auth/[...nextauth]/options";
+import { router } from "./trpc";
+import { getEvents } from "./procedures/get-events";
 
 export const appRouter = router({
   //generate smth random
-  hello: publicProcedure.query(async ({ ctx }) => {
-    return ctx.session;
-  }),
+  getEvents,
 });
 
 export const createContext = async () => {
-  const session = await getServerSession(AUTH_OPTIONS);
-
-  return {
-    session,
-  };
+  return {};
 };
+
+export type Context = Awaited<ReturnType<typeof createContext>>;
 
 export type AppRouter = typeof appRouter;

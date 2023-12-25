@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function NotFound() {
   return (
-    <main className="pt-3">
+    <main>
       <h2>Not Found</h2>
       <NotFoundWidget />
       <p>Damn, you made the 404 go bonkers.</p>

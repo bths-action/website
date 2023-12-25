@@ -6,9 +6,9 @@
   * {
     @apply font-figtree text-lg text-center transition-[background] duration-200 ease-in-out;
   }
+
   main {
-    @apply dark:bg-black dark:text-white;
-    @apply bg-white text-black;
+    @apply py-3
   }
 
   h1,h2,h3,h4,h5,h6 {

@@ -16,7 +16,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${figtree.variable} ${anybody.variable} bg-white font-anybody dark:bg-neutral-900`}
+        className={`${figtree.variable} ${anybody.variable} bg-white font-anybody dark:bg-black`}
       >
         <AppProviders>
           <div className="w-full flex h-[100dvh]">
