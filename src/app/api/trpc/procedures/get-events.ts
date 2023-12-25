@@ -88,8 +88,6 @@ export const getEvents = publicProcedure
           limit: true,
           maxHours: true,
           maxPoints: true,
-          address: true,
-          createdAt: true,
           attendees: {
             select: {
               eventId: true,

@@ -4,11 +4,11 @@
 
 @layer base {
   * {
-    @apply font-figtree text-lg text-center transition-[background] duration-200 ease-in-out;
+    @apply font-figtree text-lg  transition-[background] duration-200 ease-in-out;
   }
 
   main {
-    @apply py-3
+    @apply py-3 text-center
   }
 
   h1,h2,h3,h4,h5,h6 {

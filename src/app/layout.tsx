@@ -21,7 +21,7 @@ export default function RootLayout({
         <AppProviders>
           <div className="w-full flex h-[100dvh]">
             <Navbar />
-            <div className="h-full overflow-auto w-full break-words pb-20 md:pb-0">
+            <div className="h-[calc(100dvh-70px)] md:h-full overflow-auto w-full break-words">
               {children}
             </div>
           </div>

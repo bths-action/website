@@ -1,7 +1,16 @@
 "use client";
-import { trpc } from "@/app/api/trpc/client";
+import { GetEventsOutput, trpc, GetEventsInput } from "@/app/api/trpc/client";
 import { useState, FC } from "react";
-import { GetEventsInput } from "@/app/api/trpc/client";
+import { EventCard } from "./event-card";
+import { LimitedContainer } from "../ui/container";
+import { TransparentButton } from "../ui/buttons";
+
+export type EventPreview = GetEventsOutput["events"][number];
+
+export const metadata = {
+  title: "Events",
+  description: "Check out some of BTHS Action's events!",
+};
 
 export const Events: FC = () => {
   const [query, setQuery] = useState<GetEventsInput>({});
@@ -13,25 +22,32 @@ export const Events: FC = () => {
     }
   );
 
-  console.log(events.data?.pages[0].events[0].createdAt);
-
   return (
-    <>
-      <code>{JSON.stringify(events.data, null, "\t")}</code>
-      <br />
-      {events.isLoading ? (
-        "Loading"
-      ) : events.hasNextPage ? (
-        <button
-          onClick={() => {
-            events.fetchNextPage();
-          }}
-        >
-          load more
-        </button>
-      ) : (
-        "No more pages"
-      )}
-    </>
+    <main>
+      <LimitedContainer>
+        <div className="flex flex-col gap-3 mb-2">
+          {events.data?.pages
+            .map((page) => page.events)
+            .flat()
+            .map((event) => (
+              <EventCard event={event} />
+            ))}
+        </div>
+        {events.isLoading || events.isFetchingNextPage ? (
+          "Loading"
+        ) : events.hasNextPage ? (
+          <TransparentButton
+            className="px-2 border-2 border-black dark:border-white"
+            onClick={() => {
+              events.fetchNextPage();
+            }}
+          >
+            Load More
+          </TransparentButton>
+        ) : (
+          "No more pages"
+        )}
+      </LimitedContainer>
+    </main>
   );
 };
