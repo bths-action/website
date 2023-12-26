@@ -77,7 +77,7 @@ export const QueryForm: FC<{
               </Field>
             </div>
             <div className="flex justify-center items-center flex-wrap gap-1">
-              <h6>Event Range: {values.startRange?.toISOString()}</h6>
+              <h6>Event Range:</h6>
               <input
                 name="startRange"
                 type="datetime-local"
