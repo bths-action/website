@@ -9,11 +9,6 @@ import { Loading } from "../ui/loading";
 
 export type EventPreview = GetEventsOutput["events"][number];
 
-export const metadata = {
-  title: "Events",
-  description: "Check out some of BTHS Action's events!",
-};
-
 export const Events: FC = () => {
   const [query, setQuery] = useState<GetEventsInput>({
     cursor: 0,
