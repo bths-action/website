@@ -8,7 +8,7 @@ export default function NotFound() {
       <h2>Not Found</h2>
       <NotFoundWidget />
       <p>Damn, you made the 404 go bonkers.</p>
-      <TransparentButton className="border-2 border-black dark:border-white">
+      <TransparentButton className="bordered">
         <Link href="/" className="p-5">
           Better Return Home
         </Link>

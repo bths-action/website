@@ -22,7 +22,8 @@ export const EventCard: FC<{
   },
 }) => {
   return (
-    <div className="w-full bg-gray-400 dark:bg-zinc-900 bg-opacity-10  rounded-lg hover:shadow-2xl shadow-gray-300  hover:opacity-85 p-3 ">
+    // transition background only
+    <div className="w-full bg-gray-500 dark:bg-zinc-900 bg-opacity-10 rounded-lg hover:opacity-80 dark:hover:opacity-60 p-3 transition-opacity duration-200 ease-in-out ">
       <Link key={id} href={`/events/${id}`} className="text-left ">
         <div className="flex flex-col items-stretch w-full md:flex-row">
           <div className={`w-full ${imageURL ? "md:w-1/2" : ""}`}>

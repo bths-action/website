@@ -50,7 +50,7 @@ const ProfileButton: FC = () => {
           data?.user?.image ||
           "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/340px-Default_pfp.svg.png?20220226140232"
         }
-        className="rounded-full min-w-10 min-h-10 bg-black border-2 dark:border-white border-black "
+        className="rounded-full min-w-10 min-h-10 bg-black bordered"
       />
     </TransparentButton>
   );
