@@ -22,19 +22,23 @@ export const QueryForm: FC<{
     >
       {({ setFieldValue, values }) => {
         return (
-          <Form className="my-2 bordered rounded-lg py-2">
-            <Field
-              // for text search
-              name="search"
-              type="text"
-              placeholder="Search"
-              className=""
-            />
-            <TransparentButton type="submit" className="px-2 bordered">
-              Search
-            </TransparentButton>
-            <br />
-            <div className="flex justify-center items-center flex-wrap gap-1">
+          <Form className="my-2 bordered rounded-lg p-2 flex flex-col gap-y-2">
+            <div>
+              <Field
+                // for text search
+                name="search"
+                type="text"
+                placeholder="Search"
+                className="w-96"
+              />
+              <TransparentButton
+                type="submit"
+                className="px-2 bordered hidden sm:inline"
+              >
+                Search
+              </TransparentButton>
+            </div>
+            <div className="flex justify-center items-center flex-wrap gap-x-1">
               <h6>Availability Status:</h6>
               <label className="choice">
                 <Field
@@ -74,11 +78,9 @@ export const QueryForm: FC<{
             </div>
             <div className="flex justify-center items-center flex-wrap gap-1">
               <h6>Event Range: {values.startRange?.toISOString()}</h6>
-
               <input
                 name="startRange"
                 type="datetime-local"
-                className="mr-1"
                 placeholder="Start"
                 onChange={(e) => {
                   setFieldValue(
@@ -87,10 +89,10 @@ export const QueryForm: FC<{
                   );
                 }}
               />
+
               <input
                 name="endRange"
                 type="datetime-local"
-                className="ml-1"
                 placeholder="End"
                 onChange={(e) => {
                   setFieldValue(
@@ -100,8 +102,17 @@ export const QueryForm: FC<{
                 }}
               />
             </div>
-            To prevent abuse, the results may be cached and slightly out of
-            date.
+            <div>
+              To prevent abuse, the results may be cached and slightly out of
+              date.
+              <br />
+              <TransparentButton
+                type="submit"
+                className="px-2 bordered inline sm:hidden"
+              >
+                Search
+              </TransparentButton>
+            </div>
           </Form>
         );
       }}
