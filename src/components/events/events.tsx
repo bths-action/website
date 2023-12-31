@@ -6,6 +6,7 @@ import { LimitedContainer } from "../ui/container";
 import { TransparentButton } from "../ui/buttons";
 import { QueryForm } from "./query-form";
 import { Loading } from "../ui/loading";
+import { Error } from "../ui/error";
 
 export type EventPreview = GetEventsOutput["events"][number];
 
@@ -30,6 +31,7 @@ export const Events: FC = () => {
     <main>
       <LimitedContainer>
         <QueryForm query={query} setQuery={setQuery} />
+
         <div className="flex flex-col gap-3 mb-2">
           {events.data?.pages
             .map((page) => page.events)
@@ -38,7 +40,7 @@ export const Events: FC = () => {
               <EventCard key={event.id} event={event} />
             ))}
         </div>
-        {events.isLoading || events.isFetchingNextPage ? (
+        {events.isFetching && (
           <Loading
             loadingType="bar"
             spinnerProps={{
@@ -48,18 +50,22 @@ export const Events: FC = () => {
           >
             Loading{" "}
           </Loading>
-        ) : events.hasNextPage ? (
-          <TransparentButton
-            className="px-2 bordered"
-            onClick={() => {
-              events.fetchNextPage();
-            }}
-          >
-            Load More
-          </TransparentButton>
-        ) : (
-          "No more pages"
         )}
+        {events.isError && <Error error={events.error} />}
+        {!events.isFetching &&
+          (events.hasNextPage ? (
+            <TransparentButton
+              className="px-2 bordered"
+              disabled={events.isFetchingNextPage}
+              onClick={() => {
+                events.fetchNextPage();
+              }}
+            >
+              Load More Events
+            </TransparentButton>
+          ) : (
+            "No More Events"
+          ))}
       </LimitedContainer>
     </main>
   );

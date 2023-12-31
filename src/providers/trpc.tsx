@@ -7,7 +7,16 @@ import { FC, PropsWithChildren, useState } from "react";
 import superjson from "superjson";
 
 export const TRPCProvider: FC<PropsWithChildren> = ({ children }) => {
-  const [queryClient] = useState(() => new QueryClient());
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            retry: false,
+          },
+        },
+      })
+  );
   const [trpcClient] = useState(() => {
     return trpc.createClient({
       transformer: superjson,

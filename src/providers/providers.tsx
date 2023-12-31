@@ -1,17 +1,16 @@
 "use client";
-
 import {
   PusherProvider as $PusherProvider,
   type PusherProviderProps,
 } from "@harelpls/use-pusher";
 import { SessionProvider } from "next-auth/react";
-import { FC, PropsWithChildren, Suspense, useState } from "react";
+import { FC, PropsWithChildren, Suspense } from "react";
 import { MDXProvider } from "@mdx-js/react";
 import { MDXComponents } from "mdx/types";
 import NextTopLoader from "nextjs-toploader";
 import { ThemeProvider } from "next-themes";
-import { LocationProvider, Locations } from "./location";
 import { TRPCProvider } from "./trpc";
+import { AccountProvider } from "./account";
 
 const PusherProvider = $PusherProvider as FC<
   PropsWithChildren<PusherProviderProps>
@@ -38,7 +37,6 @@ const components: MDXComponents = {
 };
 
 export const AppProviders: FC<PropsWithChildren> = ({ children }) => {
-  const locationState = useState("home" as Locations);
   return (
     <PusherProvider
       clientKey={process.env.NEXT_PUBLIC_PUSHER_KEY!}
@@ -47,8 +45,8 @@ export const AppProviders: FC<PropsWithChildren> = ({ children }) => {
       <ThemeProvider attribute="class" storageKey="theme" defaultTheme="light">
         <MDXProvider components={components}>
           <SessionProvider>
-            <LocationProvider value={locationState}>
-              <TRPCProvider>
+            <TRPCProvider>
+              <AccountProvider>
                 <Suspense>
                   <NextTopLoader
                     showSpinner={false}
@@ -58,8 +56,8 @@ export const AppProviders: FC<PropsWithChildren> = ({ children }) => {
                   />
                 </Suspense>
                 {children}
-              </TRPCProvider>
-            </LocationProvider>
+              </AccountProvider>
+            </TRPCProvider>
           </SessionProvider>
         </MDXProvider>
       </ThemeProvider>

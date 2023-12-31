@@ -74,7 +74,7 @@ export const getEvents = publicProcedure
     const events = await prisma.event
       .findMany({
         cacheStrategy: {
-          ttl: 10,
+          ttl: 15,
         },
         take: 11,
         skip: cursor * 10,
