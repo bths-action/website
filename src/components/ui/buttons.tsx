@@ -7,7 +7,7 @@ import {
   motion,
 } from "framer-motion";
 
-interface TransparentButtonProps
+export interface TransparentButtonProps
   extends Omit<HTMLMotionProps<"button">, "initial" | "whileHover"> {
   initial?: Target;
   whileHover?: TargetAndTransition;
