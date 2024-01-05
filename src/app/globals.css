@@ -54,6 +54,7 @@
   input[type="number"],
   input[type="search"],
   input[type="datetime-local"],
+  input[type="date"],
   input[type="url"],
   input[type="color"],
   input[type="file"],
@@ -78,10 +79,6 @@
 @layer utilities {
   .bordered {
     @apply border-2 border-black dark:border-white;
-  }
-
-  input.errored {
-    @apply border-red-500 border-b-2 bg-opacity-30 bg-red-500;
   }
 
   .choice {

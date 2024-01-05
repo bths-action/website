@@ -3,7 +3,7 @@ import { useTheme } from "next-themes";
 import Image from "next/image";
 import { FC, PropsWithChildren, ReactNode, useEffect, useState } from "react";
 import { TransparentButton, TransparentButtonProps } from "./buttons";
-import { FaRegIdCard, FaRegMoon } from "react-icons/fa";
+import { FaRegIdCard, FaRegMoon, FaUserEdit } from "react-icons/fa";
 import Link from "next/link";
 import { IconType } from "react-icons";
 import {
@@ -13,9 +13,16 @@ import {
   MdOutlineBalance,
   MdOutlineWbSunny,
 } from "react-icons/md";
-import { BiPhotoAlbum, BiSpreadsheet, BiXCircle } from "react-icons/bi";
-import { signIn, useSession } from "next-auth/react";
+import {
+  BiLogOut,
+  BiPhotoAlbum,
+  BiSpreadsheet,
+  BiXCircle,
+} from "react-icons/bi";
+import { signIn, signOut, useSession } from "next-auth/react";
 import { BsQuestionCircle } from "react-icons/bs";
+import { UserForm } from "../form/user-form";
+import { useAccount } from "@/providers/account";
 
 type Links = {
   [key: string]: {
@@ -96,14 +103,16 @@ const NavButton: FC<
   return (
     <TransparentButton
       onClick={onClick}
-      className={
-        "rounded-full md:px-4 py-2 md:rounded-none w-full lg:text-left " +
-        (className || "")
-      }
+      className={`rounded-full md:rounded-none w-full lg:text-left ${
+        className || ""
+      } ${href ? "" : "md:px-4 py-2"}`}
       {...props}
     >
       {href ? (
-        <Link href={href} className="inline">
+        <Link
+          href={href}
+          className={`w-full h-full block ${href ? "md:px-4 py-2" : ""}`}
+        >
           {content}
         </Link>
       ) : (
@@ -139,29 +148,46 @@ const ProfileButton: FC<{
   setSideContent: (content: ReactNode) => void;
 }> = ({ setSideContent, setSideId, sideId }) => {
   const { data, status } = useSession();
+  const [formOpen, setFormOpen] = useState(false);
+  const { status: accountStatus } = useAccount();
+  const notDone = status == "loading" || accountStatus == "loading";
   return (
-    <TransparentButton
-      whileHover={{
-        scale: 1.1,
-      }}
-      disabled={status == "loading"}
-      className="rounded-full md:my-2 h-10 w-10 mx-2"
-      onClick={() => {
-        if (status == "unauthenticated") signIn("auth0");
-        else {
-          setSideId(sideId == "profile" ? "" : "profile");
-          setSideContent(<></>);
-        }
-      }}
-    >
-      <img
-        src={
-          data?.user?.image ||
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/340px-Default_pfp.svg.png?20220226140232"
-        }
-        className="rounded-full min-w-10 min-h-10 bg-black bordered"
-      />
-    </TransparentButton>
+    <>
+      {formOpen && <UserForm setOpen={setFormOpen} mode="edit" />}
+      <TransparentButton
+        whileHover={{
+          scale: 1.1,
+        }}
+        disabled={notDone}
+        className="rounded-full md:my-2 h-10 w-10 mx-2"
+        onClick={() => {
+          if (status == "unauthenticated") signIn("auth0");
+          else {
+            setSideId(sideId == "profile" ? "" : "profile");
+            setSideContent(
+              <>
+                <NavButton icon={FaUserEdit} onClick={() => setFormOpen(true)}>
+                  Edit Profile
+                </NavButton>
+                <NavButton icon={BiLogOut} onClick={() => signOut()}>
+                  Logout{" "}
+                </NavButton>
+              </>
+            );
+          }
+        }}
+      >
+        <img
+          src={
+            notDone
+              ? "https://i.gifer.com/origin/b4/b4d657e7ef262b88eb5f7ac021edda87.gif"
+              : data?.user?.image ||
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/340px-Default_pfp.svg.png?20220226140232"
+          }
+          className="rounded-full min-w-10 min-h-10 bg-black bordered"
+        />
+      </TransparentButton>
+    </>
   );
 };
 

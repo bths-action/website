@@ -12,6 +12,8 @@ export const TRPCProvider: FC<PropsWithChildren> = ({ children }) => {
       new QueryClient({
         defaultOptions: {
           queries: {
+            refetchInterval: false,
+            refetchOnWindowFocus: false,
             retry: false,
           },
         },

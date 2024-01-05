@@ -1,30 +1,10 @@
 import { prisma } from "@/utils/prisma";
 import { Prisma } from "@prisma/client";
-import { z } from "zod";
 import { publicProcedure } from "../trpc";
+import { queryEventsSchema } from "../schema/events";
 
 export const getEvents = publicProcedure
-  .input(
-    z.object({
-      startRange: z.date().optional(),
-      endRange: z.date().optional(),
-      search: z.string().optional(),
-      cursor: z.number().default(0),
-      orderBy: z.enum(["eventTime", "createdAt"]).default("eventTime"),
-      order: z.enum(["asc", "desc"]).default("desc"),
-      includeStatus: z
-        .object({
-          unavailable: z.boolean(),
-          available: z.boolean(),
-          upcoming: z.boolean(),
-        })
-        .default({
-          unavailable: true,
-          available: true,
-          upcoming: true,
-        }),
-    })
-  )
+  .input(queryEventsSchema)
   .query(async ({ ctx, input }) => {
     const whereConditions: Prisma.EventWhereInput[] = [];
 

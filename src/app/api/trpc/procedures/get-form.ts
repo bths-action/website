@@ -6,5 +6,8 @@ export const getForm = authedProcedure.query(async ({ ctx }) => {
     where: {
       email: ctx.session.user.email,
     },
+    include: {
+      execDetails: true,
+    },
   });
 });

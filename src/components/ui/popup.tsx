@@ -9,7 +9,7 @@ export const PopupUI: FC<
     setOpen: ((a: boolean) => any) | undefined;
     title?: ReactNode;
   }>
-> = ({ children, setOpen, title }) => {
+> = ({ children, setOpen, title, disabledExit }) => {
   function handleEsc(event: KeyboardEvent) {
     if (event.key === "Escape") {
       setOpen?.(false);
@@ -24,22 +24,29 @@ export const PopupUI: FC<
   }, []);
   return (
     <div
-      className="flex fixed inset-0 z-40 flex-row justify-center items-center w-[100dvw] h-[100dvh] text-black bg-black bg-opacity-50"
+      className="flex fixed inset-0 z-40 flex-row justify-center items-center w-screen h-screen text-black bg-black bg-opacity-50"
       onClick={(e: MouseEvent<HTMLDivElement>) => {
         if (e.target === e.currentTarget) {
-          setOpen?.(false);
+          !disabledExit && setOpen?.(false);
         }
       }}
     >
-      <div className="overflow-auto max-w-5xl min-w-[100dvw] xs:min-w-0 w-[90vw] max-h-[100dvh] text-center bg-white dark:bg-zinc-900 rounded-lg border-2 border-black dark:border-white">
-        <div className="flex items-center">
-          <h6 className="w-full text-3xl">{title}</h6>
-          <TransparentButton className="rounded-none rounded-tr-lg">
-            <BiX className="w-12 h-12" />
-          </TransparentButton>
+      <div className=" flex flex-col max-w-5xl min-w-[100dvw] xs:min-w-0 w-[95vw] h-[95dvh] text-center bg-white dark:bg-zinc-900 rounded-lg border-2 border-black dark:border-white">
+        <div className="w-full flex items-center flex-row">
+          <h6 className="mx-auto px-2 text-2xl overflow-auto whitespace-nowrap">
+            {title}
+          </h6>
+          {!disabledExit && (
+            <TransparentButton
+              className="rounded-none rounded-tr-lg"
+              onClick={setOpen?.bind(null, false)}
+            >
+              <BiX className="w-12 h-12" />
+            </TransparentButton>
+          )}
         </div>
         <hr />
-        <div>{children}</div>
+        <div className="flex-1 overflow-auto">{children}</div>
       </div>
     </div>
   );

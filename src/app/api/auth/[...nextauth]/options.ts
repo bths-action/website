@@ -9,6 +9,7 @@ export const AUTH_OPTIONS: AuthOptions = {
         user.email?.endsWith("@schools.nyc.gov")
       )
         return true;
+
       return "/auth/invalid-email";
     },
   },

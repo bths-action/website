@@ -1,20 +1,26 @@
 "use client";
 import { TRPCError } from "@/app/api/trpc/client";
+import { ErrorMessage } from "formik";
 import { FC, Fragment, HTMLProps, PropsWithChildren } from "react";
+import { BiXCircle } from "react-icons/bi";
 
-interface Props extends PropsWithChildren<HTMLProps<HTMLDivElement>> {
-  error: TRPCError;
-}
-
-export const Error: FC<Props> = ({ children, error, className, ...props }) => {
+export const RequestError: FC<
+  PropsWithChildren<
+    HTMLProps<HTMLDivElement> & {
+      error: TRPCError;
+    }
+  >
+> = ({ children, error, className, ...props }) => {
   return (
     <div
-      className={
-        "flex flex-col items-center justify-center bg-red-500 text-white rounded-lg p-1" +
-        (className || "")
-      }
+      className={`flex flex-col items-center justify-center bg-red-500 text-white rounded-lg p-1 ${
+        className || ""
+      }`}
+      {...props}
     >
-      <h5>Oops! Something went wrong.</h5>
+      <h5>
+        <BiXCircle className="inline w-8 h-8" /> Oops! Something went wrong.
+      </h5>
       {children}
       <code className="w-full">
         Code: {error.data?.code || "Unknown"}
@@ -34,5 +40,27 @@ export const Error: FC<Props> = ({ children, error, className, ...props }) => {
         )}
       </code>
     </div>
+  );
+};
+
+export const FormError: FC<
+  HTMLProps<HTMLDivElement> & {
+    name: string;
+  }
+> = ({ className, name, ...props }) => {
+  return (
+    <ErrorMessage name={name}>
+      {(msg) => (
+        <div
+          className={` bg-red-500 text-white rounded-lg p-1 mt-2 ${
+            className || ""
+          }`}
+          {...props}
+        >
+          <BiXCircle className="inline w-7 h-7" />
+          {msg}
+        </div>
+      )}
+    </ErrorMessage>
   );
 };

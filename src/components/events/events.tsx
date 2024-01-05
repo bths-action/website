@@ -6,7 +6,7 @@ import { LimitedContainer } from "../ui/container";
 import { TransparentButton } from "../ui/buttons";
 import { QueryForm } from "./query-form";
 import { Loading } from "../ui/loading";
-import { Error } from "../ui/error";
+import { RequestError } from "../ui/error";
 
 export type EventPreview = GetEventsOutput["events"][number];
 
@@ -48,10 +48,10 @@ export const Events: FC = () => {
               width: 1000,
             }}
           >
-            Loading{" "}
+            Loading...
           </Loading>
         )}
-        {events.isError && <Error error={events.error} />}
+        {events.isError && <RequestError error={events.error} />}
         {!events.isFetching &&
           (events.hasNextPage ? (
             <TransparentButton
