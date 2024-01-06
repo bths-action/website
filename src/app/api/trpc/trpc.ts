@@ -68,6 +68,17 @@ const isAdmin = isAuthedAndExists.unstable_pipe(async (opts) => {
   return opts.next(opts);
 });
 
+const isExecOnly = isAuthedAndExists.unstable_pipe(async (opts) => {
+  if (opts.ctx.user.position !== "EXEC") {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "You are not an exec.",
+    });
+  }
+  return opts.next(opts);
+});
+
 export const authedProcedure = publicProcedure.use(isAuthed);
 export const memberProcedure = publicProcedure.use(isAuthedAndExists);
 export const adminProcedure = publicProcedure.use(isAdmin);
+export const execProcedure = publicProcedure.use(isExecOnly);

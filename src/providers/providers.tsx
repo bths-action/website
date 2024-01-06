@@ -42,7 +42,7 @@ export const AppProviders: FC<PropsWithChildren> = ({ children }) => {
       clientKey={process.env.NEXT_PUBLIC_PUSHER_KEY!}
       cluster={process.env.NEXT_PUBLIC_PUSHER_CLUSTER!}
     >
-      <ThemeProvider attribute="class" storageKey="theme" defaultTheme="light">
+      <ThemeProvider attribute="class" storageKey="theme">
         <MDXProvider components={components}>
           <SessionProvider>
             <TRPCProvider>

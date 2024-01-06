@@ -23,6 +23,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { BsQuestionCircle } from "react-icons/bs";
 import { UserForm } from "../form/user-form";
 import { useAccount } from "@/providers/account";
+import { ExecForm } from "../form/exec-form";
 
 type Links = {
   [key: string]: {
@@ -149,11 +150,20 @@ const ProfileButton: FC<{
 }> = ({ setSideContent, setSideId, sideId }) => {
   const { data, status } = useSession();
   const [formOpen, setFormOpen] = useState(false);
-  const { status: accountStatus } = useAccount();
+  const [execOpen, setExecOpen] = useState(false);
+  const { status: accountStatus, data: accountData } = useAccount();
   const notDone = status == "loading" || accountStatus == "loading";
   return (
     <>
       {formOpen && <UserForm setOpen={setFormOpen} mode="edit" />}
+      {accountStatus == "success" &&
+        accountData?.position == "EXEC" &&
+        execOpen && (
+          <ExecForm
+            setOpen={setExecOpen}
+            mode={accountData?.execDetails ? "edit" : "create"}
+          />
+        )}
       <TransparentButton
         whileHover={{
           scale: 1.1,
@@ -169,6 +179,15 @@ const ProfileButton: FC<{
                 <NavButton icon={FaUserEdit} onClick={() => setFormOpen(true)}>
                   Edit Profile
                 </NavButton>
+                {accountStatus == "success" &&
+                  accountData?.position == "EXEC" && (
+                    <NavButton
+                      icon={FaUserEdit}
+                      onClick={() => setExecOpen(true)}
+                    >
+                      Edit Exec Profile
+                    </NavButton>
+                  )}
                 <NavButton icon={BiLogOut} onClick={() => signOut()}>
                   Logout{" "}
                 </NavButton>

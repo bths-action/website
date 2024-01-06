@@ -52,12 +52,10 @@ export const FormError: FC<
     <ErrorMessage name={name}>
       {(msg) => (
         <div
-          className={` bg-red-500 text-white rounded-lg p-1 mt-2 ${
-            className || ""
-          }`}
+          className={` bg-red-500 rounded-lg p-1 mt-2 ${className || ""}`}
           {...props}
         >
-          <BiXCircle className="inline w-7 h-7" />
+          <BiXCircle className="inline w-7 h-7 " />
           {msg}
         </div>
       )}

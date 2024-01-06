@@ -29,7 +29,7 @@ model ExecDetails {
 
   position    ExecPosition
   description String       @db.VarChar(5000)
-  selfieURL   String
+  selfieURL   String?
 
   @@index([email])
 }

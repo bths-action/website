@@ -3,6 +3,8 @@ import { getEvents } from "./procedures/get-events";
 import { register } from "./procedures/register";
 import { editForm } from "./procedures/edit-form";
 import { getForm } from "./procedures/get-form";
+import { createExec } from "./procedures/create-exec";
+import { editExec } from "./procedures/edit-exec";
 
 export const appRouter = router({
   //generate smth random
@@ -10,6 +12,8 @@ export const appRouter = router({
   register,
   editForm,
   getForm,
+  createExec,
+  editExec,
 });
 
 export const createContext = async () => {
