@@ -9,6 +9,6 @@ export const editForm = memberProcedure
       where: {
         email: ctx.session.user.email,
       },
-      data: input,
+      data: { ...input, lastUpdated: new Date() },
     });
   });

@@ -42,7 +42,6 @@ export const metadata: Metadata = {
 
   description: "A BTHS club for taking action and making a difference.",
   openGraph: {
-    images: "/icon.png",
     siteName: "BTHS Action",
   },
 

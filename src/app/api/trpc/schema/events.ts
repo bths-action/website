@@ -19,3 +19,7 @@ export const queryEventsSchema = z.object({
       upcoming: true,
     }),
 });
+
+export const getEventSchema = z.object({
+  id: z.string(),
+});
