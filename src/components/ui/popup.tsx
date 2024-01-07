@@ -8,10 +8,11 @@ export const PopupUI: FC<
     disabledExit?: boolean;
     setOpen: ((a: boolean) => any) | undefined;
     title?: ReactNode;
+    size?: "large" | "small";
   }>
-> = ({ children, setOpen, title, disabledExit }) => {
+> = ({ children, setOpen, title, disabledExit, size = "large" }) => {
   function handleEsc(event: KeyboardEvent) {
-    if (event.key === "Escape") {
+    if (event.key === "Escape" && !disabledExit) {
       setOpen?.(false);
     }
   }
@@ -31,7 +32,11 @@ export const PopupUI: FC<
         }
       }}
     >
-      <div className=" flex flex-col max-w-5xl min-w-[100dvw] xs:min-w-0 w-[95vw] h-[95dvh] text-center bg-white dark:bg-zinc-900 rounded-lg border-2 border-black dark:border-white">
+      <div
+        className={`flex flex-col max-w-5xl xs:min-w-0 ${
+          size == "large" ? "w-[95vw] h-[95dvh]" : ""
+        } text-center bg-white dark:bg-zinc-900 rounded-lg border-2 border-black dark:border-white`}
+      >
         <div className="w-full flex items-center flex-row">
           <h6 className="mx-auto px-2 text-2xl overflow-auto whitespace-nowrap">
             {title}

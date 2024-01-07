@@ -1,4 +1,4 @@
-import { getEventSchema } from "../schema/events";
+import { getEventSchema } from "@/schema/events";
 import { publicProcedure } from "../trpc";
 import { prisma } from "@/utils/prisma";
 

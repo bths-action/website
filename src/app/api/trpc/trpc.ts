@@ -40,6 +40,9 @@ const isAuthedAndExists = isAuthed.unstable_pipe(async (opts) => {
     where: {
       email: opts.ctx.session.user.email,
     },
+    include: {
+      execDetails: true,
+    },
   });
 
   if (!user) {

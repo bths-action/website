@@ -13,13 +13,33 @@ export type RouterErrors = inferRouterError<AppRouter>;
 
 export type GetEventsInput = RouterInput["getEvents"];
 export type GetEventsOutput = RouterOutput["getEvents"];
+
 export type RegisterInput = RouterInput["register"];
 export type RegisterOutput = RouterOutput["register"];
 
+export type CreateExecInput = RouterInput["createExec"];
+export type CreateExecOutput = RouterOutput["createExec"];
+
+export type EditExecInput = RouterInput["editExec"];
+export type EditExecOutput = RouterOutput["editExec"];
+
 export type EditFormInput = RouterInput["editForm"];
 export type EditFormOutput = RouterOutput["editForm"];
+
 export type GetFormInput = RouterInput["getForm"];
 export type GetFormOutput = RouterOutput["getForm"];
+
+export type GetEventInput = RouterInput["getEvent"];
+export type GetEventOutput = RouterOutput["getEvent"];
+
+export type CreateEventInput = RouterInput["createEvent"];
+export type CreateEventOutput = RouterOutput["createEvent"];
+
+export type EditEventInput = RouterInput["editEvent"];
+export type EditEventOutput = RouterOutput["editEvent"];
+
+export type DeleteEventInput = RouterInput["deleteEvent"];
+export type DeleteEventOutput = RouterOutput["deleteEvent"];
 
 export type TRPCError = TRPCClientErrorLike<RouterErrors>;
 

@@ -4,7 +4,11 @@
 
 @layer base {
   * {
-    @apply font-figtree text-lg  transition-[background] duration-300 ease-in-out text-black dark:text-white border-black dark:border-white;
+    @apply font-figtree  transition-[background] duration-300 ease-in-out text-lg;
+  }
+
+  *:not(svg, svg *) {
+    @apply text-black dark:text-white border-black dark:border-white;
   }
 
   hr {
@@ -58,7 +62,7 @@
   input[type="url"],
   input[type="color"],
   select {
-    @apply max-w-[calc(100%-16px)] box-border outline-none rounded-lg bg-slate-300 dark:bg-slate-600 focus:rounded-none focus:border-b-2 border-black dark:border-white focus:dark:bg-transparent focus:bg-transparent mx-2 px-1 transition-colors duration-200 ease-in-out;
+    @apply max-w-[calc(100%-16px)] box-border outline-none rounded-lg bg-slate-300 dark:bg-zinc-600 focus:rounded-none focus:border-b-2 border-black dark:border-white focus:dark:bg-transparent focus:bg-transparent mx-2 px-1 transition-colors duration-200 ease-in-out;
   }
 
   input[type="file"] {
@@ -71,11 +75,15 @@
 
   /** select options */
   option {
-    @apply bg-slate-300 dark:bg-slate-600 dark:text-white;
+    @apply bg-slate-300 dark:bg-zinc-600 dark:text-white;
   }
 
   input[type="checkbox"] {
     @apply w-5 h-5 accent-blue-500 bordered;
+  }
+
+  textarea {
+    @apply max-w-[calc(100%-16px)] bordered outline-none rounded-lg bg-slate-300 dark:bg-zinc-600 border-black dark:border-white focus:dark:bg-transparent focus:bg-transparent mx-2 px-1 transition-colors duration-200 ease-in-out;
   }
 }
 

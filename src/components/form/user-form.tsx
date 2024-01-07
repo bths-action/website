@@ -7,12 +7,13 @@ import { signOut } from "next-auth/react";
 import { Field, Form, Formik } from "formik";
 import { Loading } from "../ui/loading";
 import { ZodError } from "zod";
-import { registerSchema } from "@/app/api/trpc/schema/form";
+import { registerSchema } from "@/schema/form";
 import { FormQuestion } from "../ui/container";
 import { OLDEST_GRAD_YEAR, YOUNGEST_GRAD_YEAR } from "@/utils/constants";
 import { TRPCError, trpc } from "@/app/api/trpc/client";
-import { TransparentButton } from "../ui/buttons";
+import { RoundButton } from "../ui/buttons";
 import { Collapse } from "../ui/collapse";
+import { confirm } from "../ui/confirm";
 
 interface Props {
   mode: "edit" | "create";
@@ -82,7 +83,6 @@ const FormContent: FC<Props> = ({ mode, setOpen }) => {
               ([key, value]) => value !== initialValues[key as keyof FormValues]
             )
           ) as FormValues;
-          console.log(values);
         }
 
         if (Object.keys(values).length == 0) {
@@ -124,13 +124,9 @@ const FormContent: FC<Props> = ({ mode, setOpen }) => {
           <Form className="py-2">
             {mode == "create" && (
               <>
-                <TransparentButton
-                  className="border-2 px-2"
-                  type="button"
-                  onClick={() => signOut()}
-                >
+                <RoundButton type="button" onClick={() => signOut()}>
                   Not You? Sign Out
-                </TransparentButton>
+                </RoundButton>
                 <br />
               </>
             )}
@@ -214,13 +210,12 @@ const FormContent: FC<Props> = ({ mode, setOpen }) => {
             </FormQuestion>
 
             <br />
-            <TransparentButton
+            <RoundButton
               onClick={() => setPrefectHelp(!prefectHelp)}
-              className="border-2 px-2"
               type="button"
             >
               How to get prefect? (Click to {prefectHelp ? "hide" : "show"})
-            </TransparentButton>
+            </RoundButton>
             <Collapse collapsed={!prefectHelp} className="p-1">
               This is basically BTHS equalivalent of your "homeroom" number.
               <br />
@@ -262,9 +257,9 @@ const FormContent: FC<Props> = ({ mode, setOpen }) => {
 
             {error && <RequestError error={error} />}
 
-            <TransparentButton className="border-2 px-2" type="submit">
+            <RoundButton type="submit">
               Submit{isSubmitting && "ting"}
-            </TransparentButton>
+            </RoundButton>
           </Form>
         );
       }}
@@ -277,7 +272,15 @@ export const UserForm: FC<Props> = ({ mode, setOpen }) => {
 
   return (
     <PopupUI
-      setOpen={(open: boolean) => {
+      setOpen={async (open: boolean) => {
+        if (
+          !open &&
+          !(await confirm({
+            title: "Are you sure?",
+            children: "You will lose any unsaved changes.",
+          }))
+        )
+          return;
         setOpen(open);
       }}
       disabledExit={mode == "create"}

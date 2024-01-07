@@ -19,9 +19,9 @@ export default function RootLayout({
         className={`${figtree.variable} ${anybody.variable} bg-white font-anybody dark:bg-black`}
       >
         <AppProviders>
-          <div className="w-full flex h-[100dvh]">
+          <div className="w-full overflow-y-hidden flex h-[calc(100dvh-70px)] md:h-[100dvh]">
             <Navbar />
-            <div className="h-[calc(100dvh-70px)] md:h-full overflow-auto w-full break-words">
+            <div className="h-full overflow-auto w-full break-words">
               {children}
             </div>
           </div>
@@ -43,6 +43,11 @@ export const metadata: Metadata = {
   description: "A BTHS club for taking action and making a difference.",
   openGraph: {
     siteName: "BTHS Action",
+    images: "https://bthsaction.org/icon.png",
+  },
+
+  twitter: {
+    card: "summary",
   },
 
   appleWebApp: {

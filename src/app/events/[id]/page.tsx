@@ -72,7 +72,11 @@ const Page: FC<Params> = async ({ params: { id } }) => {
     notFound();
   }
 
-  return <EventPage event={event} />;
+  return (
+    <main>
+      <EventPage event={event} />
+    </main>
+  );
 };
 
 export default Page;

@@ -7,6 +7,7 @@ import { TransparentButton } from "../ui/buttons";
 import { QueryForm } from "./query-form";
 import { Loading } from "../ui/loading";
 import { RequestError } from "../ui/error";
+import { CreateEvent } from "./create-event";
 
 export type EventPreview = GetEventsOutput["events"][number];
 
@@ -28,7 +29,7 @@ export const Events: FC = () => {
   });
 
   return (
-    <main>
+    <>
       <LimitedContainer>
         <QueryForm query={query} setQuery={setQuery} />
 
@@ -67,6 +68,7 @@ export const Events: FC = () => {
             "No More Events"
           ))}
       </LimitedContainer>
-    </main>
+      <CreateEvent />
+    </>
   );
 };

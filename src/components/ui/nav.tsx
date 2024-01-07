@@ -2,7 +2,7 @@
 import { useTheme } from "next-themes";
 import Image from "next/image";
 import { FC, PropsWithChildren, ReactNode, useEffect, useState } from "react";
-import { TransparentButton, TransparentButtonProps } from "./buttons";
+import { TransparentButton, MotionButtonProps } from "./buttons";
 import { FaRegIdCard, FaRegMoon, FaUserEdit } from "react-icons/fa";
 import Link from "next/link";
 import { IconType } from "react-icons";
@@ -80,7 +80,7 @@ const NavButton: FC<
       href?: string;
       icon?: IconType;
       hideSmall?: boolean;
-    } & TransparentButtonProps
+    } & MotionButtonProps
   >
 > = ({
   href,
@@ -220,7 +220,7 @@ export const Navbar: FC<PropsWithChildren> = ({ children }) => {
 
   // vertical navbar
   return (
-    <nav className="flex items-center justify-around md:justify-start md:flex-col md:h-[100dvh] w-screen md:w-20 lg:w-60 bottom-0 bg-gray-100 dark:bg-gray-900 py-2 md:relative absolute flex-row z-30 border-r-0 md:border-r-2 border-t-2 md:border-t-0 ">
+    <nav className="flex items-center justify-around md:justify-start md:flex-col bg-gray-50 dark:bg-zinc-900 md:h-[100dvh] w-screen md:w-20 lg:w-60 bottom-0 py-2 md:relative absolute flex-row z-30 border-r-0 md:border-r-2 border-t-2 md:border-t-0 ">
       <Link href="/" className="hidden md:inline-block">
         <Image
           src="/icon.png"
@@ -230,7 +230,7 @@ export const Navbar: FC<PropsWithChildren> = ({ children }) => {
           className="rounded-full w-12 h-12"
         />
       </Link>
-      <div className="flex items-center justify-around md:justify-start w-full md:flex-col md:h-[calc(100dvh-60px)] md:overflow-auto flex-1">
+      <div className="flex items-center justify-around md:justify-start w-full md:flex-col md:h-[calc(100dvh-60px)] md:overflow-x-hidden flex-1">
         {Object.entries(NAV_LINKS).map(([location, { href, icon, text }]) => (
           <NavButton
             key={href}
@@ -283,7 +283,7 @@ export const Navbar: FC<PropsWithChildren> = ({ children }) => {
           sideId
             ? "h-60 w-[100dvw]  md:w-60 overflow-y-auto"
             : "h-0 w-0 overflow-y-hidden"
-        }  bg-gray-100 md:border-0 md:border-r-2 border-t-2  dark:bg-gray-900 bg-opacity-90 dark:bg-opacity-90 md:translate-x-full  right-0 top-0 translate-x-0 -translate-y-full md:translate-y-0 transition-[height,width] duration-300 ease-in-out md:overflow-hidden`}
+        } bg-gray-50  md:border-0 md:border-r-2 border-t-2  dark:bg-zinc-900 bg-opacity-90 dark:bg-opacity-90 md:translate-x-full  right-0 top-0 translate-x-0 -translate-y-full md:translate-y-0 transition-[height,width] duration-300 ease-in-out md:overflow-hidden`}
       >
         <div className="md:w-60 w-full">
           <NavButton

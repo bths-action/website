@@ -68,7 +68,7 @@ model Event {
   imageURL       String?
   serviceLetters String?
 
-  messageID String? @unique
+  messageID String @unique
 
   address   String   @db.VarChar(1000)
   createdAt DateTime @default(now())

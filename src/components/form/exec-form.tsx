@@ -1,6 +1,6 @@
 "use client";
 import { TRPCError, trpc } from "@/app/api/trpc/client";
-import { createExecSchema } from "@/app/api/trpc/schema/exec";
+import { createExecSchema } from "@/schema/exec";
 import { useAccount } from "@/providers/account";
 import { ExecPosition } from "@prisma/client";
 import { Field, Form, Formik } from "formik";
@@ -12,9 +12,9 @@ import { FormError, RequestError } from "../ui/error";
 import { Loading } from "../ui/loading";
 import { PopupUI } from "../ui/popup";
 import { BiXCircle } from "react-icons/bi";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import { TransparentButton } from "../ui/buttons";
+import { RoundButton } from "../ui/buttons";
+import { confirm } from "../ui/confirm";
+import { MarkDownView } from "../ui/md-view";
 
 interface Props {
   mode: "edit" | "create";
@@ -64,7 +64,6 @@ const FormContent: FC<Props> = ({ mode, setOpen }) => {
               ([key, value]) => value !== initialValues[key as keyof FormValues]
             )
           ) as typeof values;
-          console.log(values);
         }
 
         if (Object.keys(values).length == 0) {
@@ -137,22 +136,7 @@ const FormContent: FC<Props> = ({ mode, setOpen }) => {
             <br />
             {values.description && (
               <div className="mx-2 bg-gray-500 bg-opacity-20 overflow-auto break-words p-1 rounded-md">
-                <ReactMarkdown
-                  remarkPlugins={[remarkGfm]}
-                  components={{
-                    h1: (props) => <h1 {...props} className="text-[35px]" />,
-                    h2: (props) => <h2 {...props} className="text-[32.5px]" />,
-                    h3: (props) => <h3 {...props} className="text-[30px]" />,
-                    h4: (props) => <h4 {...props} className="text-[27.5px]" />,
-                    h5: (props) => <h5 {...props} className="text-[25px]" />,
-                    h6: (props) => <h6 {...props} className="text-[22.5px]" />,
-                    a: (props) => (
-                      <a {...props} target="_blank" className="default" />
-                    ),
-                  }}
-                >
-                  {values.description}
-                </ReactMarkdown>
+                <MarkDownView>{values.description}</MarkDownView>
               </div>
             )}
 
@@ -183,7 +167,6 @@ const FormContent: FC<Props> = ({ mode, setOpen }) => {
                     return;
                   }
                   const body = await res.json();
-                  console.log(body);
                   setFieldValue("selfieURL", body.image.url);
                   e.target.value = "";
                   setUploading(false);
@@ -214,13 +197,9 @@ const FormContent: FC<Props> = ({ mode, setOpen }) => {
             </FormQuestion>
             <br />
 
-            <TransparentButton
-              className="border-2 px-2"
-              disabled={isSubmitting}
-              type="submit"
-            >
+            <RoundButton disabled={isSubmitting} type="submit">
               Submit{isSubmitting && "ting"} Exec Desc
-            </TransparentButton>
+            </RoundButton>
           </Form>
         );
       }}
@@ -233,7 +212,15 @@ export const ExecForm: FC<Props> = ({ mode, setOpen }) => {
 
   return (
     <PopupUI
-      setOpen={(open: boolean) => {
+      setOpen={async (open: boolean) => {
+        if (
+          !open &&
+          !(await confirm({
+            title: "Are you sure?",
+            children: "You will lose any unsaved changes.",
+          }))
+        )
+          return;
         setOpen(open);
       }}
       disabledExit={mode == "create"}

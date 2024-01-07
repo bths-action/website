@@ -1,7 +1,7 @@
 import { prisma } from "@/utils/prisma";
 import { Prisma } from "@prisma/client";
 import { publicProcedure } from "../trpc";
-import { queryEventsSchema } from "../schema/events";
+import { queryEventsSchema } from "@/schema/events";
 
 export const getEvents = publicProcedure
   .input(queryEventsSchema)
