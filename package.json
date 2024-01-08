@@ -33,6 +33,7 @@
     "next-themes": "^0.2.1",
     "nextjs-toploader": "^1.6.4",
     "prisma": "^5.7.1",
+    "pusher": "^5.2.0",
     "react": "^18",
     "react-confirm": "^0.3.0-7",
     "react-dom": "^18",

@@ -41,6 +41,21 @@ export type EditEventOutput = RouterOutput["editEvent"];
 export type DeleteEventInput = RouterInput["deleteEvent"];
 export type DeleteEventOutput = RouterOutput["deleteEvent"];
 
+export type JoinEventInput = RouterInput["joinEvent"];
+export type JoinEventOutput = RouterOutput["joinEvent"];
+
+export type ForceJoinEventInput = RouterInput["forceJoinEvent"];
+export type ForceJoinEventOutput = RouterOutput["forceJoinEvent"];
+
+export type LeaveEventInput = RouterInput["leaveEvent"];
+export type LeaveEventOutput = RouterOutput["leaveEvent"];
+
+export type GetEventSpaceInput = RouterInput["getEventSpace"];
+export type GetEventSpaceOutput = RouterOutput["getEventSpace"];
+
+export type GetAttendanceInput = RouterInput["getAttendance"];
+export type GetAttendanceOutput = RouterOutput["getAttendance"];
+
 export type TRPCError = TRPCClientErrorLike<RouterErrors>;
 
 export const trpc = createTRPCReact<AppRouter>({});

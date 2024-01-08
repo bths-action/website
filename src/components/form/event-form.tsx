@@ -38,7 +38,9 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
   const editEvent = trpc.editEvent.useMutation();
   const [error, setError] = useState<TRPCError | null>(null);
   const [uploading, setUploading] = useState(false);
-  const [finishOpen, setFinishOpen] = useState(false);
+  const [finishOpen, setFinishOpen] = useState(
+    mode == "edit" ? Boolean(event.finishTime) : false
+  );
 
   const initialValues = {
     name: mode == "edit" ? event.name : "",
@@ -189,6 +191,17 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
                 id="eventTime"
                 name="eventTime"
                 type="datetime-local"
+                value={
+                  values.eventTime
+                    ? // turn into date time local format with timezone alterations
+                      new Date(
+                        values.eventTime.getTime() -
+                          values.eventTime.getTimezoneOffset() * 60000
+                      )
+                        .toISOString()
+                        .slice(0, -1)
+                    : ""
+                }
                 onChange={(e) =>
                   setFieldValue(
                     "eventTime",
@@ -206,9 +219,9 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
                 setFinishOpen(!finishOpen);
               }}
             >
-              {finishOpen ? "Enable" : "Disable"} Range Event
+              {finishOpen ? "Disable" : "Enable"} Range Event
             </RoundButton>
-            <Collapse collapsed={finishOpen}>
+            <Collapse collapsed={!finishOpen}>
               <FormQuestion errored={Boolean(errors.finishTime)}>
                 <label htmlFor="finishTime">Finish Time:</label>
                 <input
