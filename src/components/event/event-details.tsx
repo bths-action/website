@@ -22,7 +22,7 @@ export const EventDetails: FC<Props> = ({ event }) => {
       )}
       <h3>Service Letters:</h3>
       {event.serviceLetters ? (
-        <Link href={event.serviceLetters} target="_blank">
+        <Link href={event.serviceLetters} target="_blank" className="default">
           <FaRegEnvelope className="inline" /> Service Letters
         </Link>
       ) : (
@@ -33,30 +33,25 @@ export const EventDetails: FC<Props> = ({ event }) => {
       <br />
       <BsAward className="inline" /> Total Points : {event.maxPoints}
       <br />
-      <h3>
-        Event Time:{" "}
-        {event.eventTime.toLocaleString("en-US", {
-          timeZone: "America/New_York",
-          month: "long",
-          day: "numeric",
-          year: "numeric",
-          hour: "numeric",
-          minute: "2-digit",
-        })}
-      </h3>
-      <h3>
-        Location:
-        <br />
-        <Link
-          className="text-2xl default"
-          href={encodeURI(
-            `https://www.google.com/maps/dir/?api=1&destination=${event.address}&travelmode=transit`
-          )}
-          target="_blank"
-        >
-          {event.address} <BiLinkExternal className="inline" />
-        </Link>
-      </h3>
+      <h3>Event Time:</h3>
+      {event.eventTime.toLocaleString("en-US", {
+        timeZone: "America/New_York",
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+      })}
+      <h3>Location:</h3>
+      <Link
+        className="default"
+        href={encodeURI(
+          `https://www.google.com/maps/dir/?api=1&destination=${event.address}&travelmode=transit`
+        )}
+        target="_blank"
+      >
+        {event.address} <BiLinkExternal className="inline" />
+      </Link>
       <iframe
         src={encodeURI(
           `https://maps.google.com/maps?q=${event.address}&t=&z=13&ie=UTF8&iwloc=&output=embed`

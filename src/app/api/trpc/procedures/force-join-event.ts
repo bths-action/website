@@ -1,10 +1,10 @@
-import { forceSchema } from "@/schema/attendance";
+import { forceAttendanceSchema } from "@/schema/attendance";
 import { adminProcedure } from "../trpc";
 import { prisma } from "@/utils/prisma";
 import { pusher } from "@/utils/pusher";
 
 export const forceJoinEvent = adminProcedure
-  .input(forceSchema)
+  .input(forceAttendanceSchema)
   .mutation(async ({ ctx, input: { id, user } }) => {
     const attendance = await prisma.eventAttendance.create({
       data: {
@@ -13,7 +13,7 @@ export const forceJoinEvent = adminProcedure
       },
     });
 
-    await pusher.trigger(id, "join", attendance);
+    await pusher.trigger(`private-${id}`, "join", attendance);
 
     return attendance;
   });

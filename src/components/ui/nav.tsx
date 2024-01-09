@@ -220,7 +220,7 @@ export const Navbar: FC<PropsWithChildren> = ({ children }) => {
 
   // vertical navbar
   return (
-    <nav className="flex items-center justify-around md:justify-start md:flex-col bg-gray-50 dark:bg-zinc-900 md:h-[100dvh] w-screen md:w-20 lg:w-60 bottom-0 py-2 md:relative absolute flex-row z-30 border-r-0 md:border-r-2 border-t-2 md:border-t-0 ">
+    <nav className="flex items-center justify-around md:justify-start md:flex-col bg-gray-100 dark:bg-zinc-900 md:h-[100dvh] w-screen md:w-20 lg:w-60 bottom-0 py-2 md:relative absolute flex-row z-30 border-r-0 md:border-r-2 border-t-2 md:border-t-0 ">
       <Link href="/" className="hidden md:inline-block">
         <Image
           src="/icon.png"

@@ -1,12 +1,12 @@
-import { attendanceSchema } from "@/schema/attendance";
+import { attendanceWriteSchema } from "@/schema/attendance";
 import { memberProcedure } from "../trpc";
 import { prisma } from "@/utils/prisma";
 import { TRPCError } from "@trpc/server";
 import { pusher } from "@/utils/pusher";
 
 export const joinEvent = memberProcedure
-  .input(attendanceSchema)
-  .mutation(async ({ ctx, input: { id } }) => {
+  .input(attendanceWriteSchema)
+  .mutation(async ({ ctx, input: { id, socketId } }) => {
     const event = await prisma.event.findUnique({
       where: { id },
       select: {
@@ -57,7 +57,9 @@ export const joinEvent = memberProcedure
       },
     });
 
-    await pusher.trigger(id, "join", attendance);
+    await pusher.trigger(id, "join", attendance, {
+      socket_id: socketId,
+    });
 
     return attendance;
   });

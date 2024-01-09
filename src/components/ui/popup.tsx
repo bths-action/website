@@ -33,7 +33,7 @@ export const PopupUI: FC<
       }}
     >
       <div
-        className={`flex flex-col max-w-5xl xs:min-w-0 ${
+        className={`flex flex-col max-w-[95vw] max-h-[95dvh] xs:min-w-0 ${
           size == "large" ? "w-[95vw] h-[95dvh]" : ""
         } text-center bg-white dark:bg-zinc-900 rounded-lg border-2 border-black dark:border-white`}
       >
