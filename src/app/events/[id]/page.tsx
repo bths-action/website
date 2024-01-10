@@ -8,7 +8,7 @@ import removeMarkdown from "remove-markdown";
 export const dynamicParams = true;
 export const revalidate = 15;
 
-type Params = {
+export type Params = {
   params: { id: string };
 };
 
@@ -22,6 +22,19 @@ export async function generateMetadata({
 
   if (!event) {
     return {
+      creator: "BTHS Action",
+      generator: "BTHS Action",
+      icons: {
+        icon: "/icon.png",
+        apple: "/apple-icon-180.png",
+        shortcut: "/icon.png",
+      },
+      manifest: "/manifest.json",
+
+      openGraph: {
+        siteName: "BTHS Action",
+        images: "https://bthsaction.org/icon.png",
+      },
       title: "Nonexistent Event",
       description: "You may have attached a bad link.",
     };
@@ -30,12 +43,21 @@ export async function generateMetadata({
   const description = removeMarkdown(event.description);
 
   const metadata: Metadata = {
+    creator: "BTHS Action",
+    generator: "BTHS Action",
+    icons: {
+      icon: "/icon.png",
+      apple: "/apple-icon-180.png",
+      shortcut: "/icon.png",
+    },
+    manifest: "/manifest.json",
     title: event.name,
     description:
       description.length > 500
         ? description.substring(0, 500).trim() + "..."
         : description,
     openGraph: {
+      siteName: "BTHS Action",
       ...(event.imageURL
         ? {
             images: {

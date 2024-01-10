@@ -14,6 +14,8 @@ import { joinEvent } from "./procedures/join-event";
 import { leaveEvent } from "./procedures/leave-event";
 import { getEventSpace } from "./procedures/get-event-space";
 import { getAttendance } from "./procedures/get-attendance";
+import { editAttendance } from "./procedures/edit-attendance";
+import { getAttendees } from "./procedures/get-attendees";
 
 export const appRouter = router({
   //generate smth random
@@ -36,6 +38,8 @@ export const appRouter = router({
   leaveEvent,
   getEventSpace,
   getAttendance,
+  editAttendance,
+  getAttendees,
 });
 
 export const createContext = async () => {

@@ -11,3 +11,9 @@ export const attendanceWriteSchema = attendanceSchema.extend({
 export const forceAttendanceSchema = attendanceWriteSchema.extend({
   user: z.string().email(),
 });
+
+export const attendanceEditSchema = forceAttendanceSchema.extend({
+  attendedAt: z.date().optional().nullish(),
+  earnedPoints: z.number().optional(),
+  earnedHours: z.number().optional(),
+});

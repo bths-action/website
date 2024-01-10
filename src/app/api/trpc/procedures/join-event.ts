@@ -57,7 +57,7 @@ export const joinEvent = memberProcedure
       },
     });
 
-    await pusher.trigger(id, "join", attendance, {
+    await pusher.trigger(`private-${id}`, "join", attendance, {
       socket_id: socketId,
     });
 

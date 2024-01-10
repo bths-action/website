@@ -51,7 +51,7 @@ export const UserAttendance: FC<Props> = ({ event }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const pusher = usePusher();
-  const channel = useChannel(event.id);
+  const channel = useChannel(`private-${event.id}`);
   useEvent(channel, "update", (data) => {
     if (attendance.status == "success" && attendance.data)
       utils.getAttendance.setData(

@@ -56,6 +56,12 @@ export type GetEventSpaceOutput = RouterOutput["getEventSpace"];
 export type GetAttendanceInput = RouterInput["getAttendance"];
 export type GetAttendanceOutput = RouterOutput["getAttendance"];
 
+export type EditAttendanceInput = RouterInput["editAttendance"];
+export type EditAttendanceOutput = RouterOutput["editAttendance"];
+
+export type GetAttendeesInput = RouterInput["getAttendees"];
+export type GetAttendeesOutput = RouterOutput["getAttendees"];
+
 export type TRPCError = TRPCClientErrorLike<RouterErrors>;
 
 export const trpc = createTRPCReact<AppRouter>({});

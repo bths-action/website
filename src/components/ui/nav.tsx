@@ -2,8 +2,14 @@
 import { useTheme } from "next-themes";
 import Image from "next/image";
 import { FC, PropsWithChildren, ReactNode, useEffect, useState } from "react";
-import { TransparentButton, MotionButtonProps } from "./buttons";
-import { FaRegIdCard, FaRegMoon, FaUserEdit } from "react-icons/fa";
+import { TransparentButton, MotionButtonProps, ColorButton } from "./buttons";
+import {
+  FaClipboard,
+  FaClipboardCheck,
+  FaRegIdCard,
+  FaRegMoon,
+  FaUserEdit,
+} from "react-icons/fa";
 import Link from "next/link";
 import { IconType } from "react-icons";
 import {
@@ -12,6 +18,7 @@ import {
   MdHomeFilled,
   MdOutlineBalance,
   MdOutlineWbSunny,
+  MdWarning,
 } from "react-icons/md";
 import {
   BiLogOut,
@@ -91,7 +98,7 @@ const NavButton: FC<
   className,
   ...props
 }) => {
-  const icon = Icon ? <Icon className="h-full inline w-7" /> : null;
+  const icon = Icon ? <Icon className="h-full inline w-6" /> : null;
   const content = (
     <>
       {icon}
@@ -104,9 +111,9 @@ const NavButton: FC<
   return (
     <TransparentButton
       onClick={onClick}
-      className={`rounded-full md:rounded-none w-full lg:text-left ${
-        className || ""
-      } ${href ? "" : "md:px-4 py-2"}`}
+      className={`rounded-full md:rounded-none w-full ${className || ""} ${
+        href ? "" : "md:px-4 py-2"
+      }`}
       {...props}
     >
       {href ? (
@@ -134,10 +141,10 @@ const ThemeButton: FC<{
       onClick={() => {
         if (mounted) setTheme(resolvedTheme == "dark" ? "light" : "dark");
       }}
-      className=""
+      className="lg:text-left"
     >
-      <FaRegMoon className="-ml-1 h-full w-7 hidden dark:inline" />
-      <MdOutlineWbSunny className="-ml-1 h-full w-7 inline dark:hidden" />
+      <FaRegMoon className="-ml-1 h-full w-6 hidden dark:inline" />
+      <MdOutlineWbSunny className="-ml-1 h-full w-6 inline dark:hidden" />
       <span className="ml-1 lg:inline hidden">Toggle Theme</span>
     </NavButton>
   );
@@ -169,7 +176,7 @@ const ProfileButton: FC<{
           scale: 1.1,
         }}
         disabled={notDone}
-        className="rounded-full md:my-2 h-10 w-10 mx-2"
+        className="relative rounded-full md:my-2 h-10 w-10 mx-2"
         onClick={() => {
           if (status == "unauthenticated") signIn("auth0");
           else {
@@ -188,9 +195,36 @@ const ProfileButton: FC<{
                       Edit Exec Profile
                     </NavButton>
                   )}
-                <NavButton icon={BiLogOut} onClick={() => signOut()}>
-                  Logout{" "}
-                </NavButton>
+                {
+                  <NavButton
+                    disabled={accountData?.didOsis}
+                    icon={accountData?.didOsis ? FaClipboardCheck : FaClipboard}
+                    className="relative"
+                    onClick={() => {
+                      open(
+                        "https://docs.google.com/forms/d/e/1FAIpQLSd7yl28S0IVjgkKO2q-OUEwMxu963KK79HJd0Tqnoc-gl_xeQ/viewform?usp=sf_link"
+                      );
+                    }}
+                  >
+                    OSIS Form{" "}
+                    {accountData?.didOsis ? (
+                      "(Completed)"
+                    ) : (
+                      <>
+                        (MUST DO)
+                        <MdWarning className="inline w-6 h-6 text-red-500" />
+                      </>
+                    )}
+                  </NavButton>
+                }
+                <ColorButton
+                  color="red-500"
+                  className="text-red-900 w-full rounded-none"
+                  innerClass=" p-2"
+                  onClick={() => signOut()}
+                >
+                  <BiLogOut className="inline w-6 h-6 mr-1 " /> Logout
+                </ColorButton>
               </>
             );
           }
@@ -205,6 +239,9 @@ const ProfileButton: FC<{
           }
           className="rounded-full min-w-10 min-h-10 bg-black bordered"
         />
+        {accountStatus == "success" && accountData?.didOsis == false && (
+          <MdWarning className="absolute right-0 top-0 w-8 h-8 text-red-500 translate-x-1/2 -translate-y-1/2" />
+        )}
       </TransparentButton>
     </>
   );
@@ -237,6 +274,7 @@ export const Navbar: FC<PropsWithChildren> = ({ children }) => {
             icon={icon}
             href={href}
             hideSmall
+            className="lg:text-left"
             onClick={() => {
               setSideId("");
             }}
@@ -247,6 +285,7 @@ export const Navbar: FC<PropsWithChildren> = ({ children }) => {
         <NavButton
           icon={MdContentCopy}
           hideSmall
+          className="lg:text-left"
           onClick={() => {
             setSideId(sideId == "resources" ? "" : "resources");
             setSideContent(
@@ -288,7 +327,7 @@ export const Navbar: FC<PropsWithChildren> = ({ children }) => {
         <div className="md:w-60 w-full">
           <NavButton
             icon={BiXCircle}
-            className="border-b-2 rounded-none"
+            className="border-b-2 rounded-none text-center"
             onClick={() => {
               setSideId("");
             }}

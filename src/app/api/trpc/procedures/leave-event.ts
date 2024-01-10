@@ -16,7 +16,7 @@ export const leaveEvent = memberProcedure
     });
 
     await pusher.trigger(
-      id,
+      `private-${id}`,
       "delete",
       {
         email: attendance.userEmail,
