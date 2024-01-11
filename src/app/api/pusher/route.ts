@@ -1,7 +1,7 @@
 import { prisma } from "@/utils/prisma";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
-import { AUTH_OPTIONS } from "../[...nextauth]/options";
+import { AUTH_OPTIONS } from "../auth/[...nextauth]/options";
 import { z } from "zod";
 import { pusher } from "@/utils/pusher";
 
@@ -42,7 +42,7 @@ export const POST = async (req: NextRequest) => {
     return NextResponse.json({ error: "Invalid body" }, { status: 400 });
   }
 
-  const response = pusher.authorizeChannel(
+  const response = pusher().authorizeChannel(
     parsedBody.socket_id,
     parsedBody.channel_name
   );

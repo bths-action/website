@@ -12,7 +12,7 @@ export const editAttendance = adminProcedure
       data,
     });
 
-    pusher.trigger(`private-${id}`, "update", attendance, {
+    pusher().trigger(`private-${id}`, "update", attendance, {
       socket_id: socketId,
     });
 

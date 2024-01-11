@@ -21,7 +21,7 @@ export const forceJoinEvent = adminProcedure
       },
     });
 
-    await pusher.trigger(`private-${id}`, "join", attendance);
+    await pusher().trigger(`private-${id}`, "join", attendance);
 
     return attendance;
   });

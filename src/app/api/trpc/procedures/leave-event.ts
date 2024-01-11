@@ -44,7 +44,7 @@ export const leaveEvent = memberProcedure
       },
     });
 
-    await pusher.trigger(
+    await pusher().trigger(
       `private-${id}`,
       "delete",
       {

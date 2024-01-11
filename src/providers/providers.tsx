@@ -41,7 +41,7 @@ export const AppProviders: FC<PropsWithChildren> = ({ children }) => {
     <PusherProvider
       clientKey={process.env.NEXT_PUBLIC_PUSHER_KEY!}
       cluster={process.env.NEXT_PUBLIC_PUSHER_CLUSTER!}
-      authEndpoint="/api/auth/pusher"
+      authEndpoint="/api/pusher"
     >
       <ThemeProvider attribute="class" storageKey="theme">
         <MDXProvider components={components}>
