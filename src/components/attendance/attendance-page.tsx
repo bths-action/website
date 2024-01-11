@@ -53,6 +53,8 @@ export const AttendancePage: FC<{
   useEvent(channel, "update", (rawData: any) => {
     if (attendance.status !== "success") return;
     const data: EditAttendanceOutput = rawData;
+    data.registeredAt = data.registeredAt && new Date(data.registeredAt);
+    data.attendedAt = data.attendedAt && new Date(data.attendedAt);
     utils.getAttendees.setData(
       {
         id,
@@ -93,6 +95,8 @@ export const AttendancePage: FC<{
   useEvent(channel, "join", (raw: any) => {
     if (attendance.status !== "success") return;
     const data: JoinEventOutput = raw;
+    data.registeredAt = data.registeredAt && new Date(data.registeredAt);
+    data.attendedAt = data.attendedAt && new Date(data.attendedAt);
     utils.getAttendees.setData(
       {
         id,

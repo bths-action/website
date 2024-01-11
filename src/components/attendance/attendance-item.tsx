@@ -172,6 +172,12 @@ export const AttendanceItem: FC<ItemProps> = ({ attendee, attendance, id }) => {
               id,
               user: attendee.userEmail,
               attendedAt: attendee.attendedAt ? null : new Date(),
+              ...(attendee.attendedAt
+                ? {
+                    earnedHours: 0,
+                    earnedPoints: 0,
+                  }
+                : {}),
               socketId,
             },
             {
