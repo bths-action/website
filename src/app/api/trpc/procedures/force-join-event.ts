@@ -11,6 +11,14 @@ export const forceJoinEvent = adminProcedure
         userEmail: user,
         eventId: id,
       },
+      include: {
+        user: {
+          select: {
+            name: true,
+            preferredName: true,
+          },
+        },
+      },
     });
 
     await pusher.trigger(`private-${id}`, "join", attendance);

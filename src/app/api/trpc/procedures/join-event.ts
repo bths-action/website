@@ -55,6 +55,14 @@ export const joinEvent = memberProcedure
         userEmail: ctx.user.email,
         eventId: id,
       },
+      include: {
+        user: {
+          select: {
+            name: true,
+            preferredName: true,
+          },
+        },
+      },
     });
 
     await pusher.trigger(`private-${id}`, "join", attendance, {

@@ -97,6 +97,6 @@
   }
 
   .choice {
-    @apply flex items-center justify-center px-1 rounded-lg bg-gray-200 dark:bg-zinc-600 bg-opacity-0 hover:bg-opacity-25 transition-opacity duration-200 ease-in-out;
+    @apply flex items-center justify-center px-1 rounded-lg bg-zinc-400 bg-opacity-0 hover:bg-opacity-30 transition-opacity duration-200 ease-in-out;
   }
 }

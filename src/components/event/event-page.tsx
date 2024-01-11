@@ -20,7 +20,7 @@ export const EventPage: FC<{
   const [event, setEvent] = useState<Event>(defaultEvent);
   return (
     <LimitedContainer>
-      <h1>{event.name}</h1>
+      <h1 className="break-all">{event.name}</h1>
       <AdminActions event={event} setEvent={setEvent} />
       <div className="w-full flex flex-wrap mt-5">
         <div className="w-full md:w-1/2 p-2">

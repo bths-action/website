@@ -52,6 +52,14 @@ export const UserAttendance: FC<Props> = ({ event }) => {
 
   const pusher = usePusher();
   const channel = useChannel(`private-${event.id}`);
+
+  const notAccepting =
+    (event.finishTime && event.finishTime.valueOf() < Date.now()) ||
+    event.eventTime.valueOf() < Date.now();
+
+  console.log(notAccepting, event.finishTime, event.eventTime);
+  const wait = event.finishTime && event.eventTime.valueOf() > Date.now();
+
   useEvent(channel, "update", (data) => {
     if (attendance.status == "success" && attendance.data)
       utils.getAttendance.setData(
@@ -104,7 +112,7 @@ export const UserAttendance: FC<Props> = ({ event }) => {
         <Loading
           loadingType="bar"
           spinnerProps={{
-            width: "100%",
+            width: "80%",
             height: "10px",
           }}
         >
@@ -138,45 +146,51 @@ export const UserAttendance: FC<Props> = ({ event }) => {
           earned {attendance.data.earnedHours} hours and{" "}
           {attendance.data.earnedPoints} points.
           <br />
-          <ColorButton
-            innerClass="p-2 text-xl text-white rounded-xl"
-            color="blue-500"
-            disabled={isSubmitting}
-            onClick={async () => {
-              setIsSubmitting(true);
-              const attendance = await leaveEvent.mutateAsync(
-                { id: event.id, socketId: pusher.client?.connection.socket_id },
-                {
-                  onSuccess: () => {
-                    utils.getAttendance.setData(
-                      {
-                        id: event.id,
-                      },
-                      null
-                    );
-                    leaveSpace();
+          {!notAccepting && (
+            <ColorButton
+              innerClass="p-2 text-xl text-white rounded-xl"
+              color="blue-500"
+              disabled={isSubmitting}
+              onClick={async () => {
+                setIsSubmitting(true);
+                const attendance = await leaveEvent.mutateAsync(
+                  {
+                    id: event.id,
+                    socketId: pusher.client?.connection.socket_id,
                   },
-                  onError: (error) => {
-                    confirm({
-                      title: "Error Leaving Event",
-                      children: (
-                        <>
-                          We have encountered an error while leaving the event.
-                          <br />
-                          <RequestError error={error} />
-                        </>
-                      ),
-                    });
-                  },
-                }
-              );
+                  {
+                    onSuccess: () => {
+                      utils.getAttendance.setData(
+                        {
+                          id: event.id,
+                        },
+                        null
+                      );
+                      leaveSpace();
+                    },
+                    onError: (error) => {
+                      confirm({
+                        title: "Error Leaving Event",
+                        children: (
+                          <>
+                            We have encountered an error while leaving the
+                            event.
+                            <br />
+                            <RequestError error={error} />
+                          </>
+                        ),
+                      });
+                    },
+                  }
+                );
 
-              setIsSubmitting(false);
-            }}
-          >
-            <FaUserMinus className="inline w-6 h-6 mr-1" /> Leav
-            {isSubmitting ? "ing" : "e"} Event
-          </ColorButton>
+                setIsSubmitting(false);
+              }}
+            >
+              <FaUserMinus className="inline w-6 h-6 mr-1" /> Leav
+              {isSubmitting ? "ing" : "e"} Event
+            </ColorButton>
+          )}
         </>
       ) : (
         <>
@@ -190,46 +204,59 @@ export const UserAttendance: FC<Props> = ({ event }) => {
               <br />
             </>
           )}
-          <ColorButton
-            innerClass="p-2 text-xl text-white rounded-xl"
-            color="blue-500"
-            disabled={isSubmitting}
-            onClick={async () => {
-              setIsSubmitting(true);
-              const attendance = await joinEvent.mutateAsync(
-                { id: event.id, socketId: pusher.client?.connection.socket_id },
-                {
-                  onSuccess: (data) => {
-                    utils.getAttendance.setData(
-                      {
-                        id: event.id,
-                      },
-                      data
-                    );
+          {notAccepting ? (
+            <>You cannot change attendance after an event.</>
+          ) : wait ? (
+            <>
+              The event is not available for registration yet. Based on the
+              description, you may be able to do other things.
+            </>
+          ) : (
+            <ColorButton
+              innerClass="p-2 text-xl text-white rounded-xl"
+              color="blue-500"
+              disabled={isSubmitting}
+              onClick={async () => {
+                setIsSubmitting(true);
 
-                    joinSpace();
+                joinEvent.mutate(
+                  {
+                    id: event.id,
+                    socketId: pusher.client?.connection.socket_id,
                   },
-                  onError: (error) => {
-                    confirm({
-                      title: "Error Joining Event",
-                      children: (
-                        <>
-                          We have encountered an error while joining the event.
-                          <br />
-                          <RequestError error={error} />
-                        </>
-                      ),
-                    });
-                  },
-                }
-              );
-
-              setIsSubmitting(false);
-            }}
-          >
-            <FaUserPlus className="inline w-6 h-6 mr-1" /> Join
-            {isSubmitting && "ing"} Event
-          </ColorButton>
+                  {
+                    onSuccess: (data) => {
+                      utils.getAttendance.setData(
+                        {
+                          id: event.id,
+                        },
+                        data
+                      );
+                      joinSpace();
+                      setIsSubmitting(false);
+                    },
+                    onError: (error) => {
+                      setIsSubmitting(false);
+                      confirm({
+                        title: "Error Joining Event",
+                        children: (
+                          <>
+                            We have encountered an error while joining the
+                            event.
+                            <br />
+                            <RequestError error={error} />
+                          </>
+                        ),
+                      });
+                    },
+                  }
+                );
+              }}
+            >
+              <FaUserPlus className="inline w-6 h-6 mr-1" /> Join
+              {isSubmitting && "ing"} Event
+            </ColorButton>
+          )}
         </>
       )}
     </>

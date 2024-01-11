@@ -3,10 +3,16 @@
 import { FC, ReactNode } from "react";
 import { LimitedContainer } from "../ui/container";
 import { useSession } from "next-auth/react";
-import { trpc } from "@/app/api/trpc/client";
+import {
+  EditAttendanceOutput,
+  JoinEventOutput,
+  trpc,
+} from "@/app/api/trpc/client";
 import { Loading } from "../ui/loading";
 import { useAccount } from "@/providers/account";
 import { RequestError } from "../ui/error";
+import { AttendanceList } from "./attendance-list";
+import { useChannel, useEvent } from "@harelpls/use-pusher";
 
 type Status = "loading" | "unauthorized" | "success" | "error";
 type NodeMap = {
@@ -16,6 +22,7 @@ type NodeMap = {
 export const AttendancePage: FC<{
   id: string;
 }> = ({ id }) => {
+  const utils = trpc.useUtils();
   const { status } = useSession();
   const account = useAccount();
   const attendance = trpc.getAttendees.useQuery({
@@ -42,14 +49,69 @@ export const AttendancePage: FC<{
     error: "Error",
   };
 
+  const channel = useChannel(`private-${id}`);
+  useEvent(channel, "update", (rawData: any) => {
+    if (attendance.status !== "success") return;
+    const data: EditAttendanceOutput = rawData;
+    utils.getAttendees.setData(
+      {
+        id,
+      },
+      {
+        ...attendance.data,
+        attendees: attendance.data.attendees.map((attendee) => {
+          if (attendee.userEmail == data.userEmail) {
+            return {
+              ...attendee,
+              ...data,
+            };
+          }
+          return attendee;
+        }),
+      }
+    );
+  });
+
+  useEvent(channel, "delete", (raw: any) => {
+    if (attendance.status !== "success") return;
+    const data: {
+      email: string;
+    } = raw;
+    utils.getAttendees.setData(
+      {
+        id,
+      },
+      {
+        ...attendance.data,
+        attendees: attendance.data.attendees.filter(
+          (attendee) => attendee.userEmail != data.email
+        ),
+      }
+    );
+  });
+
+  useEvent(channel, "join", (raw: any) => {
+    if (attendance.status !== "success") return;
+    const data: JoinEventOutput = raw;
+    utils.getAttendees.setData(
+      {
+        id,
+      },
+      {
+        ...attendance.data,
+        attendees: [...attendance.data.attendees, data],
+      }
+    );
+  });
+
   const body: NodeMap = {
     loading: (
       <>
         <Loading
           loadingType="bar"
           spinnerProps={{
-            width: "80%",
-            height: "10px",
+            height: 10,
+            width: 800,
           }}
         >
           Loading Attendance List...
@@ -61,7 +123,13 @@ export const AttendancePage: FC<{
         <h5>You are unauthorized to view this page.</h5>
       </>
     ),
-    success: <></>,
+    success: (
+      <>
+        {attendance.data && fetchStatus == "success" && (
+          <AttendanceList attendance={attendance.data} id={id} />
+        )}
+      </>
+    ),
     error: (
       <>
         {attendance.status === "error" && (

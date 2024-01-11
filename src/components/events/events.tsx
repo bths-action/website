@@ -8,6 +8,7 @@ import { QueryForm } from "./query-form";
 import { Loading } from "../ui/loading";
 import { RequestError } from "../ui/error";
 import { CreateEvent } from "./create-event";
+import { motion } from "framer-motion";
 
 export type EventPreview = GetEventsOutput["events"][number];
 
@@ -36,9 +37,25 @@ export const Events: FC = () => {
         <div className="flex flex-col gap-3 mb-2">
           {events.data?.pages
             .map((page) => page.events)
-            .flat()
-            .map((event) => (
-              <EventCard key={event.id} event={event} />
+            .map((events) => (
+              <motion.div
+                variants={{
+                  hidden: { opacity: 0 },
+                  show: {
+                    opacity: 1,
+                    transition: {
+                      staggerChildren: 0.2,
+                    },
+                  },
+                }}
+                className="flex flex-col gap-3 mb-2 overflow-x-hidden"
+                initial="hidden"
+                animate="show"
+              >
+                {events.map((event, index) => (
+                  <EventCard key={event.id} event={event} index={index} />
+                ))}
+              </motion.div>
             ))}
         </div>
         {events.isFetching && (
@@ -46,7 +63,7 @@ export const Events: FC = () => {
             loadingType="bar"
             spinnerProps={{
               height: 10,
-              width: 1000,
+              width: 800,
             }}
           >
             Loading...
