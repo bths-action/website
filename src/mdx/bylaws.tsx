@@ -4,7 +4,7 @@ import { FC } from "react";
 
 export const Bylaws: FC = () => {
   return (
-    <div className="w-full text-left">
+    <div className="w-full text-left" id="mdx">
       <BylawsContent />
     </div>
   );

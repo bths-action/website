@@ -2,7 +2,6 @@
 import { GetEventsOutput, trpc, GetEventsInput } from "@/app/api/trpc/client";
 import { useState, FC } from "react";
 import { EventCard } from "./event-card";
-import { LimitedContainer } from "../ui/container";
 import { TransparentButton } from "../ui/buttons";
 import { QueryForm } from "./query-form";
 import { Loading } from "../ui/loading";
@@ -31,60 +30,59 @@ export const Events: FC = () => {
 
   return (
     <>
-      <LimitedContainer>
-        <QueryForm query={query} setQuery={setQuery} />
+      <QueryForm query={query} setQuery={setQuery} />
 
-        <div className="flex flex-col gap-3 mb-2">
-          {events.data?.pages
-            .map((page) => page.events)
-            .map((events) => (
-              <motion.div
-                variants={{
-                  hidden: { opacity: 0 },
-                  show: {
-                    opacity: 1,
-                    transition: {
-                      staggerChildren: 0.2,
-                    },
+      <div className="flex flex-col gap-3 mb-2 overflow-x-hidden">
+        {events.data?.pages
+          .map((page) => page.events)
+          .map((events) => (
+            <motion.div
+              variants={{
+                hidden: { opacity: 0 },
+                show: {
+                  opacity: 1,
+                  transition: {
+                    staggerChildren: 0.2,
                   },
-                }}
-                className="flex flex-col gap-3 mb-2 overflow-x-hidden"
-                initial="hidden"
-                animate="show"
-              >
-                {events.map((event, index) => (
-                  <EventCard key={event.id} event={event} index={index} />
-                ))}
-              </motion.div>
-            ))}
-        </div>
-        {events.isFetching && (
-          <Loading
-            loadingType="bar"
-            spinnerProps={{
-              height: 10,
-              width: 800,
+                },
+              }}
+              className="flex flex-col gap-3"
+              initial="hidden"
+              animate="show"
+            >
+              {events.map((event, index) => (
+                <EventCard key={event.id} event={event} index={index} />
+              ))}
+            </motion.div>
+          ))}
+      </div>
+      {events.isFetching && (
+        <Loading
+          loadingType="bar"
+          spinnerProps={{
+            height: 10,
+            width: 800,
+          }}
+        >
+          Loading...
+        </Loading>
+      )}
+      {events.isError && <RequestError error={events.error} />}
+      {!events.isFetching &&
+        (events.hasNextPage ? (
+          <TransparentButton
+            className="px-2 bordered"
+            disabled={events.isFetchingNextPage}
+            onClick={() => {
+              events.fetchNextPage();
             }}
           >
-            Loading...
-          </Loading>
-        )}
-        {events.isError && <RequestError error={events.error} />}
-        {!events.isFetching &&
-          (events.hasNextPage ? (
-            <TransparentButton
-              className="px-2 bordered"
-              disabled={events.isFetchingNextPage}
-              onClick={() => {
-                events.fetchNextPage();
-              }}
-            >
-              Load More Events
-            </TransparentButton>
-          ) : (
-            "No More Events"
-          ))}
-      </LimitedContainer>
+            Load More Events
+          </TransparentButton>
+        ) : (
+          "No More Events"
+        ))}
+
       <CreateEvent />
     </>
   );

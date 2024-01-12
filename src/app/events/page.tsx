@@ -1,4 +1,5 @@
 import { Events } from "@/components/events/events";
+import { LimitedContainer } from "@/components/ui/container";
 import { FC } from "react";
 
 export const metadata = {
@@ -9,9 +10,10 @@ export const metadata = {
 const EventsPage: FC = () => {
   return (
     <main>
-      <h1>Events</h1>
-
-      <Events />
+      <LimitedContainer>
+        <h1>Events</h1>
+        <Events />
+      </LimitedContainer>
     </main>
   );
 };

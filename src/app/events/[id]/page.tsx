@@ -1,4 +1,5 @@
 import { EventPage } from "@/components/event/event-page";
+import { LimitedContainer } from "@/components/ui/container";
 import { prisma } from "@/utils/prisma";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -58,16 +59,13 @@ export async function generateMetadata({
         : description,
     openGraph: {
       siteName: "BTHS Action",
-      ...(event.imageURL
-        ? {
-            images: {
-              url: event.imageURL,
-            },
-          }
-        : {}),
+
+      images: {
+        url: event.imageURL || "https://bthsaction.org/icon.png",
+      },
     },
     twitter: {
-      card: "summary_large_image",
+      card: event.imageURL ? "summary_large_image" : "summary",
     },
   };
 
@@ -96,7 +94,9 @@ const Page: FC<Params> = async ({ params: { id } }) => {
 
   return (
     <main>
-      <EventPage event={event} />
+      <LimitedContainer>
+        <EventPage event={event} />
+      </LimitedContainer>
     </main>
   );
 };

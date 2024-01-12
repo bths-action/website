@@ -32,7 +32,7 @@ export const AttendanceList: FC<ListProps> = ({ attendance, id }) => {
       }}
       initial="hidden"
       animate="show"
-      className="overflow-x-hidden flex flex-col"
+      className="overflow-x-visible flex flex-col"
     >
       <div className="flex justify-center flex-wrap">
         <label htmlFor="email">Force Add: </label>

@@ -1,7 +1,6 @@
 "use client";
 import { Event } from "@prisma/client";
 import { Dispatch, FC, SetStateAction, useState } from "react";
-import { LimitedContainer } from "../ui/container";
 import { AdminActions } from "./admin-actions";
 import { EventDetails, EventDescription } from "./event-details";
 import { UserAttendance } from "./user-attendance";
@@ -19,7 +18,7 @@ export const EventPage: FC<{
 }> = ({ event: defaultEvent }) => {
   const [event, setEvent] = useState<Event>(defaultEvent);
   return (
-    <LimitedContainer>
+    <>
       <h1 className="break-all">{event.name}</h1>
       <AdminActions event={event} setEvent={setEvent} />
       <div className="w-full flex flex-wrap mt-5">
@@ -31,6 +30,6 @@ export const EventPage: FC<{
           <UserAttendance event={event} />
         </div>
       </div>
-    </LimitedContainer>
+    </>
   );
 };

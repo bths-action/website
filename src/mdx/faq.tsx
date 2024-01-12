@@ -5,7 +5,7 @@ import { FC } from "react";
 
 export const FAQ: FC = () => {
   return (
-    <div className="w-full text-left">
+    <div className="w-full text-left" id="mdx">
       <FAQContent />
     </div>
   );

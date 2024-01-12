@@ -1,7 +1,6 @@
 "use client";
 
 import { FC, ReactNode } from "react";
-import { LimitedContainer } from "../ui/container";
 import { useSession } from "next-auth/react";
 import {
   EditAttendanceOutput,
@@ -145,11 +144,9 @@ export const AttendancePage: FC<{
   };
 
   return (
-    <main>
-      <LimitedContainer>
-        <h1>Event Attendance - {heading[fetchStatus]}</h1>
-        <div className="w-full">{body[fetchStatus]}</div>
-      </LimitedContainer>
-    </main>
+    <>
+      <h1>Event Attendance - {heading[fetchStatus]}</h1>
+      <div className="w-full">{body[fetchStatus]}</div>
+    </>
   );
 };
