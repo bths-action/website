@@ -1,5 +1,6 @@
 import { LimitedContainer } from "@/components/ui/container";
 import { FC } from "react";
+import { prisma } from "@/utils/prisma";
 
 export const revalidate = 60;
 export const metadata = {
@@ -8,7 +9,7 @@ export const metadata = {
 };
 
 const Page: FC = () => {
-  const data = prisma?.execDetails.findMany({
+  const data = prisma.execDetails.findMany({
     include: {
       user: {
         select: {
