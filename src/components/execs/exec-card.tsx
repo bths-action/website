@@ -43,12 +43,12 @@ export const ExecCard: FC<{
           duration: 0.6,
         }}
       >
-        <div className="h-14 overflow-visible z-20 bg-default -mb-1 flex justify-center items-center text-black relative">
+        <div className="h-14 overflow-visible z-20 bg-default -mb-1 flex justify-center items-center text-white relative">
           {alumni ? (
             "Alumni Executive"
           ) : (
             <TransparentButton
-              className="p-2 absolute top-1 right-1 rounded-full dark:text-black border-4 dark:border-black "
+              className="p-2 absolute top-1 right-1 rounded-full text-white border-4 border-white "
               onClick={() => {
                 open(`mailto:${exec.email}`);
               }}
