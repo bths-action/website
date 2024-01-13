@@ -9,7 +9,7 @@ import { Loading } from "../ui/loading";
 import { ZodError } from "zod";
 import { registerSchema } from "@/schema/form";
 import { FormQuestion } from "../ui/container";
-import { OLDEST_GRAD_YEAR, YOUNGEST_GRAD_YEAR } from "@/utils/constants";
+import { GRAD_YEARS, OLDEST_GRAD_YEAR } from "@/utils/constants";
 import { TRPCError, trpc } from "@/app/api/trpc/client";
 import { RoundButton } from "../ui/buttons";
 import { Collapse } from "../ui/collapse";
@@ -179,10 +179,7 @@ const FormContent: FC<Props> = ({ mode, setOpen }) => {
                     setFieldValue("gradYear", Number(e.target.value));
                   }}
                 >
-                  {Array.from(
-                    { length: YOUNGEST_GRAD_YEAR - OLDEST_GRAD_YEAR + 1 },
-                    (_, i) => OLDEST_GRAD_YEAR + i
-                  ).map((year) => (
+                  {GRAD_YEARS.map((year) => (
                     <option key={year} value={year}>
                       {year}
                     </option>

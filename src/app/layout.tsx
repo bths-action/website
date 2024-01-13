@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Anybody, Figtree } from "next/font/google";
+import { Anybody, Figtree, Space_Mono } from "next/font/google";
 
 import "./globals.css";
 import { AppProviders } from "@/providers/providers";
@@ -7,6 +7,11 @@ import { Navbar } from "@/components/ui/nav";
 
 const figtree = Figtree({ subsets: ["latin"], variable: "--font-figtree" });
 const anybody = Anybody({ subsets: ["latin"], variable: "--font-anybody" });
+const spaceMono = Space_Mono({
+  weight: ["400", "700"],
+  subsets: ["latin"],
+  variable: "--font-space-mono",
+});
 
 export default function RootLayout({
   children,
@@ -16,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${figtree.variable} ${anybody.variable} bg-white font-anybody dark:bg-black`}
+        className={`${figtree.variable} ${anybody.variable} ${spaceMono.variable} bg-white font-anybody dark:bg-black`}
       >
         <AppProviders>
           <div className="w-full overflow-y-hidden flex h-[calc(100dvh-70px)] md:h-[100dvh]">

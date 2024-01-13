@@ -6,6 +6,8 @@ import { TransparentButton, MotionButtonProps, ColorButton } from "./buttons";
 import {
   FaClipboard,
   FaClipboardCheck,
+  FaDiscord,
+  FaInstagram,
   FaRegIdCard,
   FaRegMoon,
   FaUserEdit,
@@ -22,7 +24,9 @@ import {
 } from "react-icons/md";
 import {
   BiLogOut,
+  BiMailSend,
   BiPhotoAlbum,
+  BiSearch,
   BiSpreadsheet,
   BiXCircle,
 } from "react-icons/bi";
@@ -32,6 +36,7 @@ import { UserForm } from "../form/user-form";
 import { useAccount } from "@/providers/account";
 import { ExecForm } from "../form/exec-form";
 import { twMerge } from "tailwind-merge";
+import { EmailQueryForm } from "../form/email-query-form";
 
 type Links = {
   [key: string]: {
@@ -161,6 +166,7 @@ const ProfileButton: FC<{
   const { data, status } = useSession();
   const [formOpen, setFormOpen] = useState(false);
   const [execOpen, setExecOpen] = useState(false);
+  const [queryOpen, setQueryOpen] = useState(false);
   const { status: accountStatus, data: accountData } = useAccount();
   const notDone = status == "loading" || accountStatus == "loading";
   return (
@@ -174,6 +180,9 @@ const ProfileButton: FC<{
             mode={accountData?.execDetails ? "edit" : "create"}
           />
         )}
+      {accountStatus == "success" &&
+        accountData?.position == "EXEC" &&
+        queryOpen && <EmailQueryForm setOpen={setQueryOpen} />}
       <TransparentButton
         whileHover={{
           scale: 1.1,
@@ -198,6 +207,7 @@ const ProfileButton: FC<{
                       Edit Exec Profile
                     </NavButton>
                   )}
+
                 {
                   <NavButton
                     disabled={accountData?.didOsis}
@@ -220,6 +230,15 @@ const ProfileButton: FC<{
                     )}
                   </NavButton>
                 }
+                {accountStatus == "success" &&
+                  accountData?.position == "EXEC" && (
+                    <NavButton
+                      icon={BiSearch}
+                      onClick={() => setQueryOpen(true)}
+                    >
+                      Query Emails
+                    </NavButton>
+                  )}
                 <ColorButton
                   color="red-500"
                   className="w-full rounded-none"
@@ -240,7 +259,7 @@ const ProfileButton: FC<{
               : data?.user?.image ||
                 "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/340px-Default_pfp.svg.png?20220226140232"
           }
-          className="rounded-full min-w-10 min-h-10 bg-black bordered"
+          className="rounded-full min-w-8 min-h-8 bg-black bordered"
         />
         {accountStatus == "success" && accountData?.didOsis == false && (
           <MdWarning className="absolute right-0 top-0 w-8 h-8 text-red-500 translate-x-1/2 -translate-y-1/2" />
@@ -249,6 +268,29 @@ const ProfileButton: FC<{
     </>
   );
 };
+
+const socials = (
+  <>
+    <TransparentButton
+      className="p-2"
+      onClick={() => open(process.env.NEXT_PUBLIC_DISCORD_INVITE)}
+    >
+      <FaDiscord className="w-8 h-8" />
+    </TransparentButton>
+    <TransparentButton
+      className="p-2"
+      onClick={() => open("https://instagram.com/bths.action")}
+    >
+      <FaInstagram className="w-8 h-8" />
+    </TransparentButton>
+    <TransparentButton
+      className="p-2"
+      onClick={() => open("mailto:bthsaction@gmail.com")}
+    >
+      <BiMailSend className="w-8 h-8" />
+    </TransparentButton>
+  </>
+);
 
 export const Navbar: FC<PropsWithChildren> = ({ children }) => {
   const [mounted, setMounted] = useState(false);
@@ -307,6 +349,9 @@ export const Navbar: FC<PropsWithChildren> = ({ children }) => {
                     </NavButton>
                   )
                 )}
+                <div className="flex lg:hidden gap-2 justify-center">
+                  {socials}
+                </div>
               </>
             );
           }}
@@ -314,6 +359,9 @@ export const Navbar: FC<PropsWithChildren> = ({ children }) => {
           Resources
         </NavButton>
         <ThemeButton mounted={mounted} />
+        <div className="hidden lg:flex gap-2 text-left lg:justify-start">
+          {socials}
+        </div>
       </div>
       <ProfileButton
         setSideContent={setSideContent}

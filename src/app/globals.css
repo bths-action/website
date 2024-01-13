@@ -133,4 +133,8 @@
   #mdx a:hover::after {
     @apply scale-x-100 origin-bottom-left;
   }
+
+  code {
+    @apply font-space-mono;
+  }
 }

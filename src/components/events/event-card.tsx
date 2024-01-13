@@ -27,8 +27,7 @@ export const EventCard: FC<{
   return (
     <motion.div
       initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true }}
+      animate="visible"
       whileHover={{
         y: -10,
       }}
@@ -39,7 +38,7 @@ export const EventCard: FC<{
           visible: {
             x: 0,
             transition: {
-              delay: 0.2,
+              delay: 0.3 * index,
             },
           },
           hidden: { x: "100%" },

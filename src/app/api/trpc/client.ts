@@ -65,6 +65,9 @@ export type GetAttendeesOutput = RouterOutput["getAttendees"];
 export type GetExecsInput = RouterInput["getExecs"];
 export type GetExecsOutput = RouterOutput["getExecs"];
 
+export type GetEmailsInput = RouterInput["getEmails"];
+export type GetEmailsOutput = RouterOutput["getEmails"];
+
 export type TRPCError = TRPCClientErrorLike<RouterErrors>;
 
 export const trpc = createTRPCReact<AppRouter>({});
