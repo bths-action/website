@@ -54,8 +54,8 @@ export const UserAttendance: FC<Props> = ({ event }) => {
   const channel = useChannel(`private-${event.id}`);
 
   const notAccepting =
-    (event.finishTime && event.finishTime.valueOf() < Date.now()) ||
-    event.eventTime.valueOf() < Date.now();
+    (event.finishTime ? event.finishTime : event.eventTime).valueOf() <
+    Date.now();
 
   console.log(notAccepting, event.finishTime, event.eventTime);
   const wait = event.finishTime && event.eventTime.valueOf() > Date.now();
@@ -204,13 +204,13 @@ export const UserAttendance: FC<Props> = ({ event }) => {
               <br />
             </>
           )}
-          {notAccepting ? (
-            <>You cannot change attendance after an event.</>
-          ) : wait ? (
+          {wait ? (
             <>
               The event is not available for registration yet. Based on the
               description, you may be able to do other things.
             </>
+          ) : notAccepting ? (
+            <>You cannot change attendance after an event.</>
           ) : (
             <ColorButton
               innerClass="p-2 text-xl text-white rounded-xl"
