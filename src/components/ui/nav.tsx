@@ -31,6 +31,7 @@ import { BsQuestionCircle } from "react-icons/bs";
 import { UserForm } from "../form/user-form";
 import { useAccount } from "@/providers/account";
 import { ExecForm } from "../form/exec-form";
+import { twMerge } from "tailwind-merge";
 
 type Links = {
   [key: string]: {
@@ -111,9 +112,11 @@ const NavButton: FC<
   return (
     <TransparentButton
       onClick={onClick}
-      className={`rounded-full md:rounded-none w-full ${className || ""} ${
+      className={twMerge(
+        "rounded-full md:rounded-none w-full",
+        className || "",
         href ? "" : "md:px-4 py-2"
-      }`}
+      )}
       {...props}
     >
       {href ? (
@@ -219,8 +222,8 @@ const ProfileButton: FC<{
                 }
                 <ColorButton
                   color="red-500"
-                  className="text-red-900 w-full rounded-none"
-                  innerClass=" p-2"
+                  className="w-full rounded-none"
+                  innerClass=" p-2 text-white"
                   onClick={() => signOut()}
                 >
                   <BiLogOut className="inline w-6 h-6 mr-1 " /> Logout
@@ -324,7 +327,7 @@ export const Navbar: FC<PropsWithChildren> = ({ children }) => {
             : "h-0 w-0 overflow-y-hidden"
         } bg-gray-50  md:border-0 md:border-r-2 border-t-2  dark:bg-zinc-900 bg-opacity-90 dark:bg-opacity-90 md:translate-x-full  right-0 top-0 translate-x-0 -translate-y-full md:translate-y-0 transition-[height,width] duration-300 ease-in-out md:overflow-hidden`}
       >
-        <div className="md:w-60 w-full">
+        <div className="md:w-60 w-full ">
           <NavButton
             icon={BiXCircle}
             className="border-b-2 rounded-none text-center"

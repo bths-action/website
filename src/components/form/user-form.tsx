@@ -14,6 +14,7 @@ import { TRPCError, trpc } from "@/app/api/trpc/client";
 import { RoundButton } from "../ui/buttons";
 import { Collapse } from "../ui/collapse";
 import { confirm } from "../ui/confirm";
+import { isAlumni } from "@/utils/helpers";
 
 interface Props {
   mode: "edit" | "create";
@@ -166,7 +167,7 @@ const FormContent: FC<Props> = ({ mode, setOpen }) => {
             <br />
             <FormQuestion errored={Boolean(errors.gradYear)}>
               <label htmlFor="gradYear">Graduation Year:</label>
-              {values.gradYear < OLDEST_GRAD_YEAR ? (
+              {isAlumni(values.gradYear) ? (
                 " Alumni (Cannot Change)"
               ) : (
                 // Make this a select instead

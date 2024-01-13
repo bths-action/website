@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Anybody, Figtree } from "next/font/google";
 
 import "./globals.css";
@@ -31,6 +31,10 @@ export default function RootLayout({
   );
 }
 
+export const viewport: Viewport = {
+  themeColor: "#19b1a0",
+};
+
 export const metadata: Metadata = {
   title: "BTHS Action",
   icons: {
@@ -39,7 +43,6 @@ export const metadata: Metadata = {
     shortcut: "/icon.png",
   },
   manifest: "/manifest.json",
-
   description: "A BTHS club for taking action and making a difference.",
   openGraph: {
     siteName: "BTHS Action",

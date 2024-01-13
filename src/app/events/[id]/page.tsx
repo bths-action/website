@@ -1,5 +1,4 @@
 import { EventPage } from "@/components/event/event-page";
-import { LimitedContainer } from "@/components/ui/container";
 import { prisma } from "@/utils/prisma";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -94,9 +93,7 @@ const Page: FC<Params> = async ({ params: { id } }) => {
 
   return (
     <main>
-      <LimitedContainer>
-        <EventPage event={event} />
-      </LimitedContainer>
+      <EventPage event={event} />
     </main>
   );
 };

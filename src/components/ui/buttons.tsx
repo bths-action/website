@@ -6,6 +6,7 @@ import {
   TargetAndTransition,
   motion,
 } from "framer-motion";
+import { twMerge } from "tailwind-merge";
 
 export interface MotionButtonProps
   extends Omit<HTMLMotionProps<"button">, "initial" | "whileHover"> {
@@ -18,11 +19,11 @@ export const TransparentButton: FC<MotionButtonProps> = (props) => {
   return (
     <motion.button
       {...props}
-      className={`rounded-full dark:text-white text-black ${
+      className={twMerge(
+        "rounded-full bg-gray-500 bg-opacity-0 dark:text-white text-black",
         props.className || ""
-      }`}
+      )}
       initial={{
-        backgroundColor: "rgba(128,128,128,0)",
         ...props.initial,
       }}
       whileHover={{

@@ -123,7 +123,7 @@ export const UserAttendance: FC<Props> = ({ event }) => {
         <>
           <h5>You must be logged in and registered to view your attendance.</h5>
           <ColorButton
-            color="blue-500"
+            color="default"
             innerClass="p-2 text-xl text-white rounded-xl"
             onClick={() => signIn("auth0")}
           >
@@ -149,7 +149,7 @@ export const UserAttendance: FC<Props> = ({ event }) => {
           {!notAccepting && (
             <ColorButton
               innerClass="p-2 text-xl text-white rounded-xl"
-              color="blue-500"
+              color="default"
               disabled={isSubmitting}
               onClick={async () => {
                 setIsSubmitting(true);
@@ -214,7 +214,7 @@ export const UserAttendance: FC<Props> = ({ event }) => {
           ) : (
             <ColorButton
               innerClass="p-2 text-xl text-white rounded-xl"
-              color="blue-500"
+              color="default"
               disabled={isSubmitting}
               onClick={async () => {
                 setIsSubmitting(true);

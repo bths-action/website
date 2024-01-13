@@ -16,10 +16,12 @@ import { getEventSpace } from "./procedures/get-event-space";
 import { getAttendance } from "./procedures/get-attendance";
 import { editAttendance } from "./procedures/edit-attendance";
 import { getAttendees } from "./procedures/get-attendees";
+import { getExecs } from "./procedures/get-execs";
 
 export const appRouter = router({
   //generate smth random
   getEvents,
+  getExecs,
 
   register,
   editForm,

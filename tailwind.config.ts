@@ -18,6 +18,11 @@ const config: Config = {
         figtree: ["var(--font-figtree)"],
         anybody: ["var(--font-anybody)"],
       },
+      colors: {
+        default: "#19b1a0",
+        "default-darker": "#138679",
+        "default-lighter": "#19b3a1",
+      },
     },
   },
   plugins: [],

@@ -51,7 +51,7 @@ export const AppProviders: FC<PropsWithChildren> = ({ children }) => {
                 <Suspense>
                   <NextTopLoader
                     showSpinner={false}
-                    color="#4299e1"
+                    color="#19b1a0"
                     height={5}
                     zIndex={1000}
                   />

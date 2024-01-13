@@ -17,7 +17,7 @@ export const CreateEvent: FC = () => {
         <div className="sticky bottom-4 mt-2 w-full text-right">
           <ColorButton
             className="mr-8 w-16 h-16 rounded-full"
-            color="blue-500"
+            color="default"
             onClick={() => setCreateOpen(true)}
           >
             <BiPlus className="w-16 h-16 fill-white" />

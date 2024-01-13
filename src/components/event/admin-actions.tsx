@@ -30,7 +30,7 @@ export const AdminActions: FC<PropsWrite> = ({ event, setEvent }) => {
         />
       )}
       <ColorButton
-        color="blue-500"
+        color="default"
         innerClass="text-white text-xl p-2"
         className="rounded-xl"
         onClick={() => setFormOpen(true)}
@@ -38,7 +38,7 @@ export const AdminActions: FC<PropsWrite> = ({ event, setEvent }) => {
         <FaRegEdit className="inline mr-1 w-6 h-6" />
         Edit Event
       </ColorButton>
-      <ColorButton color="blue-500" className="rounded-xl">
+      <ColorButton color="default" className="rounded-xl">
         <Link
           href={`/events/${event.id}/attendance`}
           className="text-white p-2 text-xl"

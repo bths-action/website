@@ -35,7 +35,7 @@ export function Loading<T extends LoadingType>({
       <Spinner
         {...(spinnerProps as any)}
         className={"mx-auto max-w-full" + (spinnerProps?.className || "")}
-        color={spinnerProps?.color || "#3b82f6"}
+        color={spinnerProps?.color || "#19b1a0"}
       />
     </div>
   );

@@ -25,11 +25,13 @@ export const EventCard: FC<{
   index,
 }) => {
   return (
-    // transition background only
     <motion.div
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
+      whileHover={{
+        y: -10,
+      }}
     >
       <motion.div
         custom={index}

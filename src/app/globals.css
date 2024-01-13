@@ -55,6 +55,33 @@
   h1 {
     @apply text-6xl;
   }
+}
+
+@layer utilities {
+  .bordered {
+    @apply border-2 border-black dark:border-white;
+  }
+
+  a.default,
+  #mdx a {
+    @apply text-default dark:text-default hover:text-default-darker hover:cursor-pointer hover:underline-animated underline-animated hover:dark:text-default-lighter;
+  }
+
+  #mdx ul li {
+    @apply list-disc list-inside;
+  }
+
+  #mdx ol li {
+    @apply list-decimal list-inside;
+  }
+
+  #mdx p {
+    @apply inline-block;
+  }
+
+  .choice {
+    @apply flex items-center justify-center px-1 rounded-lg bg-gray-400 bg-opacity-0 hover:bg-opacity-30 transition-opacity duration-200 ease-in-out;
+  }
 
   input[type="text"],
   input[type="email"],
@@ -66,7 +93,7 @@
   input[type="url"],
   input[type="color"],
   select {
-    @apply max-w-[calc(100%-16px)] box-border outline-none rounded-lg bg-gray-200 dark:bg-zinc-600 focus:rounded-none focus:border-b-2 border-black dark:border-white focus:dark:bg-transparent focus:bg-transparent mx-2 px-1 transition-colors duration-200 ease-in-out;
+    @apply max-w-[calc(100%-16px)] box-border outline-none rounded-lg bg-gray-400 bg-opacity-20 focus:rounded-none focus:border-b-2 border-black dark:border-white focus:dark:bg-transparent focus:bg-transparent mx-2 px-1 transition-colors duration-200 ease-in-out;
   }
 
   input[type="file"] {
@@ -83,37 +110,27 @@
   }
 
   input[type="checkbox"] {
-    @apply w-5 h-5 accent-blue-500 bordered;
+    @apply w-5 h-5 accent-default bordered;
   }
 
   textarea {
-    @apply max-w-[calc(100%-16px)] bordered outline-none rounded-lg bg-gray-200 dark:bg-zinc-600 border-black dark:border-white focus:dark:bg-transparent focus:bg-transparent mx-2 px-1 transition-colors duration-200 ease-in-out;
-  }
-}
-
-@layer utilities {
-  .bordered {
-    @apply border-2 border-black dark:border-white;
+    @apply max-w-[calc(100%-16px)] bordered outline-none rounded-lg bg-gray-400 bg-opacity-20 border-black dark:border-white focus:dark:bg-opacity-0 focus:bg-opacity-0 mx-2 px-1 transition-colors duration-200 ease-in-out;
   }
 
+  .underline-animation,
   a.default,
   #mdx a {
-    @apply text-blue-500 dark:text-blue-500 hover:text-blue-600 hover:cursor-pointer hover:underline hover:dark:text-blue-400;
+    @apply inline-block relative;
+  }
+  .underline-animation::after,
+  a.default::after,
+  #mdx a::after {
+    @apply content-[""] absolute w-full transform scale-x-0 h-0.5 bottom-0 left-0 bg-default transition-transform duration-200 ease-out origin-bottom-right;
   }
 
-  #mdx ul li {
-    @apply list-disc list-inside;
-  }
-
-  #mdx ol li {
-    @apply list-decimal list-inside;
-  }
-
-  #mdx p {
-    @apply inline-block;
-  }
-
-  .choice {
-    @apply flex items-center justify-center px-1 rounded-lg bg-zinc-400 bg-opacity-0 hover:bg-opacity-30 transition-opacity duration-200 ease-in-out;
+  .underline-animated::after,
+  a.default:hover::after,
+  #mdx a:hover::after {
+    @apply scale-x-100 origin-bottom-left;
   }
 }
