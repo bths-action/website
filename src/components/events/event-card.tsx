@@ -27,10 +27,11 @@ export const EventCard: FC<{
   return (
     <motion.div
       initial="hidden"
-      animate="visible"
+      whileInView="visible"
       whileHover={{
         y: -10,
       }}
+      viewport={{ once: true }}
     >
       <motion.div
         custom={index}
@@ -38,7 +39,7 @@ export const EventCard: FC<{
           visible: {
             x: 0,
             transition: {
-              delay: 0.3 * index,
+              delay: 0.2,
             },
           },
           hidden: { x: "100%" },

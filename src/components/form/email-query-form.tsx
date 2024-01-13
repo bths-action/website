@@ -110,7 +110,11 @@ const EmailQueryContent: FC = () => {
               </label>
             );
           })}
-          <ColorButton color="default" innerClass="p-2" type="submit">
+          <ColorButton
+            color="default"
+            innerClass="p-2 text-white"
+            type="submit"
+          >
             Submit
           </ColorButton>
           <div className="h-64 bg-gray-400 bg-opacity-30 m-2 rounded-lg overflow-auto">

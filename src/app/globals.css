@@ -12,7 +12,7 @@
   }
 
   *:not(svg, svg *) {
-    @apply text-black dark:text-white border-black dark:border-white;
+    @apply border-black dark:border-white;
   }
 
   hr {
@@ -20,7 +20,7 @@
   }
 
   main {
-    @apply py-3 text-center;
+    @apply py-3 text-center overflow-clip;
   }
 
   h1,

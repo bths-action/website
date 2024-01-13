@@ -32,7 +32,7 @@ export const Events: FC = () => {
     <>
       <QueryForm query={query} setQuery={setQuery} />
 
-      <div className="flex flex-col gap-3 mb-2 overflow-hidden pt-3">
+      <div className="flex flex-col gap-3 mb-2 overflow-visible pt-3">
         {events.data?.pages
           .map((page) => page.events)
           .map((events) => (

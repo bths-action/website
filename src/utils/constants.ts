@@ -20,3 +20,5 @@ export const POSITIONS_MAP: Record<ExecPosition, string> = {
   TREASURER: "Treasurer",
   EVENT_COORDINATOR: "Event Coordinator",
 } as const;
+
+export const MAX_CREDITS = 6;

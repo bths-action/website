@@ -10,7 +10,7 @@ export const Banner: FC = () => {
     return () => clearTimeout(timer);
   }, []);
   return (
-    <div className="relative w-full min-h-[570px] h-[90vh] rounded-xl -mt-20 mb-20">
+    <div className="relative w-full min-h-[570px] h-[95dvh] rounded-xl mb-20">
       <div className="absolute w-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center banner z-20">
         <motion.span
           className="inline-block bg-black bg-opacity-50 rounded-3xl p-6"
