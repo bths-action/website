@@ -20,19 +20,17 @@ export const TransparentButton: FC<MotionButtonProps> = (props) => {
     <motion.button
       {...props}
       className={twMerge(
-        "rounded-full bg-gray-500 bg-opacity-0 dark:text-white text-black",
+        "rounded-full bg-gray-500 bg-opacity-0 dark:text-white text-black hover:bg-opacity-40 hover:bg-[#808080] active:bg-[#808080] active:bg-opacity-80",
         props.className || ""
       )}
       initial={{
         ...props.initial,
       }}
       whileHover={{
-        backgroundColor: "rgba(128,128,128,0.4)",
         ...props.whileHover,
       }}
       whileTap={{
         scale: 0.9,
-        backgroundColor: "rgba(128,128,128,0.8)",
         ...props.whileTap,
       }}
     />
