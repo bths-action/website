@@ -273,7 +273,7 @@ const socials = (
   <>
     <TransparentButton
       className="p-2"
-      onClick={() => open(process.env.NEXT_PUBLIC_DISCORD_INVITE)}
+      onClick={() => open("https://discord.gg/TepH9vuqn4")}
     >
       <FaDiscord className="w-8 h-8" />
     </TransparentButton>
