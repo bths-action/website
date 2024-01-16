@@ -1,4 +1,5 @@
 import { ExecPosition } from "@prisma/client";
+import { ReactNode } from "react";
 
 export const OLDEST_GRAD_YEAR = 2024;
 export const YOUNGEST_GRAD_YEAR = 2027;
@@ -20,5 +21,9 @@ export const POSITIONS_MAP: Record<ExecPosition, string> = {
   TREASURER: "Treasurer",
   EVENT_COORDINATOR: "Event Coordinator",
 } as const;
+export type Status = "loading" | "unauthorized" | "success" | "error";
+export type NodeMap<T extends string | number | symbol> = {
+  [key in T]: ReactNode;
+};
 
 export const MAX_CREDITS = 6;

@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, ReactNode } from "react";
+import { FC } from "react";
 import { useSession } from "next-auth/react";
 import {
   EditAttendanceOutput,
@@ -12,11 +12,7 @@ import { useAccount } from "@/providers/account";
 import { RequestError } from "../ui/error";
 import { AttendanceList } from "./attendance-list";
 import { useChannel, useEvent } from "@harelpls/use-pusher";
-
-type Status = "loading" | "unauthorized" | "success" | "error";
-type NodeMap = {
-  [key in Status]: ReactNode;
-};
+import { NodeMap, Status } from "@/utils/constants";
 
 export const AttendancePage: FC<{
   id: string;
@@ -41,7 +37,7 @@ export const AttendancePage: FC<{
       ? "success"
       : "error";
 
-  const heading: NodeMap = {
+  const heading: NodeMap<Status> = {
     loading: "Loading",
     unauthorized: "Unauthorized",
     success: attendance.data?.name,
@@ -107,7 +103,7 @@ export const AttendancePage: FC<{
     );
   });
 
-  const body: NodeMap = {
+  const body: NodeMap<Status> = {
     loading: (
       <>
         <Loading

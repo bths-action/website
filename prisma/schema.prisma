@@ -48,6 +48,7 @@ model User {
   referredBy    String?
   sgoSticker    Boolean
   execDetails   ExecDetails?
+  givenCredits  Int               @default(0)
   miscPoints    Float             @default(0)
   didOsis       Boolean           @default(false)
 

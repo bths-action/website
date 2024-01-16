@@ -18,6 +18,7 @@ import { editAttendance } from "./procedures/edit-attendance";
 import { getAttendees } from "./procedures/get-attendees";
 import { getExecs } from "./procedures/get-execs";
 import { getEmails } from "./procedures/get-emails";
+import { getStats } from "./procedures/get-stats";
 
 export const appRouter = router({
   //generate smth random
@@ -45,6 +46,7 @@ export const appRouter = router({
   getAttendees,
 
   getEmails,
+  getStats,
 });
 
 export const createContext = async () => {

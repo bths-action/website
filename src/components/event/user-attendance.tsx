@@ -121,7 +121,10 @@ export const UserAttendance: FC<Props> = ({ event }) => {
       ) : status == "unauthenticated" ||
         (account.status == "success" && account.data === null) ? (
         <>
-          <h5>You must be logged in and registered to view your attendance.</h5>
+          <h5>
+            You must be logged in and registered to view and edit event
+            attendance.
+          </h5>
           <ColorButton
             color="default"
             innerClass="p-2 text-xl text-white rounded-xl"
