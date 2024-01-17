@@ -7,6 +7,14 @@ export const getStats = authedProcedure.query(async ({ ctx }) => {
       where: {
         userEmail: ctx.session.user.email,
       },
+      include: {
+        event: {
+          select: {
+            name: true,
+            eventTime: true,
+          },
+        },
+      },
     }),
     prisma.user
       .findMany({

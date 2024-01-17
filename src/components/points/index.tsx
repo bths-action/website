@@ -8,7 +8,7 @@ import { RequestError } from "../ui/error";
 import { Loading } from "../ui/loading";
 import { ColorButton } from "../ui/buttons";
 import { BiLogIn } from "react-icons/bi";
-import { Stats } from "./stats";
+import { PointsStats } from "./stats";
 
 export const Points: FC = () => {
   const account = useAccount();
@@ -66,7 +66,7 @@ export const Points: FC = () => {
     success: (
       <>
         {account.data && data.data && (
-          <Stats account={account.data} data={data.data} />
+          <PointsStats account={account.data} data={data.data} />
         )}
       </>
     ),
