@@ -20,7 +20,7 @@ export const AdminActions: FC<PropsWrite> = ({ event, setEvent }) => {
   const router = useRouter();
 
   return (
-    <div className="flex flex-wrap gap-3 justify-center">
+    <>
       {formOpen && (
         <EventForm
           setOpen={setFormOpen}
@@ -80,6 +80,6 @@ export const AdminActions: FC<PropsWrite> = ({ event, setEvent }) => {
         <FaRegTrashAlt className="inline mr-1 w-6 h-6" />
         Delete Event
       </ColorButton>
-    </div>
+    </>
   );
 };
