@@ -1,4 +1,4 @@
-import { Events } from "@/components/events/events";
+import { Events } from "@/components/events";
 import { LimitedContainer } from "@/components/ui/container";
 import { FC } from "react";
 

@@ -71,6 +71,12 @@ export type GetEmailsOutput = RouterOutput["getEmails"];
 export type GetStatsInput = RouterInput["getStats"];
 export type GetStatsOutput = RouterOutput["getStats"];
 
+export type GetSpreadsheetInput = RouterInput["getSpreadsheet"];
+export type GetSpreadsheetOutput = RouterOutput["getSpreadsheet"];
+
+export type EditCreditsInput = RouterInput["editCredits"];
+export type EditCreditsOutput = RouterOutput["editCredits"];
+
 export type TRPCError = TRPCClientErrorLike<RouterErrors>;
 
 export const trpc = createTRPCReact<AppRouter>({});

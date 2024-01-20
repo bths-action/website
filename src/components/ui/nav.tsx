@@ -23,6 +23,7 @@ import {
   MdWarning,
 } from "react-icons/md";
 import {
+  BiAward,
   BiLogOut,
   BiMailSend,
   BiPhotoAlbum,
@@ -232,12 +233,23 @@ const ProfileButton: FC<{
                 }
                 {accountStatus == "success" &&
                   accountData?.position == "EXEC" && (
-                    <NavButton
-                      icon={BiSearch}
-                      onClick={() => setQueryOpen(true)}
-                    >
-                      Query Emails
-                    </NavButton>
+                    <>
+                      <NavButton
+                        icon={BiSearch}
+                        onClick={() => setQueryOpen(true)}
+                      >
+                        Query Emails
+                      </NavButton>
+                      <NavButton
+                        icon={BiAward}
+                        href="/spreadsheet"
+                        onClick={() => {
+                          setSideId("");
+                        }}
+                      >
+                        Credits Spreadsheet
+                      </NavButton>
+                    </>
                   )}
                 <ColorButton
                   color="red-500"
@@ -350,6 +362,7 @@ export const Navbar: FC<PropsWithChildren> = ({ children }) => {
                       </NavButton>
                     )
                   )}
+
                   <div className="flex lg:hidden gap-2 justify-center">
                     {socials}
                   </div>

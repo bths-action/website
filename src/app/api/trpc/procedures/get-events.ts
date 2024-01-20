@@ -12,10 +12,22 @@ export const getEvents = publicProcedure
 
     if (includeStatus.available)
       whereConditions.push({
-        finishTime: null,
-        eventTime: {
-          gte: new Date(),
-        },
+        OR: [
+          {
+            finishTime: null,
+            eventTime: {
+              gte: new Date(),
+            },
+          },
+          {
+            eventTime: {
+              lt: new Date(),
+            },
+            finishTime: {
+              gte: new Date(),
+            },
+          },
+        ],
       });
 
     if (includeStatus.unavailable) {
@@ -34,9 +46,18 @@ export const getEvents = publicProcedure
 
     if (includeStatus.upcoming) {
       whereConditions.push({
-        finishTime: {
-          gte: new Date(),
-        },
+        AND: [
+          {
+            finishTime: {
+              not: null,
+            },
+          },
+          {
+            eventTime: {
+              gte: new Date(),
+            },
+          },
+        ],
       });
     }
 

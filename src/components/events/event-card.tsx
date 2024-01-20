@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { EventPreview } from "./events";
+import { EventPreview } from ".";
 import Link from "next/link";
 import Image from "next/image";
 import { BsClock, BsAward } from "react-icons/bs";
