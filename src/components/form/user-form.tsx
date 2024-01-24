@@ -133,7 +133,7 @@ const FormContent: FC<Props> = ({ mode, setOpen }) => {
             )}
 
             <FormQuestion errored={Boolean(errors.name)}>
-              <label htmlFor="name">Name:</label>
+              <label htmlFor="name">Full (Legal) Name:</label>
               <Field
                 id="name"
                 name="name"
