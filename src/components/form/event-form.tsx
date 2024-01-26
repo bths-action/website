@@ -47,7 +47,7 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
     description: mode == "edit" ? event.description : "",
     maxHours: mode == "edit" ? event.maxHours : 0,
     maxPoints: mode == "edit" ? event.maxPoints : 0,
-    eventTime: mode == "edit" ? event.eventTime : new Date(),
+    eventTime: mode == "edit" ? event.eventTime : null,
     finishTime: mode == "edit" ? event.finishTime : null,
     address: mode == "edit" ? event.address : "",
     limit: mode == "edit" ? event.limit || 0 : (0 as number | null),
@@ -96,7 +96,11 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
 
         await (mode == "edit" ? editEvent : createEvent)
           .mutateAsync(
-            { ...values, id: (mode == "edit" ? event.id : undefined)! },
+            {
+              ...values,
+              id: (mode == "edit" ? event.id : undefined)!,
+              eventTime: values.eventTime!,
+            },
             {
               onSuccess: (data) => {
                 setEvent?.({
