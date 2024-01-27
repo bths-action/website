@@ -38,6 +38,7 @@ import { useAccount } from "@/providers/account";
 import { ExecForm } from "../form/exec-form";
 import { twMerge } from "tailwind-merge";
 import { EmailQueryForm } from "../form/email-query-form";
+import { DISCORD_INVITE_LINK } from "@/utils/constants";
 
 type Links = {
   [key: string]: {
@@ -285,7 +286,7 @@ const socials = (
   <>
     <TransparentButton
       className="p-2"
-      onClick={() => open("https://discord.gg/TepH9vuqn4")}
+      onClick={() => open(DISCORD_INVITE_LINK)}
     >
       <FaDiscord className="w-8 h-8" />
     </TransparentButton>

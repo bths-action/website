@@ -30,7 +30,7 @@ const Home: FC = async () => {
     <main className="pt-0">
       <Banner />
       <LimitedContainer>
-        <p className="text-2xl">
+        <p className="text-xl">
           Welcome to Action! Our goal is to revolutionize and redefine the
           volunteer sector of Brooklyn Tech. In this world of inflation and
           economic troubles, we pursue a modern, equal, worker-oriented, and

@@ -4,6 +4,7 @@ import { Anybody, Figtree, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { AppProviders } from "@/providers/providers";
 import { Navbar } from "@/components/ui/nav";
+import { BannerAds } from "@/components/ui/banner-ads";
 
 const figtree = Figtree({ subsets: ["latin"], variable: "--font-figtree" });
 const anybody = Anybody({ subsets: ["latin"], variable: "--font-anybody" });
@@ -27,6 +28,7 @@ export default function RootLayout({
           <div className="w-full overflow-y-hidden flex h-[calc(100dvh-70px)] md:h-[100dvh]">
             <Navbar />
             <div className="h-full overflow-auto w-full break-words">
+              <BannerAds />
               {children}
             </div>
           </div>
