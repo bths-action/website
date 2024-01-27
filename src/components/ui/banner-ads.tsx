@@ -6,6 +6,7 @@ import { FaChevronUp } from "react-icons/fa";
 import { DISCORD_INVITE_LINK } from "@/utils/constants";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image";
 
 const BannerAd: FC<PropsWithChildren> = ({ children }) => {
   return (
@@ -19,7 +20,7 @@ const BannerAd: FC<PropsWithChildren> = ({ children }) => {
       exit={{
         x: "-100%",
       }}
-      className="w-full h-16 flex items-center justify-center flex-wrap flex-col text-center overflow-ellipsis transform translate-x-full"
+      className="w-full h-16 flex items-center justify-center flex-wrap flex-col text-center overflow-ellipsis transform translate-x-full relative"
     >
       {children}
     </motion.div>
@@ -27,12 +28,12 @@ const BannerAd: FC<PropsWithChildren> = ({ children }) => {
 };
 
 const GiveawayAd: FC<{
-  initial: number;
-}> = ({ initial }) => {
-  const [date, setDate] = useState(initial);
+  endDate: number;
+}> = ({ endDate }) => {
+  const [date, setDate] = useState(endDate - Date.now());
 
   const tick = () => {
-    setDate(1709243999809 - Date.now());
+    setDate(endDate - Date.now());
   };
 
   useEffect(() => {
@@ -44,7 +45,7 @@ const GiveawayAd: FC<{
 
   return (
     <BannerAd>
-      <div className="text-[16px] md:text-sm ">
+      <div className="text-sm md:text-lg">
         🎉 Exclusive Discord Giveaway{" "}
         {date &&
           (date > 0 ? (
@@ -58,12 +59,8 @@ const GiveawayAd: FC<{
             <>has ended!</>
           ))}
         <TransparentButton className="mx-1 p-0 bordered">
-          <Link
-            href={DISCORD_INVITE_LINK}
-            target="_blank"
-            className="p-1 text-sm"
-          >
-            Join Discord Server
+          <Link href={DISCORD_INVITE_LINK} target="_blank" className="p-1">
+            Join
           </Link>
         </TransparentButton>
         <div className="md:block hidden">
@@ -76,16 +73,29 @@ const GiveawayAd: FC<{
 
 export const BannerAds: FC = () => {
   const ads = [
-    <GiveawayAd key={0} initial={1709243999809 - Date.now()} />,
+    <GiveawayAd key={0} endDate={1709243999809} />,
     <BannerAd key={1}>
-      <div className="text-[14px] md:text-lg">
+      <div className="text-sm md:text-lg bg-zinc-800 text-white bg-opacity-50 p-1 rounded-lg">
+        <Image
+          alt=""
+          src="/images/metroquest-ad-bg.jpg"
+          fill
+          className="-z-10 object-cover"
+        />
+        Psst...
+        <TransparentButton className="mx-1 p-0 bordered text-white">
+          <Link href={DISCORD_INVITE_LINK} target="_blank" className="p-1">
+            Join Metroquest!
+          </Link>
+        </TransparentButton>{" "}
+        It is a non-p2w go on trips club.
+      </div>
+    </BannerAd>,
+    <BannerAd key={2}>
+      <div className="text-sm md:text-lg">
         📢 Want to be featured? Request an advertisement on{" "}
         <TransparentButton className="mx-1 p-0 bordered">
-          <Link
-            href={DISCORD_INVITE_LINK}
-            target="_blank"
-            className="p-1 text-[14px] md:text-lg"
-          >
+          <Link href={DISCORD_INVITE_LINK} target="_blank" className="p-1">
             our Discord
           </Link>
         </TransparentButton>
@@ -98,7 +108,7 @@ export const BannerAds: FC = () => {
 
   const [collapsed, setCollapsed] = useState(false);
 
-  const [adIndex, setAdIndex] = useState(0);
+  const [adIndex, setAdIndex] = useState(1);
 
   const tick = () => {
     setAdIndex((adIndex + 1) % ads.length);
