@@ -107,6 +107,12 @@ export const BannerAds: FC = () => {
     };
   }, [adIndex]);
 
+  useEffect(() => {
+    if (localStorage.getItem("hideAds") === "true") {
+      setCollapsed(true);
+    }
+  });
+
   return (
     <div className="w-full relative overflow-visible">
       <Collapse collapsed={collapsed}>
@@ -116,7 +122,10 @@ export const BannerAds: FC = () => {
       </Collapse>
       <div className="absolute bottom-[1px] mt-1 right-0 translate-y-full z-20 dark:bg-zinc-900 dark:hover:bg-zinc-800 bg-slate-100 hover:bg-slate-200 rounded-b-xl overflow-hidden">
         <TransparentButton
-          onClick={() => setCollapsed(!collapsed)}
+          onClick={() => {
+            localStorage.setItem("hideAds", String(!collapsed));
+            setCollapsed(!collapsed);
+          }}
           className="rounded-none p-2 px-3"
         >
           <FaChevronUp
