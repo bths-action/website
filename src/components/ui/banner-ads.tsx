@@ -26,8 +26,10 @@ const BannerAd: FC<PropsWithChildren> = ({ children }) => {
   );
 };
 
-const GiveawayAd: FC = () => {
-  const [date, setDate] = useState<number | null>(null);
+const GiveawayAd: FC<{
+  initial: number;
+}> = ({ initial }) => {
+  const [date, setDate] = useState(initial);
 
   const tick = () => {
     setDate(1709243999809 - Date.now());
@@ -74,7 +76,7 @@ const GiveawayAd: FC = () => {
 
 export const BannerAds: FC = () => {
   const ads = [
-    <GiveawayAd key={0} />,
+    <GiveawayAd key={0} initial={1709243999809 - Date.now()} />,
     <BannerAd key={1}>
       <div className="text-[14px] md:text-lg">
         📢 Want to be featured? Request an advertisement on{" "}
@@ -91,6 +93,8 @@ export const BannerAds: FC = () => {
       </div>
     </BannerAd>,
   ];
+
+  const [mounted, setMounted] = useState(false);
 
   const [collapsed, setCollapsed] = useState(false);
 
@@ -111,7 +115,12 @@ export const BannerAds: FC = () => {
     if (localStorage.getItem("hideAds") === "true") {
       setCollapsed(true);
     }
+    setMounted(true);
   });
+
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <div className="w-full relative overflow-visible">
