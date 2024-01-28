@@ -84,7 +84,11 @@ export const BannerAds: FC = () => {
         />
         Psst...
         <TransparentButton className="mx-1 p-0 bordered text-white">
-          <Link href={DISCORD_INVITE_LINK} target="_blank" className="p-1">
+          <Link
+            href="https://discord.gg/NeYkEmWfzv"
+            target="_blank"
+            className="p-1"
+          >
             Join Metroquest!
           </Link>
         </TransparentButton>{" "}
@@ -108,7 +112,7 @@ export const BannerAds: FC = () => {
 
   const [collapsed, setCollapsed] = useState(false);
 
-  const [adIndex, setAdIndex] = useState(1);
+  const [adIndex, setAdIndex] = useState(0);
 
   const tick = () => {
     setAdIndex((adIndex + 1) % ads.length);
