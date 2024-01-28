@@ -24,6 +24,7 @@
     "@trpc/react-query": "^10.44.1",
     "@trpc/server": "^10.44.1",
     "@types/mdx": "^2.0.10",
+    "@widgetbot/react-embed": "^1.9.0",
     "discord-api-types": "^0.37.67",
     "formik": "^2.4.5",
     "framer-motion": "^10.16.16",

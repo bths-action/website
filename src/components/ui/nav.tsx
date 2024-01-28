@@ -3,6 +3,7 @@ import { useTheme } from "next-themes";
 import Image from "next/image";
 import { FC, PropsWithChildren, ReactNode, useEffect, useState } from "react";
 import { TransparentButton, MotionButtonProps, ColorButton } from "./buttons";
+import WidgetBot from "@widgetbot/react-embed";
 import {
   FaClipboard,
   FaClipboardCheck,
@@ -15,6 +16,7 @@ import {
 import Link from "next/link";
 import { IconType } from "react-icons";
 import {
+  MdChatBubbleOutline,
   MdContentCopy,
   MdEventAvailable,
   MdHomeFilled,
@@ -39,6 +41,7 @@ import { ExecForm } from "../form/exec-form";
 import { twMerge } from "tailwind-merge";
 import { EmailQueryForm } from "../form/email-query-form";
 import { DISCORD_INVITE_LINK } from "@/utils/constants";
+import { PopupUI } from "./popup";
 
 type Links = {
   [key: string]: {
@@ -282,40 +285,81 @@ const ProfileButton: FC<{
   );
 };
 
-const socials = (
-  <>
-    <TransparentButton
-      className="p-2"
-      onClick={() => open(DISCORD_INVITE_LINK)}
-    >
-      <FaDiscord className="w-8 h-8" />
-    </TransparentButton>
-    <TransparentButton
-      className="p-2"
-      onClick={() => open("https://instagram.com/bths.action")}
-    >
-      <FaInstagram className="w-8 h-8" />
-    </TransparentButton>
-    <TransparentButton
-      className="p-2"
-      onClick={() => open("mailto:bthsaction@gmail.com")}
-    >
-      <BiMailSend className="w-8 h-8" />
-    </TransparentButton>
-  </>
-);
+const Socials: FC<{
+  setChatOpen: (open: boolean) => void;
+}> = ({ setChatOpen }) => {
+  return (
+    <>
+      <TransparentButton
+        className="p-1.5"
+        onClick={() => open(DISCORD_INVITE_LINK)}
+      >
+        <FaDiscord className="w-7 h-7" />
+      </TransparentButton>
+      <TransparentButton
+        className="p-1.5"
+        onClick={() => open("https://instagram.com/bths.action")}
+      >
+        <FaInstagram className="w-7 h-7" />
+      </TransparentButton>
+      <TransparentButton
+        className="p-1.5"
+        onClick={() => open("mailto:bthsaction@gmail.com")}
+      >
+        <BiMailSend className="w-7 h-7" />
+      </TransparentButton>
+      <TransparentButton className="p-1.5" onClick={() => setChatOpen(true)}>
+        <MdChatBubbleOutline className="w-7 h-7" />
+      </TransparentButton>
+    </>
+  );
+};
 
 export const Navbar: FC<PropsWithChildren> = ({ children }) => {
   const [mounted, setMounted] = useState(false);
   const [sideContent, setSideContent] = useState<ReactNode>();
   const [sideId, setSideId] = useState("");
+  const [chatOpen, setChatOpen] = useState(false);
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  const socials = <Socials setChatOpen={setChatOpen} />;
+
   // vertical navbar
   return (
     <>
+      {chatOpen && (
+        <PopupUI setOpen={setChatOpen} title="Guest Chat">
+          <WidgetBot
+            server="1124144876112584727"
+            channel="1200510746962956338"
+            className="w-full h-full"
+            onAPI={(api) => {
+              api.on("signIn", async (u) => {
+                await new Promise((r) => setTimeout(r, 5000));
+
+                api.emit("sendMessage", {
+                  channel: "1200510746962956338",
+                  message:
+                    u.username +
+                    " has joined the guest chat via the website. Say hi!",
+                });
+              });
+              api.on("alreadySignedIn", async (u) => {
+                await new Promise((r) => setTimeout(r, 5000));
+
+                api.emit("sendMessage", {
+                  channel: "1200510746962956338",
+                  message:
+                    u.username +
+                    " has joined the guest chat via the website. Say hi!",
+                });
+              });
+            }}
+          />
+        </PopupUI>
+      )}
       <nav className="flex items-center justify-around md:justify-start md:flex-col bg-gray-100 dark:bg-zinc-900 md:h-[100dvh] w-screen md:w-20 lg:w-60 bottom-0 py-2 md:relative absolute flex-row z-30 border-r-0 md:border-r-2 border-t-2 md:border-t-0 ">
         <Link href="/" className="hidden md:inline-block">
           <Image
@@ -364,7 +408,7 @@ export const Navbar: FC<PropsWithChildren> = ({ children }) => {
                     )
                   )}
 
-                  <div className="flex lg:hidden gap-2 justify-center">
+                  <div className="flex lg:hidden gap-1 justify-center">
                     {socials}
                   </div>
                 </>

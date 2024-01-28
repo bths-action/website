@@ -98,7 +98,7 @@ export const BannerAds: FC = () => {
     <BannerAd key={2}>
       <div className="text-sm md:text-lg">
         📢 Want to be featured? Request an advertisement on{" "}
-        <TransparentButton className="mx-1 p-0 bordered">
+        <TransparentButton className="mx-1 p-0 bordered border-white">
           <Link href={DISCORD_INVITE_LINK} target="_blank" className="p-1">
             our Discord
           </Link>

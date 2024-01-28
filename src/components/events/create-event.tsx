@@ -14,9 +14,9 @@ export const CreateEvent: FC = () => {
   if (position == "ADMIN" || position == "EXEC")
     return (
       <>
-        <div className="sticky bottom-4 mt-2 w-full text-right">
+        <div className="sticky bottom-4 mt-2 w-full text-right pointer-events-none">
           <ColorButton
-            className="mr-8 w-16 h-16 rounded-full"
+            className="mr-8 w-16 h-16 rounded-full pointer-events-auto"
             color="default"
             onClick={() => setCreateOpen(true)}
           >
