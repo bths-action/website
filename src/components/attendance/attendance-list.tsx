@@ -1,9 +1,9 @@
 "use client";
-import { GetAttendeesOutput, trpc } from "@/app/api/trpc/client";
+import { GetAttendeesOutput, TRPCError, trpc } from "@/app/api/trpc/client";
 import { FC, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { AttendanceItem } from "./attendance-item";
-import { TransparentButton } from "../ui/buttons";
+import { ColorButton, TransparentButton } from "../ui/buttons";
 import { confirm } from "../ui/confirm";
 import { RequestError } from "../ui/error";
 
@@ -15,8 +15,10 @@ export interface ListProps {
 export const AttendanceList: FC<ListProps> = ({ attendance, id }) => {
   const utils = trpc.useUtils();
   const forceAdd = trpc.forceJoinEvent.useMutation();
+  const editAttendance = trpc.editAttendance.useMutation();
   const ref = useRef<HTMLInputElement>(null);
 
+  const [batchEdit, setBatchEdit] = useState<number | null>(null);
   const [forceAdding, setForceAdding] = useState(false);
 
   return (
@@ -34,6 +36,69 @@ export const AttendanceList: FC<ListProps> = ({ attendance, id }) => {
       animate="show"
       className="overflow-x-visible flex flex-col"
     >
+      <div className="p-2">
+        <ColorButton
+          color="default"
+          innerClass="p-2 text-xl text-white rounded-xl"
+          onClick={async () => {
+            if (batchEdit !== null) return;
+            let oldData = {
+              ...attendance,
+              attendees: attendance.attendees.map((attendee) => ({
+                ...attendee,
+              })),
+            };
+            for (const attendee of attendance.attendees) {
+              setBatchEdit(attendance.attendees.indexOf(attendee) + 1);
+              if (
+                !attendee.attendedAt ||
+                attendee.earnedHours !== 0 ||
+                attendee.earnedPoints !== 0
+              )
+                continue;
+              try {
+                const data = await editAttendance.mutateAsync({
+                  id,
+                  user: attendee.userEmail,
+                  earnedHours: attendance.maxHours,
+                  earnedPoints: attendance.maxPoints,
+                });
+
+                oldData = {
+                  ...oldData,
+                  attendees: oldData.attendees.map((attendee) =>
+                    attendee.userEmail === data.userEmail
+                      ? { ...attendee, ...data }
+                      : attendee
+                  ),
+                };
+
+                console.log(oldData);
+
+                utils.getAttendees.setData(
+                  {
+                    id,
+                  },
+                  {
+                    ...oldData,
+                  }
+                );
+              } catch (error) {
+                confirm({
+                  title: `Failed to Edit ${attendee.userEmail} (${attendee.user.name})`,
+                  children: <RequestError error={error as TRPCError} />,
+                });
+              }
+            }
+            setBatchEdit(null);
+          }}
+          disabled={batchEdit !== null}
+        >
+          Batch{batchEdit !== null && "ing"} Points & Hours{" "}
+          {batchEdit !== null &&
+            `(${batchEdit}/${attendance.attendees.length})`}
+        </ColorButton>
+      </div>
       <div className="flex justify-center flex-wrap">
         <label htmlFor="email">Force Add: </label>
         <input
