@@ -83,7 +83,7 @@ export const BannerAds: FC = () => {
           className="-z-10 object-cover"
         />
         Psst...
-        <TransparentButton className="mx-1 p-0 bordered text-white">
+        <TransparentButton className="mx-1 p-0 border-2 text-white border-white">
           <Link
             href="https://discord.gg/NeYkEmWfzv"
             target="_blank"

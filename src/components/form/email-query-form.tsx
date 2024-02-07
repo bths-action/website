@@ -3,7 +3,7 @@ import { GRAD_YEARS } from "@/utils/constants";
 import { Field, Form, Formik } from "formik";
 import { ChangeEvent, FC, useEffect, useState } from "react";
 import { PopupUI } from "../ui/popup";
-import { ColorButton } from "../ui/buttons";
+import { ColorButton, CopyButton } from "../ui/buttons";
 import { confirm } from "../ui/confirm";
 import { RequestError } from "../ui/error";
 
@@ -117,7 +117,7 @@ const EmailQueryContent: FC = () => {
           >
             Submit
           </ColorButton>
-          <div className="h-64 bg-gray-400 bg-opacity-30 m-2 rounded-lg overflow-auto">
+          <div className="h-64 bg-gray-400 bg-opacity-30 m-2 rounded-lg overflow-auto relative">
             <code>
               {query.status == "loading"
                 ? "Loading..."
@@ -125,6 +125,10 @@ const EmailQueryContent: FC = () => {
                 ? "Error!"
                 : query.data.join(", ")}
             </code>
+            <br />
+            <div className="text-right sticky bottom-2 ml-auto mr-2">
+              {query.data && <CopyButton text={query.data.join(", ")} />}
+            </div>
           </div>
         </Form>
       )}

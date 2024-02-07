@@ -1,5 +1,5 @@
 "use client";
-import { FC, ReactNode } from "react";
+import { FC, PropsWithChildren, ReactNode, useState } from "react";
 import {
   HTMLMotionProps,
   Target,
@@ -7,6 +7,9 @@ import {
   motion,
 } from "framer-motion";
 import { twMerge } from "tailwind-merge";
+import { MdContentCopy } from "react-icons/md";
+import { FaCheck } from "react-icons/fa6";
+import { IconType } from "react-icons";
 
 export interface MotionButtonProps
   extends Omit<HTMLMotionProps<"button">, "initial" | "whileHover"> {
@@ -71,5 +74,44 @@ export const ColorButton: FC<
         {children}
       </div>
     </TransparentButton>
+  );
+};
+
+export const CopyButton: FC<
+  PropsWithChildren<
+    MotionButtonProps & {
+      text: string;
+    }
+  >
+> = ({ text, children, className, ...props }) => {
+  const [copied, setCopied] = useState(false);
+  const [currentTimeout, setCurrentTimeout] = useState<number | null>(null);
+
+  const Clipboard: IconType = copied ? FaCheck : MdContentCopy;
+
+  return (
+    <ColorButton
+      {...props}
+      color="default"
+      className={"text-white " + (className || "")}
+      innerClass="p-2 text-white"
+      onClick={async () => {
+        setCopied(true);
+        navigator.clipboard.writeText(text);
+        if (currentTimeout) clearTimeout(currentTimeout);
+        setCurrentTimeout(
+          setTimeout(
+            () => {
+              setCopied(false);
+            },
+            2000,
+            ""
+          )
+        );
+      }}
+    >
+      <Clipboard className="w-6 h-6" />
+      {children}
+    </ColorButton>
   );
 };
