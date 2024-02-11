@@ -89,7 +89,7 @@ export const ExecCard: FC<{
           </p>
           <div className="flex justify-center text-5xl">
             “{" "}
-            <div className="transform origin-top scale-90 h-36 overflow-auto">
+            <div className="transform origin-top scale-90 h-36 text-xl overflow-auto">
               <MarkDownView>{exec.description}</MarkDownView>
             </div>{" "}
             ”

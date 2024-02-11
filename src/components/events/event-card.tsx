@@ -27,11 +27,10 @@ export const EventCard: FC<{
   return (
     <motion.div
       initial="hidden"
-      whileInView="visible"
+      animate="visible"
       whileHover={{
         y: -10,
       }}
-      viewport={{ once: true }}
     >
       <motion.div
         custom={index}
@@ -39,12 +38,12 @@ export const EventCard: FC<{
           visible: {
             x: 0,
             transition: {
-              delay: 0.2,
+              delay: index * 0.2,
             },
           },
           hidden: { x: "100%" },
         }}
-        className="w-full bg-gray-500 dark:bg-zinc-900 bg-opacity-10 rounded-lg hover:opacity-80 dark:hover:opacity-60 p-3 transition-opacity duration-200 ease-in-out "
+        className="w-full bg-zinc-100 dark:bg-zinc-900 bg-opacity-100 rounded-lg hover:opacity-80 dark:hover:opacity-60 p-3 transition-opacity duration-200 ease-in-out "
       >
         <Link key={id} href={`/events/${id}`} className="text-left ">
           <div className="flex flex-col items-stretch w-full md:flex-row">

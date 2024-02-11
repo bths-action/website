@@ -23,7 +23,7 @@ export const TransparentButton: FC<MotionButtonProps> = (props) => {
     <motion.button
       {...props}
       className={twMerge(
-        "rounded-full bg-gray-500 bg-opacity-0 dark:text-white text-black hover:bg-opacity-40 hover:bg-[#808080] active:bg-[#808080] active:bg-opacity-80",
+        "rounded-full bg-gray-500 bg-opacity-0 dark:text-white text-black hover:enabled:bg-opacity-40 hover:enabled:bg-[#808080] active:enabled:bg-[#808080] active:enabled:bg-opacity-80 active:enabled:scale-90 disabled:cursor-not-allowed transition-all duration-200 ease-in-out",
         props.className || ""
       )}
       initial={{
@@ -33,7 +33,6 @@ export const TransparentButton: FC<MotionButtonProps> = (props) => {
         ...props.whileHover,
       }}
       whileTap={{
-        scale: 0.9,
         ...props.whileTap,
       }}
     />
@@ -61,10 +60,7 @@ export const ColorButton: FC<
   return (
     <TransparentButton
       {...props}
-      whileHover={{
-        scale: 1.1,
-      }}
-      className={`overflow-hidden ${className || ""}`}
+      className={`overflow-hidden hover:enabled:scale-110 ${className || ""}`}
     >
       <div
         className={`w-full h-full flex justify-center items-center  bg-${color} dark:bg-${darkColor} ${
