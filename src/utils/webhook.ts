@@ -64,7 +64,7 @@ export function generateEmbed(event: CreateEventInput, id: string): APIEmbed {
     title: "New Event: " + event.name,
     description: event.description,
     image: {
-      url: event.imageUrl || "https://bthsaction.org/icon.png",
+      url: event.imageURL || "https://bthsaction.org/icon.png",
     },
     timestamp: new Date().toISOString(),
     url: `https://bthsaction.org/events/${id}`,

@@ -171,6 +171,7 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
                 id="maxHours"
                 name="maxHours"
                 type="number"
+                step={0.25}
                 min={0}
                 placeholder="Max hours"
               />
@@ -182,6 +183,7 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
               <Field
                 id="maxPoints"
                 name="maxPoints"
+                step={0.1}
                 type="number"
                 min={0}
                 placeholder="Max points"

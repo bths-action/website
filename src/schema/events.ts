@@ -68,7 +68,7 @@ const baseEventSchema = z.object({
     })
     .nullish()
     .optional(),
-  imageUrl: z.string().url().optional().nullish(),
+  imageURL: z.string().url().optional().nullish(),
   // gdrive url
   serviceLetters: z
     .string()

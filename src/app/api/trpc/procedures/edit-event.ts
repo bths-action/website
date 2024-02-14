@@ -13,11 +13,13 @@ export const editEvent = adminProcedure
       );
     }
 
+    console.log(input);
+
     const event = await prisma.event.update({
       where: {
         id: input.id,
       },
-      data: { ...input, id: undefined },
+      data: { ...input },
     });
 
     await editMessage(event.messageID, {
