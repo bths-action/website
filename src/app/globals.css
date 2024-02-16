@@ -8,11 +8,7 @@
   }
 
   * {
-    @apply font-figtree  transition-[background] duration-300 ease-in-out;
-  }
-
-  *:not(svg, svg *) {
-    @apply border-black dark:border-white;
+    @apply font-figtree  transition-[background] duration-300 ease-in-out border-gray-400 dark:border-zinc-600;
   }
 
   hr {
@@ -36,37 +32,37 @@
   h4,
   h5,
   h6 {
-    @apply font-semibold font-anybody;
+    @apply font-anybody;
   }
 
   h6 {
-    @apply text-xl;
+    @apply text-xl font-normal;
   }
 
   h5 {
-    @apply text-2xl;
+    @apply text-2xl font-normal;
   }
 
   h4 {
-    @apply text-3xl;
+    @apply text-3xl font-semibold;
   }
 
   h3 {
-    @apply text-4xl;
+    @apply text-4xl font-semibold;
   }
 
   h2 {
-    @apply text-5xl;
+    @apply text-5xl font-bold;
   }
 
   h1 {
-    @apply text-6xl;
+    @apply text-6xl font-bold;
   }
 }
 
 @layer utilities {
   .bordered {
-    @apply border-2 border-black dark:border-white;
+    @apply border-2;
   }
 
   a.default,
@@ -100,11 +96,11 @@
   input[type="url"],
   input[type="color"],
   select {
-    @apply max-w-[calc(100%-16px)] box-border outline-none rounded-lg bg-gray-400 bg-opacity-20 focus:rounded-none focus:border-b-2 border-black dark:border-white focus:dark:bg-transparent focus:bg-transparent mx-2 px-1 transition-colors duration-200 ease-in-out;
+    @apply max-w-[calc(100%-16px)] box-border focus:border-default focus:dark:border-default-darker outline-none rounded-lg bg-gray-400 bg-opacity-20 focus:rounded-none focus:border-b-2 focus:dark:bg-transparent focus:bg-transparent mx-2 px-1 transition-colors duration-200 ease-in-out;
   }
 
   input[type="file"] {
-    @apply max-w-[calc(100%-16px)] box-border outline-none rounded-none border-b-2 border-black dark:border-white mx-2 px-1 transition-colors duration-200 ease-in-out;
+    @apply max-w-[calc(100%-16px)] box-border outline-none rounded-none border-b-2 mx-2 px-1 transition-colors duration-200 ease-in-out;
   }
 
   select {
@@ -121,24 +117,31 @@
   }
 
   textarea {
-    @apply max-w-[calc(100%-16px)] bordered outline-none rounded-lg bg-gray-400 bg-opacity-20 border-black dark:border-white focus:dark:bg-opacity-0 focus:bg-opacity-0 mx-2 px-1 transition-colors duration-200 ease-in-out;
+    @apply max-w-[calc(100%-16px)] bordered outline-none rounded-lg bg-gray-400 bg-opacity-20 focus:dark:bg-opacity-0 focus:bg-opacity-0 mx-2 px-1 transition-colors duration-200 ease-in-out;
   }
 
   .underline-animation,
   a.default,
   #mdx a {
-    @apply inline-block relative;
-  }
-  .underline-animation::after,
-  a.default::after,
-  #mdx a::after {
-    @apply content-[""] absolute w-full transform scale-x-0 h-0.5 bottom-0 left-0 bg-default transition-transform duration-200 ease-out origin-bottom-right;
+    @apply inline-block relative bg-default-lighter;
+    background: linear-gradient(
+      to right,
+      rgba(19 134 121, 1),
+      rgba(25 179 161, 1)
+    );
+    background-size: 0 0.1em;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 300ms;
   }
 
-  .underline-animated::after,
-  a.default:hover::after,
-  #mdx a:hover::after {
-    @apply scale-x-100 origin-bottom-left;
+  .underline-animated,
+  a.default:hover,
+  #mdx a:hover,
+  .underline-animated:focus,
+  a.default:focus,
+  #mdx a:focus {
+    background-size: 100% 0.1em;
   }
 
   code {

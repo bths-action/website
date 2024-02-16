@@ -46,7 +46,7 @@ export const Events: FC = () => {
                   },
                 },
               }}
-              className="flex flex-col gap-3"
+              className="grid gap-3 col-span-1 sm:grid-cols-2 lg:grid-cols-3 items-stretch"
               initial="hidden"
               animate="show"
             >

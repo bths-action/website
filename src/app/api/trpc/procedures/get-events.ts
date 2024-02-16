@@ -77,8 +77,8 @@ export const getEvents = publicProcedure
         cacheStrategy: {
           ttl: 15,
         },
-        take: 11,
-        skip: cursor * 10,
+        take: 13,
+        skip: cursor * 12,
         orderBy: {
           [orderBy]: order,
         },
@@ -119,6 +119,6 @@ export const getEvents = publicProcedure
 
     return {
       events,
-      nextCursor: events.length === 11 ? events.pop()! && cursor + 1 : null,
+      nextCursor: events.length === 13 ? events.pop()! && cursor + 1 : null,
     };
   });

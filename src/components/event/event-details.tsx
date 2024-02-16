@@ -12,15 +12,17 @@ export const EventDetails: FC<Props> = ({ event }) => {
   return (
     <>
       {event.imageURL && (
-        <Image
-          src={event.imageURL}
-          alt={event.name}
-          width={1000}
-          height={1000}
-          className="w-full rounded-lg mb-5"
-        />
+        <div className="relative mb-2 ">
+          <Image
+            src={event.imageURL}
+            alt=""
+            width={500}
+            height={500}
+            className="max-h-60 w-full object-contain rounded-lg"
+          />
+        </div>
       )}
-      <h3>Service Letters:</h3>
+      <h4>Service Letters:</h4>
       {event.serviceLetters ? (
         <Link href={event.serviceLetters} target="_blank" className="default">
           <FaRegEnvelope className="inline" /> Service Letters
@@ -28,12 +30,19 @@ export const EventDetails: FC<Props> = ({ event }) => {
       ) : (
         "Service letters are not available for this event."
       )}
-      <h3>Rewards: </h3>
-      <BsClock className="inline" /> Total Hours : {event.maxHours}
-      <br />
-      <BsAward className="inline" /> Total Points : {event.maxPoints}
-      <br />
-      <h3>Event Time:</h3>
+      <h4>Rewards: </h4>
+      {event.maxHours != 0 && (
+        <span className="text-yellow-600 dark:text-yellow-500">
+          <BsClock className="inline" /> Total Hours : {event.maxHours} <br />
+        </span>
+      )}
+      {event.maxPoints != 0 && (
+        <span className="text-blue-500">
+          <BsAward className="inline" /> Total Points : {event.maxPoints}
+          <br />
+        </span>
+      )}
+      <h4>Event Time:</h4>
       {event.eventTime.toLocaleString("en-US", {
         timeZone: "America/New_York",
         month: "long",
@@ -42,7 +51,7 @@ export const EventDetails: FC<Props> = ({ event }) => {
         hour: "numeric",
         minute: "2-digit",
       })}
-      <h3>Location:</h3>
+      <h4>Location:</h4>
       <Link
         className="default"
         href={encodeURI(
@@ -65,7 +74,7 @@ export const EventDetails: FC<Props> = ({ event }) => {
 export const EventDescription: FC<Props> = ({ event }) => {
   return (
     <>
-      <h3>Event Description: </h3>
+      <h4>Event Description: </h4>
       <div className="min-h-[200px] m-2 bg-gray-500 bg-opacity-20 overflow-auto break-words p-2 rounded-md">
         <MarkDownView>{event.description}</MarkDownView>
       </div>

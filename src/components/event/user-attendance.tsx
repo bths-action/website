@@ -104,7 +104,7 @@ export const UserAttendance: FC<Props> = ({ event }) => {
 
   return (
     <>
-      <h3>Event Attendance:</h3>
+      <h4>Event Attendance:</h4>
       {space.status === "loading" ||
       attendance.status === "loading" ||
       status === "loading" ||

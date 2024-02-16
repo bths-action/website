@@ -336,24 +336,14 @@ export const Navbar: FC<PropsWithChildren> = ({ children }) => {
             channel="1200510746962956338"
             className="w-full h-full"
             onAPI={(api) => {
+              let loggedIn = false;
               api.on("signIn", async (u) => {
                 await new Promise((r) => setTimeout(r, 5000));
-
+                if (loggedIn) return;
+                loggedIn = true;
                 api.emit("sendMessage", {
                   channel: "1200510746962956338",
-                  message:
-                    u.username +
-                    " has joined the guest chat via the website. Say hi!",
-                });
-              });
-              api.on("alreadySignedIn", async (u) => {
-                await new Promise((r) => setTimeout(r, 5000));
-
-                api.emit("sendMessage", {
-                  channel: "1200510746962956338",
-                  message:
-                    u.username +
-                    " has joined the guest chat via the website. Say hi!",
+                  message: `_**${u.username}**_ has joined the <:robux:1182796686687473785> chat! Say hi! 🎉`,
                 });
               });
             }}
@@ -370,7 +360,7 @@ export const Navbar: FC<PropsWithChildren> = ({ children }) => {
             className="rounded-full w-12 h-12"
           />
         </Link>
-        <div className="flex items-center justify-around md:justify-start w-full md:flex-col md:h-[calc(100dvh-60px)] md:overflow-x-hidden flex-1">
+        <div className="flex items-center overflow-y-auto justify-around md:justify-start w-full md:flex-col md:h-[calc(100dvh-60px)] md:overflow-x-hidden flex-1">
           {Object.entries(NAV_LINKS).map(([location, { href, icon, text }]) => (
             <NavButton
               key={href}
@@ -418,10 +408,11 @@ export const Navbar: FC<PropsWithChildren> = ({ children }) => {
             Resources
           </NavButton>
           <ThemeButton mounted={mounted} />
-          <div className="hidden lg:flex gap-2 text-left lg:justify-start">
+          <div className="hidden lg:flex gap-2 w-full text-left lg:justify-center">
             {socials}
           </div>
         </div>
+
         <ProfileButton
           setSideContent={setSideContent}
           setSideId={setSideId}
