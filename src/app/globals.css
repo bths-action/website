@@ -123,7 +123,12 @@
   .underline-animation,
   a.default,
   #mdx a {
-    @apply inline-block relative bg-default;
+    @apply inline-block relative;
+    background: linear-gradient(
+      to right,
+      rgba(19 134 121, 1),
+      rgba(25 179 161, 1)
+    );
     background-size: 0 0.15em;
     background-position: 0 100%;
     background-repeat: no-repeat;
