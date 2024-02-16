@@ -123,8 +123,7 @@
   .underline-animation,
   a.default,
   #mdx a {
-    @apply inline-block relative bg-default-lighter;
-    background: rgba(19 134 121, 1);
+    @apply inline-block relative bg-default;
     background-size: 0 0.15em;
     background-position: 0 100%;
     background-repeat: no-repeat;
