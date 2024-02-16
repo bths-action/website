@@ -23,7 +23,7 @@ export const Banner: FC = () => {
         >
           <motion.h1
             className={`text-white inline mb-2 underline-animation after:duration-500 after:h-3 ${
-              animated ? "underline-animated" : ""
+              animated ? "underline-animated " : ""
             }`}
           >
             BTHS Action

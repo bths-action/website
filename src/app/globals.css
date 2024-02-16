@@ -124,12 +124,8 @@
   a.default,
   #mdx a {
     @apply inline-block relative bg-default-lighter;
-    background: linear-gradient(
-      to right,
-      rgba(19 134 121, 1),
-      rgba(25 179 161, 1)
-    );
-    background-size: 0 0.1em;
+    background: rgba(19 134 121, 1);
+    background-size: 0 0.15em;
     background-position: 0 100%;
     background-repeat: no-repeat;
     transition: background-size 300ms;
@@ -141,10 +137,24 @@
   .underline-animated:focus,
   a.default:focus,
   #mdx a:focus {
-    background-size: 100% 0.1em;
+    background-size: 100% 0.15em !important;
   }
 
   code {
     @apply font-space-mono;
   }
+}
+
+.underline-animation,
+a.default,
+#mdx a {
+  background: linear-gradient(
+    to right,
+    rgba(19 134 121, 1),
+    rgba(25 179 161, 1)
+  );
+  background-size: 0 0.1em;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 300ms;
 }
