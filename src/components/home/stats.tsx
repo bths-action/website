@@ -39,7 +39,7 @@ export const StatsCard: FC<
           },
         }}
         className={
-          "rounded-lg bg-zinc-100 dark:bg-zinc-900 overflow-hidden h-full"
+          "rounded-lg bg-zinc-50 dark:bg-zinc-900 overflow-hidden h-full shadowed"
         }
       >
         <div className="flex flex-row items-center justify-between p-4 h-full border-l-default dark:border-l-default border-l-8">

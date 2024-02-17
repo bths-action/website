@@ -16,7 +16,7 @@ export const CreateEvent: FC = () => {
       <>
         <div className="sticky bottom-4 mt-2 w-full text-right pointer-events-none">
           <ColorButton
-            className="mr-8 w-16 h-16 rounded-full pointer-events-auto"
+            className="mr-8 w-16 h-16 rounded-full pointer-events-auto shadowed"
             color="default"
             onClick={() => setCreateOpen(true)}
           >

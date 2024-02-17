@@ -83,7 +83,15 @@
   }
 
   .choice {
-    @apply flex items-center justify-center px-1 rounded-lg bg-gray-400 bg-opacity-0 hover:bg-opacity-30 transition-opacity duration-200 ease-in-out;
+    @apply flex items-center justify-center px-1 rounded-lg bg-zinc-400 bg-opacity-0 hover:bg-opacity-30 transition-opacity duration-200 ease-in-out;
+  }
+
+  .shadowed {
+    @apply shadow-xl shadow-[#7773];
+  }
+
+  button.shadowed {
+    @apply shadow-xl shadow-[#7773];
   }
 
   input[type="text"],
@@ -96,7 +104,7 @@
   input[type="url"],
   input[type="color"],
   select {
-    @apply max-w-[calc(100%-16px)] box-border focus:border-default focus:dark:border-default-darker outline-none rounded-lg bg-gray-400 bg-opacity-20 focus:rounded-none focus:border-b-2 focus:dark:bg-transparent focus:bg-transparent mx-2 px-1 transition-colors duration-200 ease-in-out;
+    @apply max-w-[calc(100%-16px)] box-border focus:border-default focus:dark:border-default-darker outline-none rounded-lg bg-zinc-400 bg-opacity-20 focus:rounded-none focus:border-b-2 focus:dark:bg-transparent focus:bg-transparent mx-2 px-1 transition-colors duration-200 ease-in-out;
   }
 
   input[type="file"] {
@@ -109,7 +117,7 @@
 
   /** select options */
   option {
-    @apply bg-gray-200 dark:bg-zinc-600 dark:text-white;
+    @apply bg-zinc-200 dark:bg-zinc-600 dark:text-white;
   }
 
   input[type="checkbox"] {
@@ -117,7 +125,7 @@
   }
 
   textarea {
-    @apply max-w-[calc(100%-16px)] bordered outline-none rounded-lg bg-gray-400 bg-opacity-20 focus:dark:bg-opacity-0 focus:bg-opacity-0 mx-2 px-1 transition-colors duration-200 ease-in-out;
+    @apply max-w-[calc(100%-16px)] bordered focus:border-default focus:dark:border-default outline-none rounded-lg bg-gray-400 bg-opacity-20 focus:dark:bg-opacity-0 focus:bg-opacity-0 mx-2 px-1 transition-colors duration-200 ease-in-out;
   }
 
   .underline-animation,

@@ -1,8 +1,9 @@
 "use client";
 import { GetFormOutput, GetStatsOutput } from "@/app/api/trpc/client";
-import { FC } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { FC } from "react";
+import { BsTriangleFill } from "react-icons/bs";
 
 export const PointsStats: FC<{
   account: NonNullable<GetFormOutput>;
@@ -19,131 +20,138 @@ export const PointsStats: FC<{
   );
   const totalPoints = refPoints + eventPoints + (account.miscPoints || 0);
   // bths is 32 credits; 25 points per credit
-  const maxPoints = Math.max(totalPoints, 800);
-  // console log everything
-  for (const attendance of data.attendances) {
-    console.log(attendance.earnedPoints);
-  }
+  const credits = Math.ceil(totalPoints / 25);
   return (
     <div>
-      <h3>Points:</h3>
-      <div className="relative w-full bg-gray-300 bg-opacity-30 h-4 flex">
-        <motion.div
-          className="h-full bg-yellow-500"
-          initial={{
-            width: 0,
-          }}
-          animate={{
-            width: `${(account.miscPoints / maxPoints) * 100}%`,
-          }}
-          transition={{
-            duration: 1,
-          }}
-        ></motion.div>
-        <motion.div
-          className="h-full bg-green-500 text-sm overflow-visible"
-          initial={{
-            width: 0,
-          }}
-          animate={{
-            width: `${(refPoints / maxPoints) * 100}%`,
-          }}
-          transition={{
-            duration: 1,
-          }}
-        ></motion.div>
-        <motion.div
-          className="h-full bg-blue-500 text-sm overflow-visible"
-          initial={{
-            width: 0,
-          }}
-          animate={{
-            width: `${(eventPoints / maxPoints) * 100}%`,
-          }}
-          transition={{
-            duration: 1,
-          }}
-        ></motion.div>
+      <div className="text-3xl font-bold">Summary</div>
+      <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-4 gap-3 my-3">
+        <div className="bg-gray-50 dark:bg-zinc-900 rounded-lg overflow-hidden h-full shadowed">
+          <div className="h-14 overflow-visible z-20 bg-default -mb-1 flex justify-center items-center text-white relative">
+            <div className="font-bold">Total Points</div>
+          </div>
+          <div className="p-4">
+            <div className="font-bold text-center">{totalPoints}</div>
+          </div>
+        </div>
+        <div className="bg-gray-50 dark:bg-zinc-900 rounded-lg overflow-hidden h-full shadowed">
+          <div className="h-14 overflow-visible z-20 bg-default -mb-1 flex justify-center items-center text-white relative">
+            <div className="font-bold">Total Hours</div>
+          </div>
+          <div className="p-4">
+            <div className="font-bold text-center">{eventHours}</div>
+          </div>
+        </div>
+        <div className="bg-gray-50 dark:bg-zinc-900 rounded-lg overflow-hidden h-full shadowed">
+          <div className="h-14 overflow-visible z-20 bg-default flex justify-center items-center text-white relative">
+            <div className="font-bold">Club Credits</div>
+          </div>
+          <div className="p-4">
+            <div className="font-bold text-center">{credits}</div>
+          </div>
+        </div>
+        <div className="bg-gray-50 dark:bg-zinc-900 rounded-lg overflow-hidden h-full shadowed">
+          <div className="h-14 overflow-visible z-20 bg-default -mb-1 flex justify-center items-center text-white relative">
+            <div className="font-bold">Paid Off Credits</div>
+          </div>
+          <div className="p-4">
+            <div className="font-bold text-center">{account.givenCredits}</div>
+          </div>
+        </div>
       </div>
-      <div className="relative w-full bg-gray-300 bg-opacity-30 h-4 flex">
+      <div className="text-3xl font-bold pt-10">Points Breakdown</div>
+      <div className="w-full">
+        <div className="grid grid-cols-2 justify-between p-2">
+          <span className="text-left text-xl font-semibold">Event/Task</span>
+          <span className="text-right text-xl font-semibold">Rewards</span>
+        </div>
+        <hr />
         <motion.div
-          className="h-full bg-pink-500 text-sm overflow-visible"
-          initial={{
-            width: 0,
-          }}
           animate={{
-            width: `${((account.givenCredits * 25) / maxPoints) * 100}%`,
+            x: 0,
           }}
           transition={{
-            duration: 1,
+            type: "spring",
+            delay: 0.15,
+            bounce: 0.2,
+            duration: 0.6,
           }}
-        ></motion.div>
-      </div>
-      32 credits is needed for the Tech diploma. <br />
-      <span className="rounded-full w-3 h-3 bg-yellow-500 inline-block mr-2" />{" "}
-      Last Year + Other Misc Points ({account.miscPoints})
-      <br />
-      <span className="rounded-full w-3 h-3 bg-green-500 inline-block mr-2" />{" "}
-      Points from {data.referrals} Referral{data.referrals === 1 ? "" : "s"} (
-      {refPoints})
-      <br />
-      <span className="rounded-full w-3 h-3 bg-blue-500 inline-block mr-2" />{" "}
-      Points from Events ({eventPoints})
-      <br />
-      <span className="rounded-full w-3 h-3 bg-pink-500 inline-block mr-2" />{" "}
-      {account.givenCredits} Credit{account.givenCredits === 1 ? "" : "s"} Paid
-      Off ({account.givenCredits * 25} Points)
-      <br />
-      <span className="text-md">
-        What does this mean? Since our club has to submit credits every
-        semester, we do a system of "paying off" where we give the advisor the
-        max we can give, and leave rest for next semester.
-      </span>
-      <h3>Hours:</h3>
-      <div className="relative w-full bg-gray-300 bg-opacity-30 h-4 flex">
-        <motion.div
-          className="h-full bg-indigo-500 text-sm overflow-visible"
           initial={{
-            width: 0,
+            x: "100%",
           }}
-          animate={{
-            width: `${(eventHours / 50) * 100}%`,
-          }}
-          transition={{
-            duration: 1,
-          }}
-        ></motion.div>
-      </div>
-      50 hours is needed for the Tech diploma. <br />
-      <span className="rounded-full w-3 h-3 bg-indigo-500 inline-block mr-2" />{" "}
-      Hours from Events ({eventHours})<h3>Event History:</h3>
-      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {
-          // @ts-ignore
-          data.attendances
-            .sort((a, b) => {
-              return a.event.eventTime.valueOf() < b.event.eventTime.valueOf()
-                ? 1
-                : -1;
-            })
-            .map((attendance) => {
-              return (
-                <div key={attendance.eventId}>
-                  <h6>{attendance.event.name}</h6>
-                  <p className="text-md">
-                    Earned {attendance.earnedPoints} Points and{" "}
-                    {attendance.earnedHours} Hours
-                  </p>
-                  <Link
-                    href={`/events/${attendance.eventId}`}
-                    className="default"
-                  >
-                    View Event
-                  </Link>
-                </div>
-              );
-            })
-        }
+          className="grid grid-cols-2 justify-between items-center hover:dark:bg-zinc-900 hover:bg-zinc-100 px-2 py-1"
+        >
+          <span className="text-left">
+            {data.referrals} Referral{data.referrals != 1 && "s"}
+          </span>
+          <span className="text-right">
+            <BsTriangleFill className="text-green-500 inline mr-2 w-3 h-3" />
+            {refPoints} Point{refPoints != 1 && "s"}
+          </span>
+        </motion.div>
+        {data.attendances.map((attendance, index) => (
+          <>
+            <hr />
+            <motion.div
+              animate={{
+                x: 0,
+              }}
+              transition={{
+                type: "spring",
+                delay: 0.15 * (index + 1),
+                bounce: 0.2,
+                duration: 0.6,
+              }}
+              initial={{
+                x: "100%",
+              }}
+              key={index}
+              className="grid grid-cols-2 justify-between items-center hover:dark:bg-zinc-900 hover:bg-zinc-100 px-2 py-1"
+            >
+              <span className="text-left">
+                <Link
+                  href={`/events/${attendance.eventId}`}
+                  className="default"
+                >
+                  {attendance.event.name}
+                </Link>
+              </span>
+              <span className="text-right">
+                {attendance.earnedPoints != 0 && (
+                  <>
+                    <BsTriangleFill
+                      className={`${
+                        attendance.earnedPoints > 0
+                          ? "text-green-500 "
+                          : "text-red-500 rotate-180"
+                      } inline mr-2 w-3 h-3`}
+                    />
+                    {attendance.earnedPoints} Point
+                    {attendance.earnedPoints != 1 && "s"}
+                  </>
+                )}
+                {attendance.earnedPoints != 0 && attendance.earnedHours != 0 ? (
+                  <br />
+                ) : (
+                  attendance.earnedPoints == 0 &&
+                  attendance.earnedHours == 0 && <>---</>
+                )}
+                {attendance.earnedHours > 0 && (
+                  <>
+                    <BsTriangleFill
+                      className={`${
+                        attendance.earnedHours > 0
+                          ? "text-green-500 "
+                          : "text-red-500 rotate-180"
+                      } inline mr-2 w-3 h-3`}
+                    />
+                    {attendance.earnedHours} Hour
+                    {attendance.earnedHours != 1 && "s"}
+                  </>
+                )}
+              </span>
+            </motion.div>
+          </>
+        ))}
       </div>
     </div>
   );

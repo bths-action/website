@@ -46,7 +46,7 @@ export const Events: FC = () => {
                   },
                 },
               }}
-              className="grid gap-3 col-span-1 sm:grid-cols-2 lg:grid-cols-3 items-stretch"
+              className="grid gap-6 col-span-1 sm:grid-cols-2 lg:grid-cols-3 items-stretch"
               initial="hidden"
               animate="show"
             >
@@ -71,7 +71,7 @@ export const Events: FC = () => {
       {!events.isFetching &&
         (events.hasNextPage ? (
           <TransparentButton
-            className="px-2 bordered"
+            className="px-2 bordered shadowed"
             disabled={events.isFetchingNextPage}
             onClick={() => {
               events.fetchNextPage();

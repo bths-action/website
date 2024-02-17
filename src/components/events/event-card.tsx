@@ -36,17 +36,18 @@ export const EventCard: FC<{
         custom={index}
         variants={{
           visible: {
-            y: 0,
+            x: 0,
             transition: {
               delay: index * 0.15,
             },
+            opacity: 1,
           },
-          hidden: { y: "100%" },
+          hidden: { x: "100dvw", opacity: 0 },
         }}
-        className="bordered h-full bg-zinc-100 dark:bg-zinc-900 bg-opacity-0 dark:bg-opacity-0 rounded-lg hover:bg-opacity-100 hover:dark:bg-opacity-100 p-3 transition-opacity duration-200 ease-in-out "
+        className="shadowed bordered h-full bg-zinc-100 dark:bg-zinc-900 bg-opacity-0 dark:bg-opacity-0 rounded-lg hover:bg-opacity-100 hover:dark:bg-opacity-100 p-3 transition-opacity duration-200 ease-in-out "
       >
         <Link key={id} href={`/events/${id}`} className="text-left ">
-          <div className="flex flex-col items-stretch w-full font-semibold">
+          <div className="flex flex-col items-stretch w-full font-semibold flex-wrap h-full">
             <div>
               <h5>{name}</h5>
               <span className="">
@@ -102,15 +103,16 @@ export const EventCard: FC<{
                 </span>
               )}
             </div>
+
             {imageURL && (
               <>
-                <div className="relative mt-2 ">
+                <div className="relative mt-auto pt-2">
                   <Image
                     src={imageURL}
                     alt=""
                     width={500}
                     height={500}
-                    className="max-h-44 w-full object-contain rounded-lg"
+                    className="max-h-44 w-auto h-auto mx-auto rounded-lg"
                   />
                 </div>
               </>

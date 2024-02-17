@@ -46,7 +46,7 @@ const GiveawayAd: FC<{
   return (
     <BannerAd>
       <div className="text-sm md:text-lg">
-        🎉 Exclusive Discord Giveaway{" "}
+        Exclusive Discord Giveaway{" "}
         {date &&
           (date > 0 ? (
             <>
@@ -58,11 +58,13 @@ const GiveawayAd: FC<{
           ) : (
             <>has ended!</>
           ))}
-        <TransparentButton className="mx-1 p-0 bordered">
-          <Link href={DISCORD_INVITE_LINK} target="_blank" className="p-1">
-            Join
-          </Link>
-        </TransparentButton>
+        <Link
+          href={DISCORD_INVITE_LINK}
+          target="_blank"
+          className="mx-2 default"
+        >
+          🎉 Join 🎉
+        </Link>
         <div className="md:block hidden">
           Gift cards, rare souvenirs, and more!
         </div>
@@ -75,7 +77,7 @@ export const BannerAds: FC = () => {
   const ads = [
     <GiveawayAd key={0} endDate={1709243999809} />,
     <BannerAd key={1}>
-      <div className="text-sm md:text-lg bg-zinc-800 text-white bg-opacity-50 p-1 rounded-lg">
+      <div className="text-sm md:text-lg bg-black text-white bg-opacity-50 p-1 rounded-lg">
         <Image
           alt=""
           src="/images/metroquest-ad-bg.jpg"
@@ -83,26 +85,22 @@ export const BannerAds: FC = () => {
           className="-z-10 object-cover"
         />
         Psst...
-        <TransparentButton className="mx-1 p-0 border-2 text-white border-white">
-          <Link
-            href="https://discord.gg/NeYkEmWfzv"
-            target="_blank"
-            className="p-1"
-          >
-            Join Metroquest!
-          </Link>
-        </TransparentButton>{" "}
+        <Link
+          href="https://discord.gg/NeYkEmWfzv"
+          target="_blank"
+          className="default mx-2"
+        >
+          Join Metroquest!
+        </Link>
         It is a non-p2w go on trips club.
       </div>
     </BannerAd>,
     <BannerAd key={2}>
       <div className="text-sm md:text-lg">
         📢 Want to be featured? Request an advertisement on{" "}
-        <TransparentButton className="mx-1 p-0 bordered border-white">
-          <Link href={DISCORD_INVITE_LINK} target="_blank" className="p-1">
-            our Discord
-          </Link>
-        </TransparentButton>
+        <Link href={DISCORD_INVITE_LINK} target="_blank" className="default">
+          our Discord
+        </Link>
         !
       </div>
     </BannerAd>,
@@ -139,11 +137,12 @@ export const BannerAds: FC = () => {
   return (
     <div className="w-full relative overflow-visible">
       <Collapse collapsed={collapsed}>
-        <div className="w-full h-16 dark:bg-zinc-900 dark:hover:bg-zinc-800 bg-slate-100 hover:bg-slate-200">
+        <div className="w-full h-16 dark:bg-black dark:hover:bg-zinc-900 bg-white hover:bg-zinc-100">
           <AnimatePresence>{ads[adIndex]}</AnimatePresence>
         </div>
+        <hr />
       </Collapse>
-      <div className="absolute bottom-[1px] mt-1 right-0 translate-y-full z-20 dark:bg-zinc-900 dark:hover:bg-zinc-800 bg-slate-100 hover:bg-slate-200 rounded-b-xl overflow-hidden">
+      <div className="absolute bordered bottom-[1px] mt-1 right-0 translate-y-full z-20 dark:bg-black dark:hover:bg-zinc-900 bg-white hover:bg-zinc-100 rounded-b-xl overflow-hidden">
         <TransparentButton
           onClick={() => {
             localStorage.setItem("hideAds", String(!collapsed));

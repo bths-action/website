@@ -31,14 +31,14 @@ export const AdminActions: FC<PropsWrite> = ({ event, setEvent }) => {
       )}
       <ColorButton
         color="default"
-        innerClass="text-white text-xl p-2"
-        className="rounded-xl"
+        innerClass="text-white text-xl p-2 "
+        className="rounded-xl shadowed"
         onClick={() => setFormOpen(true)}
       >
         <FaRegEdit className="inline mr-1 w-6 h-6" />
         Edit Event
       </ColorButton>
-      <ColorButton color="default" className="rounded-xl">
+      <ColorButton color="default" className="rounded-xl shadowed">
         <Link
           href={`/events/${event.id}/attendance`}
           className="text-white p-2 text-xl"
@@ -50,7 +50,7 @@ export const AdminActions: FC<PropsWrite> = ({ event, setEvent }) => {
       <ColorButton
         color="red-500"
         innerClass="text-white text-xl p-2"
-        className="rounded-xl"
+        className="rounded-xl shadowed"
         onClick={async () => {
           if (
             await confirm({

@@ -12,13 +12,13 @@ export const EventDetails: FC<Props> = ({ event }) => {
   return (
     <>
       {event.imageURL && (
-        <div className="relative mb-2 ">
+        <div className="relative mt-auto pb-2">
           <Image
             src={event.imageURL}
             alt=""
             width={500}
             height={500}
-            className="max-h-60 w-full object-contain rounded-lg"
+            className="max-h-64 shadowed w-auto h-auto mx-auto rounded-lg"
           />
         </div>
       )}
@@ -65,7 +65,7 @@ export const EventDetails: FC<Props> = ({ event }) => {
         src={encodeURI(
           `https://maps.google.com/maps?q=${event.address}&t=&z=13&ie=UTF8&iwloc=&output=embed`
         )}
-        className="w-full border-none h-60 rounded-xl"
+        className="w-full h-60 rounded-xl shadowed"
       ></iframe>
     </>
   );
@@ -75,7 +75,7 @@ export const EventDescription: FC<Props> = ({ event }) => {
   return (
     <>
       <h4>Event Description: </h4>
-      <div className="min-h-[200px] m-2 bg-gray-500 bg-opacity-20 overflow-auto break-words p-2 rounded-md">
+      <div className="min-h-[200px] max-h-[400px] m-2 bordered bg-gray-100 dark:bg-zinc-900 shadowed overflow-auto break-words p-2 rounded-md">
         <MarkDownView>{event.description}</MarkDownView>
       </div>
     </>

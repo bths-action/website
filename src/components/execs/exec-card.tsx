@@ -27,7 +27,7 @@ export const ExecCard: FC<{
       className="h-full"
     >
       <motion.div
-        className="bg-gray-400 bg-opacity-20 m-1 rounded-lg overflow-hidden h-full"
+        className="bg-gray-50 dark:bg-zinc-900 m-1 rounded-lg overflow-hidden h-full shadowed"
         initial={{
           opacity: 0,
           y: 100,

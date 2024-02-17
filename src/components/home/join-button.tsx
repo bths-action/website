@@ -31,8 +31,8 @@ export const JoinButton: FC = () => {
     >
       <ColorButton
         color="default"
-        className="mt-8"
-        innerClass="p-2 text-4xl text-white"
+        className="mt-8 shadowed"
+        innerClass="p-2 text-4xl text-white "
         disabled={status !== "unauthenticated"}
         onClick={() => {
           signIn("auth0");

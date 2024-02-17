@@ -15,6 +15,9 @@ export const getStats = authedProcedure.query(async ({ ctx }) => {
           },
         },
       },
+      orderBy: {
+        registeredAt: "desc",
+      },
     }),
     prisma.user
       .findMany({

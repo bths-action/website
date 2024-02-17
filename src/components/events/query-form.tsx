@@ -26,7 +26,7 @@ export const QueryForm: FC<{
       {({ setFieldValue, values }) => {
         return (
           <Form
-            className={`my-2 bordered rounded-lg p-2 flex flex-col gap-y-2 ${
+            className={`my-2 bordered rounded-lg p-2 flex flex-col gap-y-2 shadowed ${
               collapsed ? "pb-0" : ""
             }`}
           >
@@ -37,7 +37,7 @@ export const QueryForm: FC<{
                 setCollapsed(!collapsed);
               }}
             >
-              <BiSearch className="inline-block mr-1" />
+              <BiSearch className="inline-block mr-1 " />
               {collapsed ? "Show" : "Hide"} Filters{" "}
             </TransparentButton>
             <Collapse collapsed={collapsed}>

@@ -23,7 +23,7 @@ export const TransparentButton: FC<MotionButtonProps> = (props) => {
     <motion.button
       {...props}
       className={twMerge(
-        "rounded-full bg-gray-500 bg-opacity-0 dark:text-white text-black hover:enabled:bg-opacity-40 hover:enabled:bg-[#808080] active:enabled:bg-[#808080] active:enabled:bg-opacity-80 active:enabled:scale-90 disabled:cursor-not-allowed transition-all duration-200 ease-in-out",
+        "rounded-full bg-gray-400 bg-opacity-0 dark:text-white text-black hover:enabled:bg-opacity-20 active:enabled:bg-opacity-40 active:enabled:scale-90 disabled:cursor-not-allowed transition-all duration-200 ease-in-out",
         props.className || ""
       )}
       initial={{
