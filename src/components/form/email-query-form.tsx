@@ -112,6 +112,7 @@ const EmailQueryContent: FC = () => {
           })}
           <ColorButton
             color="default"
+            className="rounded-xl shadowed"
             innerClass="p-2 text-white"
             type="submit"
           >

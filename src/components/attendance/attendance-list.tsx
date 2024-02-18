@@ -6,6 +6,8 @@ import { AttendanceItem } from "./attendance-item";
 import { ColorButton, TransparentButton } from "../ui/buttons";
 import { confirm } from "../ui/confirm";
 import { RequestError } from "../ui/error";
+import { MdOutlinePeople } from "react-icons/md";
+import { BsDatabaseDown } from "react-icons/bs";
 
 export interface ListProps {
   attendance: GetAttendeesOutput;
@@ -36,10 +38,11 @@ export const AttendanceList: FC<ListProps> = ({ attendance, id }) => {
       animate="show"
       className="overflow-x-visible flex flex-col"
     >
-      <div className="p-2">
+      <div className="p-2 flex flex-wrap gap-3 justify-center">
         <ColorButton
           color="default"
-          innerClass="p-2 text-xl text-white rounded-xl"
+          className="shadowed rounded-xl"
+          innerClass="p-2 text-xl text-white"
           onClick={async () => {
             if (batchEdit !== null) return;
             let oldData = {
@@ -94,9 +97,38 @@ export const AttendanceList: FC<ListProps> = ({ attendance, id }) => {
           }}
           disabled={batchEdit !== null}
         >
-          Batch{batchEdit !== null && "ing"} Points & Hours{" "}
+          <MdOutlinePeople className="w-6 h-6 mr-1" /> Batch
+          {batchEdit !== null && "ing"} Points & Hours{" "}
           {batchEdit !== null &&
             `(${batchEdit}/${attendance.attendees.length})`}
+        </ColorButton>
+        <ColorButton
+          color="default"
+          className="shadowed rounded-xl"
+          innerClass="p-2 text-xl text-white"
+          onClick={async () => {
+            if (
+              !(await confirm({
+                title: "Export Data",
+                children: "Are you sure?",
+              }))
+            )
+              return;
+            let string = "";
+            string += "Email,Name,Attended At,Earned Hours,Earned Points\n";
+            for (const attendee of attendance.attendees) {
+              string += `${attendee.userEmail},${attendee.user.name},${attendee.attendedAt},${attendee.earnedHours},${attendee.earnedPoints}\n`;
+            }
+
+            const blob = new Blob([string], { type: "text/csv" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "attendance.csv";
+            a.click();
+          }}
+        >
+          <BsDatabaseDown className="w-6 h-6 mr-1" /> Export
         </ColorButton>
       </div>
       <div className="flex justify-center flex-wrap">

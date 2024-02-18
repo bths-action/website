@@ -11,6 +11,7 @@ export const BackupButton: FC<{
     <ColorButton
       color="default"
       innerClass="p-2 text-white"
+      className="rounded-xl shadowed"
       onClick={async () => {
         // download as csv
         let string =

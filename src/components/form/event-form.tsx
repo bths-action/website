@@ -16,6 +16,7 @@ import { createEventSchema } from "@/schema/events";
 import { ZodError } from "zod";
 import { Collapse } from "../ui/collapse";
 import { BiXCircle } from "react-icons/bi";
+import { useRouter } from "next/navigation";
 
 type Props = (
   | {
@@ -33,6 +34,7 @@ type Props = (
 };
 
 const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
+  const router = useRouter();
   const utils = trpc.useUtils();
   const createEvent = trpc.createEvent.useMutation();
   const editEvent = trpc.editEvent.useMutation();
@@ -107,6 +109,7 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
                   ...event,
                   ...data,
                 });
+                router.push(`/events/${data.id}`);
                 setOpen(false);
               },
               onError: (err) => {

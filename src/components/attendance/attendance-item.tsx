@@ -34,8 +34,9 @@ export const AttendanceItem: FC<ItemProps> = ({ attendee, attendance, id }) => {
         hidden: { opacity: 0, x: "100%" },
         show: { opacity: 1, x: "0" },
       }}
-      className="p-2 bg-gray-400 bg-opacity-20 m-2  rounded-lg"
+      className="pb-2 rounded-lg"
     >
+      <hr className="my-2" />
       {attendee.user.preferredName} ({attendee.user.name}) -{" "}
       {attendee.userEmail}
       <br />
@@ -99,7 +100,7 @@ export const AttendanceItem: FC<ItemProps> = ({ attendee, attendance, id }) => {
             type="number"
             name="points"
             id="points"
-            className="w-20 bg-slate-500"
+            className="w-20"
             onBlur={async (e) => {
               const value = e.target.valueAsNumber || 0;
 
@@ -159,6 +160,7 @@ export const AttendanceItem: FC<ItemProps> = ({ attendee, attendance, id }) => {
         </span>
       )}
       <ColorButton
+        className="shadowed rounded-xl"
         innerClass={`p-2 text-white ${
           attendee.attendedAt
             ? "bg-red-500 dark:bg-red-500"

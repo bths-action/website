@@ -30,7 +30,7 @@ export const EventPage: FC<{
           <ColorButton
             color="default"
             innerClass="text-white text-xl p-2"
-            className="rounded-xl"
+            className="rounded-xl shadowed"
             onClick={() => {
               confirm({
                 title: "Share Event",

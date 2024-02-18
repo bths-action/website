@@ -19,6 +19,7 @@ export const GiveCreditsButton: FC<{
     <ColorButton
       color="default"
       innerClass="p-2 text-white"
+      className="shadowed rounded-xl"
       onClick={async () => {
         setProgress(0);
         // download as csv

@@ -127,8 +127,8 @@ export const UserAttendance: FC<Props> = ({ event }) => {
           </h5>
           <ColorButton
             color="default"
-            className="shadowed"
-            innerClass="p-2 text-xl text-white rounded-xl"
+            className="rounded-xl shadowed"
+            innerClass="p-2 text-xl text-white"
             onClick={() => signIn("auth0")}
           >
             <BiLogIn className="inline w-6 h-6 mr-1" />
@@ -152,8 +152,8 @@ export const UserAttendance: FC<Props> = ({ event }) => {
           <br />
           {!notAccepting && (
             <ColorButton
-              innerClass="p-2 text-xl text-white rounded-xl"
-              className="shadowed"
+              innerClass="p-2 text-xl text-white"
+              className="rounded-xl shadowed"
               color="default"
               disabled={isSubmitting}
               onClick={async () => {
@@ -218,8 +218,8 @@ export const UserAttendance: FC<Props> = ({ event }) => {
             <>You cannot change attendance after an event.</>
           ) : (
             <ColorButton
-              innerClass="p-2 text-xl text-white rounded-xl"
-              className="shadowed"
+              innerClass="p-2 text-xl text-white"
+              className="rounded-xl shadowed"
               color="default"
               disabled={isSubmitting}
               onClick={async () => {

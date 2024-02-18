@@ -79,7 +79,7 @@ export const Spreadsheet: FC = () => {
             the user is an executive, therefore able to recieve in full every
             time.
             <table className="max-w-fit m-auto block overflow-auto h-[80dvh]">
-              <thead className="sticky top-0 dark:bg-zinc-900 bg-gray-100">
+              <thead className="sticky top-0 dark:bg-zinc-800 bg-gray-200 text-sm">
                 <tr>
                   <th>Given Credits</th>
                   <th>Email</th>
@@ -104,8 +104,8 @@ export const Spreadsheet: FC = () => {
                       0
                     );
                   return (
-                    <tr className="bg-opacity-0 hover:bg-opacity-30 bg-gray-300">
-                      <td className="px-4 whitespace-nowrap">
+                    <tr className="hover:bg-gray-100 hover:dark:bg-zinc-900 border-t-2 ">
+                      <td className="px-4 whitespace-nowrap py-1">
                         <input
                           className="w-16"
                           defaultValue={user.givenCredits}
