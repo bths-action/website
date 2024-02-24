@@ -8,7 +8,8 @@
   }
 
   * {
-    @apply font-figtree  transition-[background] duration-300 ease-in-out border-gray-400 dark:border-zinc-600;
+    @apply font-figtree  transition-[background] duration-300 ease-in-out border-gray-400  dark:border-zinc-600;
+    scrollbar-color: rgba(25, 177, 160, 0.75) rgba(128, 128, 128, 0.3);
   }
 
   hr {
@@ -87,11 +88,7 @@
   }
 
   .shadowed {
-    @apply shadow-xl shadow-[#7773];
-  }
-
-  button.shadowed {
-    @apply shadow-xl shadow-[#7773];
+    @apply shadow-xl shadow-[#6663];
   }
 
   input[type="text"],
@@ -145,6 +142,7 @@
   .underline-animated:focus,
   a.default:focus,
   #mdx a:focus {
+    display: inline !important;
     background-size: 100% 0.15em !important;
   }
 

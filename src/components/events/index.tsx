@@ -71,7 +71,7 @@ export const Events: FC = () => {
       {!events.isFetching &&
         (events.hasNextPage ? (
           <TransparentButton
-            className="px-2 bordered shadowed"
+            className="px-2 bordered"
             disabled={events.isFetchingNextPage}
             onClick={() => {
               events.fetchNextPage();

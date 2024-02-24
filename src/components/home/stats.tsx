@@ -74,7 +74,7 @@ export const Stats: FC<{
         {events}
       </StatsCard>
       <StatsCard title="Club Credits" icon={BsAward} index={3}>
-        {MAX_CREDITS * 2}
+        {MAX_CREDITS}
       </StatsCard>
       <StatsCard title="Service Hours Contributed" icon={BiTime} index={4}>
         {serviceHours} (This Year)

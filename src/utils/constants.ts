@@ -28,4 +28,4 @@ export type NodeMap<T extends string | number | symbol> = {
 
 export const DISCORD_INVITE_LINK = "https://discord.gg/TepH9vuqn4";
 
-export const MAX_CREDITS = 6;
+export const MAX_CREDITS = 12;

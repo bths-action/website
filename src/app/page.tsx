@@ -4,6 +4,9 @@ import { LimitedContainer } from "@/components/ui/container";
 import { Stats } from "@/components/home/stats";
 import { prisma } from "@/utils/prisma";
 import { JoinButton } from "@/components/home/join-button";
+import { About } from "@/components/home/about";
+import { ColorButton } from "@/components/ui/buttons";
+import { FaArrowDown } from "react-icons/fa";
 
 export const revalidate = 600;
 
@@ -30,19 +33,18 @@ const Home: FC = async () => {
     <main className="pt-0">
       <Banner />
       <LimitedContainer>
-        <p className="text-xl">
-          Welcome to Action! Our goal is to revolutionize and redefine the
-          volunteer sector of Brooklyn Tech. In this world of inflation and
-          economic troubles, we pursue a modern, equal, worker-oriented, and
-          diverse club without the wallet and the inequalities.
-          <br />
-          Money is NOT the solution to everything. We, the workers, are the
-          solution.
-        </p>
-
         <br />
+        <About />
+        <ColorButton
+          className="w-12 h-12 disabled:cursor-auto rounded-full pointer-events-auto shadowed sticky bottom-4"
+          color="default"
+          disabled
+        >
+          <FaArrowDown className="w-6 h-6 text-white" />
+        </ColorButton>
         <JoinButton />
         <hr className="my-8" />
+
         <Stats members={members} serviceHours={serviceHours} events={events} />
       </LimitedContainer>
     </main>

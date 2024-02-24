@@ -31,18 +31,20 @@ export const JoinButton: FC = () => {
     >
       <ColorButton
         color="default"
-        className="mt-8 shadowed"
-        innerClass="p-2 text-4xl text-white "
+        className={`mt-4 shadowed  ${
+          status == "unauthenticated" ? "animate-pulse" : ""
+        }`}
+        innerClass="p-4 text-xl text-white "
         disabled={status !== "unauthenticated"}
         onClick={() => {
           signIn("auth0");
         }}
       >
-        <FaFistRaised className="inline w-8 h-8 mr-1" />{" "}
+        <FaFistRaised className="inline w-6 h-6 mr-2" />{" "}
         {status === "loading"
           ? "Loading Invite..."
           : status === "unauthenticated"
-          ? "Join Now!"
+          ? "Take Action."
           : "Welcome to the Family!"}
       </ColorButton>
       {status === "authenticated" && (
