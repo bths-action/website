@@ -16,8 +16,8 @@ const config: Config = {
 
       fontFamily: {
         figtree: ["var(--font-figtree)"],
-        anybody: ["var(--font-anybody)"],
         "space-mono": ["var(--font-space-mono)"],
+        poppins: ["var(--font-poppins)"],
       },
       colors: {
         default: "#19b1a0",

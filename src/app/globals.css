@@ -33,7 +33,7 @@
   h4,
   h5,
   h6 {
-    @apply font-anybody;
+    @apply font-poppins;
   }
 
   h6 {
@@ -45,19 +45,19 @@
   }
 
   h4 {
-    @apply text-3xl font-semibold;
+    @apply text-3xl font-medium;
   }
 
   h3 {
-    @apply text-4xl font-semibold;
+    @apply text-4xl font-medium;
   }
 
   h2 {
-    @apply text-5xl font-bold;
+    @apply text-5xl font-semibold;
   }
 
   h1 {
-    @apply text-6xl font-bold;
+    @apply text-6xl font-semibold;
   }
 }
 
@@ -128,7 +128,7 @@
   .underline-animation,
   a.default,
   #mdx a {
-    @apply inline-block relative;
+    @apply inline relative;
     background: linear-gradient(to right, rgb(19 134 121), rgb(25 179 161));
     background-size: 0 0.15em;
     background-position: 0 100%;
@@ -142,7 +142,6 @@
   .underline-animated:focus,
   a.default:focus,
   #mdx a:focus {
-    display: inline !important;
     background-size: 100% 0.15em !important;
   }
 
