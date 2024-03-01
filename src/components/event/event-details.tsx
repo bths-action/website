@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Props } from "./event-page";
 import { FC } from "react";
 import { BiLinkExternal } from "react-icons/bi";
-import { BsClock, BsAward } from "react-icons/bs";
+import { BsClock, BsAward, BsTicketPerforated } from "react-icons/bs";
 import { FaRegEnvelope } from "react-icons/fa";
 import { MarkDownView } from "../ui/md-view";
 import Image from "next/image";
@@ -31,16 +31,22 @@ export const EventDetails: FC<Props> = ({ event }) => {
         "Service letters are not available for this event."
       )}
       <h4>Rewards: </h4>
+
       {event.maxHours != 0 && (
-        <span className="text-yellow-600 dark:text-yellow-500">
-          <BsClock className="inline" /> Total Hours : {event.maxHours} <br />
-        </span>
+        <div className="text-yellow-600 dark:text-yellow-500">
+          <BsClock className="inline" /> Total Hours : {event.maxHours}
+        </div>
       )}
       {event.maxPoints != 0 && (
-        <span className="text-blue-500">
+        <div className="text-blue-500">
           <BsAward className="inline" /> Total Points : {event.maxPoints}
-          <br />
-        </span>
+        </div>
+      )}
+      {event.maxGiveawayEntries != 0 && (
+        <div className="text-pink-600 dark:text-pink-500 mr-2">
+          <BsTicketPerforated className="inline" /> Total Entries:{" "}
+          {event.maxGiveawayEntries}
+        </div>
       )}
       <h4>Event Time:</h4>
       {event.eventTime.toLocaleString("en-US", {

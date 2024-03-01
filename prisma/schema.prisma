@@ -35,39 +35,43 @@ model ExecDetails {
 }
 
 model User {
-  email         String            @id
+  email         String       @id
   name          String
   preferredName String
   prefect       String
   pronouns      String
   gradYear      Int
-  position      UserPosition      @default(MEMBER)
-  registeredAt  DateTime          @default(now())
-  events        EventAttendance[] @relation("EventAttendee")
-  birthday      String
-  referredBy    String?
-  sgoSticker    Boolean
-  execDetails   ExecDetails?
-  givenCredits  Int               @default(0)
-  miscPoints    Float             @default(0)
-  didOsis       Boolean           @default(false)
+  position      UserPosition @default(MEMBER)
+  registeredAt  DateTime     @default(now())
+
+  events    EventAttendance[] @relation("EventAttendee")
+  giveaways GiveawayEntry[]   @relation("GiveawayEntry")
+
+  birthday     String
+  referredBy   String?
+  sgoSticker   Boolean
+  execDetails  ExecDetails?
+  givenCredits Int          @default(0)
+  miscPoints   Float        @default(0)
+  didOsis      Boolean      @default(false)
 
   eventAlerts Boolean
   lastUpdated DateTime @default(now())
 }
 
 model Event {
-  id             String            @id @default(cuid())
-  name           String
-  description    String            @db.VarChar(4000)
-  maxPoints      Float
-  maxHours       Float
-  attendees      EventAttendance[]
-  eventTime      DateTime
-  finishTime     DateTime?
-  limit          Int?
-  imageURL       String?
-  serviceLetters String?
+  id                 String            @id @default(cuid())
+  name               String
+  description        String            @db.VarChar(4000)
+  maxPoints          Float
+  maxHours           Float
+  maxGiveawayEntries Float
+  attendees          EventAttendance[]
+  eventTime          DateTime
+  finishTime         DateTime?
+  limit              Int?
+  imageURL           String?
+  serviceLetters     String?
 
   messageID String @unique
 
@@ -76,17 +80,58 @@ model Event {
 }
 
 model EventAttendance {
-  user         User      @relation("EventAttendee", fields: [userEmail], references: [email])
-  userEmail    String
-  event        Event     @relation(fields: [eventId], references: [id])
-  eventId      String
-  earnedPoints Float     @default(0)
-  earnedHours  Float     @default(0)
-  registeredAt DateTime  @default(now())
-  attendedAt   DateTime?
+  user          User      @relation("EventAttendee", fields: [userEmail], references: [email])
+  userEmail     String
+  event         Event     @relation(fields: [eventId], references: [id])
+  eventId       String
+  earnedPoints  Float     @default(0)
+  earnedHours   Float     @default(0)
+  earnedEntries Float     @default(0)
+  registeredAt  DateTime  @default(now())
+  attendedAt    DateTime?
 
   @@id([userEmail, eventId])
   @@index([userEmail])
   @@index([eventId])
   @@map("EventAttendee")
+}
+
+enum GiveawayType {
+  FIRST_CLAIM
+  ORDERED_CLAIM
+  RANDOM
+}
+
+model Giveaway {
+  id          String   @id @default(cuid())
+  name        String
+  description String   @db.VarChar(4000)
+  imageURL    String
+  endsAt      DateTime
+
+  maxWinners Int
+  prizes     Json
+  entries    GiveawayEntry[]
+  type       GiveawayType
+
+  messageID String @unique
+
+  createdAt DateTime @default(now())
+}
+
+model GiveawayEntry {
+  user       User     @relation("GiveawayEntry", fields: [userEmail], references: [email])
+  userEmail  String
+  giveaway   Giveaway @relation(fields: [giveawayId], references: [id])
+  giveawayId String
+  won        Boolean  @default(false)
+  order      Int?
+  rewardId   Int?
+  entries    Int      @default(1)
+
+  createdAt DateTime @default(now())
+
+  @@id([userEmail, giveawayId])
+  @@index([userEmail])
+  @@index([giveawayId])
 }

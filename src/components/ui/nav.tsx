@@ -34,7 +34,7 @@ import {
   BiXCircle,
 } from "react-icons/bi";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { BsQuestionCircle } from "react-icons/bs";
+import { BsGift, BsQuestionCircle } from "react-icons/bs";
 import { UserForm } from "../form/user-form";
 import { useAccount } from "@/providers/account";
 import { ExecForm } from "../form/exec-form";
@@ -62,15 +62,15 @@ const NAV_LINKS: Links = {
     icon: MdEventAvailable,
     text: "Events",
   },
+  giveaways: {
+    href: "/giveaways",
+    icon: BsGift,
+    text: "Giveaways",
+  },
   gallery: {
     href: "/gallery",
     icon: BiPhotoAlbum,
     text: "Gallery",
-  },
-  executives: {
-    href: "/executives",
-    icon: FaRegIdCard,
-    text: "Executives",
   },
 };
 
@@ -83,7 +83,7 @@ const RESOURCE_LINKS: Links = {
   points: {
     href: "/points",
     icon: BiSpreadsheet,
-    text: "Points & Hours",
+    text: "Reward Breakdown",
   },
   bylaws: {
     href: "/bylaws",
@@ -360,59 +360,96 @@ export const Navbar: FC<PropsWithChildren> = ({ children }) => {
             className="rounded-full w-12 h-12"
           />
         </Link>
-        <div className="flex items-center overflow-y-auto justify-around md:justify-start w-full md:flex-col md:h-[calc(100dvh-60px)] md:overflow-x-hidden flex-1">
-          {Object.entries(NAV_LINKS).map(([location, { href, icon, text }]) => (
+        <div className="overflow-y-auto w-full flex-1">
+          <div className="flex-row md:flex-col flex items-center justify-around md:justify-start">
+            {Object.entries(NAV_LINKS).map(
+              ([location, { href, icon, text }]) => (
+                <NavButton
+                  key={href}
+                  icon={icon}
+                  href={href}
+                  hideSmall
+                  className="lg:text-left "
+                  onClick={() => {
+                    setSideId("");
+                  }}
+                >
+                  {text}
+                </NavButton>
+              )
+            )}
+
             <NavButton
-              key={href}
-              icon={icon}
-              href={href}
+              icon={FaRegIdCard}
+              href="/executives"
+              className="hidden md:block lg:text-left "
               hideSmall
-              className="lg:text-left"
               onClick={() => {
                 setSideId("");
               }}
             >
-              {text}
+              Execs
             </NavButton>
-          ))}
-          <NavButton
-            icon={MdContentCopy}
-            hideSmall
-            className="lg:text-left"
-            onClick={() => {
-              setSideId(sideId == "resources" ? "" : "resources");
-              setSideContent(
-                <>
-                  {Object.entries(RESOURCE_LINKS).map(
-                    ([location, { href, icon, text }]) => (
-                      <NavButton
-                        key={href}
-                        icon={icon}
-                        href={href}
-                        onClick={() => {
-                          setSideId("");
-                        }}
-                      >
-                        {text}
-                      </NavButton>
-                    )
-                  )}
+            <NavButton
+              icon={MdContentCopy}
+              hideSmall
+              className="lg:text-left"
+              onClick={() => {
+                setSideId(sideId == "resources" ? "" : "resources");
+                setSideContent(
+                  <>
+                    {Object.entries(RESOURCE_LINKS).map(
+                      ([location, { href, icon, text }]) => (
+                        <NavButton
+                          key={href}
+                          icon={icon}
+                          href={href}
+                          onClick={() => {
+                            setSideId("");
+                          }}
+                        >
+                          {text}
+                        </NavButton>
+                      )
+                    )}
+                    <NavButton
+                      icon={FaRegIdCard}
+                      href="/executives"
+                      className="block md:hidden"
+                      onClick={() => {
+                        setSideId("");
+                      }}
+                    >
+                      Execs
+                    </NavButton>
 
-                  <div className="flex lg:hidden gap-1 justify-center">
-                    {socials}
-                  </div>
-                </>
-              );
-            }}
-          >
-            Resources
-          </NavButton>
-          <ThemeButton mounted={mounted} />
-          <div className="hidden lg:flex gap-2 w-full text-left lg:justify-center">
-            {socials}
+                    <div className="flex lg:hidden gap-1 justify-center">
+                      {socials}
+                    </div>
+                  </>
+                );
+              }}
+            >
+              Resources
+            </NavButton>
+            <ThemeButton mounted={mounted} />
+            <div className="hidden lg:flex gap-2 w-full text-left lg:justify-center">
+              {socials}
+            </div>
           </div>
         </div>
-
+        <span className="text-xs tracking-tight p-1 hidden lg:block text-center">
+          We are transparent and community driven. Find or contribute to our
+          source code on{" "}
+          <Link
+            href="https://github.com/bths-action/website"
+            className="default"
+            target="_blank"
+          >
+            Github
+          </Link>
+          .
+        </span>
         <ProfileButton
           setSideContent={setSideContent}
           setSideId={setSideId}

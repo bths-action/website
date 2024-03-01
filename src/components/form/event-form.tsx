@@ -55,6 +55,7 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
     limit: mode == "edit" ? event.limit || 0 : (0 as number | null),
     serviceLetters: mode == "edit" ? event.serviceLetters : null,
     imageURL: mode == "edit" ? event.imageURL : null,
+    maxGiveawayEntries: mode == "edit" ? event.maxGiveawayEntries : 0,
   };
 
   type FormValues = typeof initialValues;
@@ -192,6 +193,19 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
                 placeholder="Max points"
               />
               <FormError name="maxPoints" />
+            </FormQuestion>
+            <br />
+            <FormQuestion errored={Boolean(errors.maxGiveawayEntries)}>
+              <label htmlFor="maxGiveawayEntries">Max Entries:</label>
+              <Field
+                id="maxGiveawayEntries"
+                name="maxGiveawayEntries"
+                type="number"
+                step={0.1}
+                min={0}
+                placeholder="Max giveaway entries"
+              />
+              <FormError name="maxGiveawayEntries" />
             </FormQuestion>
             <br />
             <FormQuestion errored={Boolean(errors.eventTime)}>

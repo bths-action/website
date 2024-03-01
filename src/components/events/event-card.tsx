@@ -2,7 +2,7 @@ import { FC } from "react";
 import { EventPreview } from ".";
 import Link from "next/link";
 import Image from "next/image";
-import { BsClock, BsAward } from "react-icons/bs";
+import { BsClock, BsAward, BsTicketPerforated } from "react-icons/bs";
 import { FiCheckCircle, FiXCircle } from "react-icons/fi";
 import { BiAlarm } from "react-icons/bi";
 import { motion } from "framer-motion";
@@ -21,6 +21,7 @@ export const EventCard: FC<{
     imageURL,
     limit,
     attendees,
+    maxGiveawayEntries,
   },
   index,
 }) => {
@@ -75,13 +76,19 @@ export const EventCard: FC<{
               <br />
               {maxHours != 0 && (
                 <span className="text-yellow-600 dark:text-yellow-500 mr-2">
-                  <BsClock className="inline" /> +{maxHours} Hours
+                  <BsClock className="inline w" /> +{maxHours} Hours
                 </span>
               )}
 
               {maxPoints != 0 && (
-                <span className="text-blue-500">
+                <span className="text-blue-500 mr-2">
                   <BsAward className="inline" /> +{maxPoints} Points
+                </span>
+              )}
+              {maxGiveawayEntries != 0 && (
+                <span className="text-pink-600 dark:text-pink-500 mr-2">
+                  <BsTicketPerforated className="inline" /> +
+                  {maxGiveawayEntries} Entries
                 </span>
               )}
               <br />

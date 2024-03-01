@@ -55,6 +55,13 @@ const baseEventSchema = z.object({
     .min(0, {
       message: "Max hours must be greater than or equal to 0. ",
     }),
+  maxGiveawayEntries: z
+    .number({
+      invalid_type_error: "Max giveaway entries must be a number. ",
+    })
+    .min(0, {
+      message: "Max giveaway entries must be greater than or equal to 0. ",
+    }),
   eventTime: z.date({
     invalid_type_error: "Event time must be a valid date. ",
   }),

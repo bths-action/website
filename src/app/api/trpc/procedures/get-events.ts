@@ -97,6 +97,7 @@ export const getEvents = publicProcedure
               eventId: true,
             },
           },
+          maxGiveawayEntries: true,
         },
       })
       .then((events) =>

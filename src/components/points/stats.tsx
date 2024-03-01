@@ -10,6 +10,7 @@ export const PointsStats: FC<{
   data: GetStatsOutput;
 }> = ({ account, data }) => {
   const refPoints = Math.min(data.referrals, 20) * 5;
+  const refEntries = data.referrals * 0.5;
   const eventPoints = data.attendances.reduce(
     (acc, cur) => acc + cur.earnedPoints,
     0
@@ -21,6 +22,9 @@ export const PointsStats: FC<{
   const totalPoints = refPoints + eventPoints + (account.miscPoints || 0);
   // bths is 32 credits; 25 points per credit
   const credits = Math.ceil(totalPoints / 25);
+  const totalEntries =
+    refEntries +
+    data.attendances.reduce((acc, cur) => acc + cur.earnedEntries, 0);
   return (
     <div>
       <div className="text-3xl font-bold">Summary</div>
@@ -51,14 +55,14 @@ export const PointsStats: FC<{
         </div>
         <div className="bg-gray-50 dark:bg-zinc-900 rounded-lg overflow-hidden h-full shadowed">
           <div className="h-14 overflow-visible z-20 bg-default -mb-1 flex justify-center items-center text-white relative">
-            <div className="font-bold">Paid Off Credits</div>
+            <div className="font-bold">Total Giveaway Entries</div>
           </div>
           <div className="p-4">
-            <div className="font-bold text-center">{account.givenCredits}</div>
+            <div className="font-bold text-center">{totalEntries}</div>
           </div>
         </div>
       </div>
-      <div className="text-3xl font-bold pt-10">Points Breakdown</div>
+      <div className="text-3xl font-bold pt-10">Breakdown</div>
       <div className="w-full">
         <div className="grid grid-cols-2 justify-between p-2">
           <span className="text-left text-xl font-semibold">Event/Task</span>
@@ -86,6 +90,9 @@ export const PointsStats: FC<{
           <span className="text-right">
             <BsTriangleFill className="text-green-500 inline mr-2 w-3 h-3" />
             {refPoints} Point{refPoints != 1 && "s"}
+            <br />
+            <BsTriangleFill className="text-green-500 inline mr-2 w-3 h-3" />
+            {refEntries} Entr{refEntries != 1 ? "ies" : "y"}
           </span>
         </motion.div>
         {data.attendances.map((attendance, index) => (
@@ -116,8 +123,11 @@ export const PointsStats: FC<{
                 </Link>
               </span>
               <span className="text-right">
+                {attendance.earnedPoints == 0 &&
+                  attendance.earnedHours == 0 &&
+                  attendance.earnedEntries == 0 && <>---</>}
                 {attendance.earnedPoints != 0 && (
-                  <>
+                  <div>
                     <BsTriangleFill
                       className={`${
                         attendance.earnedPoints > 0
@@ -127,16 +137,11 @@ export const PointsStats: FC<{
                     />
                     {attendance.earnedPoints} Point
                     {attendance.earnedPoints != 1 && "s"}
-                  </>
+                  </div>
                 )}
-                {attendance.earnedPoints != 0 && attendance.earnedHours != 0 ? (
-                  <br />
-                ) : (
-                  attendance.earnedPoints == 0 &&
-                  attendance.earnedHours == 0 && <>---</>
-                )}
-                {attendance.earnedHours > 0 && (
-                  <>
+
+                {attendance.earnedHours != 0 && (
+                  <div>
                     <BsTriangleFill
                       className={`${
                         attendance.earnedHours > 0
@@ -146,7 +151,21 @@ export const PointsStats: FC<{
                     />
                     {attendance.earnedHours} Hour
                     {attendance.earnedHours != 1 && "s"}
-                  </>
+                  </div>
+                )}
+
+                {attendance.earnedEntries != 0 && (
+                  <div>
+                    <BsTriangleFill
+                      className={`${
+                        attendance.earnedEntries > 0
+                          ? "text-green-500"
+                          : "text-red-500 rotate-180"
+                      } inline mr-2 w-3 h-3`}
+                    />
+                    {attendance.earnedEntries} Entr
+                    {attendance.earnedEntries != 1 ? "ies" : "y"}
+                  </div>
                 )}
               </span>
             </motion.div>

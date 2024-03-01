@@ -22,10 +22,12 @@ export const AttendanceItem: FC<ItemProps> = ({ attendee, attendance, id }) => {
   const Icon = attendee.attendedAt ? FaUserSlash : FaUserCheck;
   const pointsRef = useRef<HTMLInputElement>(null);
   const hoursRef = useRef<HTMLInputElement>(null);
+  const entriesRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
-    if (pointsRef.current && hoursRef.current) {
+    if (pointsRef.current && hoursRef.current && entriesRef.current) {
       pointsRef.current.valueAsNumber = attendee.earnedPoints;
       hoursRef.current.valueAsNumber = attendee.earnedHours;
+      entriesRef.current.valueAsNumber = attendee.earnedEntries;
     }
   }, [attendee]);
   return (
@@ -136,6 +138,58 @@ export const AttendanceItem: FC<ItemProps> = ({ attendee, attendance, id }) => {
                   },
                   onError: (error) => {
                     pointsRef.current!.valueAsNumber = attendee.earnedPoints;
+                    confirm({
+                      title: "Error",
+                      children: <RequestError error={error} />,
+                    });
+                  },
+                }
+              );
+            }}
+          />
+
+          <label htmlFor="entries">Entries: </label>
+          <input
+            ref={entriesRef}
+            type="number"
+            name="entries"
+            id="entries"
+            className="w-20"
+            onBlur={async (e) => {
+              const value = e.target.valueAsNumber || 0;
+
+              await editAttendance.mutateAsync(
+                {
+                  id,
+                  user: attendee.userEmail,
+                  earnedEntries: value,
+                  socketId,
+                },
+                {
+                  onSuccess: (data) => {
+                    const attendees = attendance.attendees.map(
+                      (attendee, index) => {
+                        if (attendee.userEmail === data.userEmail)
+                          return {
+                            user: attendance.attendees[index].user,
+                            ...data,
+                          };
+
+                        return attendee;
+                      }
+                    );
+                    utils.getAttendees.setData(
+                      {
+                        id,
+                      },
+                      {
+                        ...attendance,
+                        attendees,
+                      }
+                    );
+                  },
+                  onError: (error) => {
+                    entriesRef.current!.valueAsNumber = attendee.earnedPoints;
                     confirm({
                       title: "Error",
                       children: <RequestError error={error} />,

@@ -16,4 +16,5 @@ export const attendanceEditSchema = forceAttendanceSchema.extend({
   attendedAt: z.date().optional().nullish(),
   earnedPoints: z.number().optional(),
   earnedHours: z.number().optional(),
+  earnedEntries: z.number().optional(),
 });
