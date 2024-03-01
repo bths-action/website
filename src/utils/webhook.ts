@@ -43,22 +43,33 @@ export function generateEmbed(event: CreateEventInput, id: string): APIEmbed {
     });
   }
 
-  fields.push(
-    {
+  if (event.maxPoints) {
+    fields.push({
       name: "**Points:**",
       value: event.maxPoints.toString(),
-    },
-    {
+    });
+  }
+
+  if (event.maxHours) {
+    fields.push({
       name: "**Hours:**",
       value: event.maxHours.toString(),
-    },
-    {
-      name: "**Location:**",
-      value: `[${event.address}](${encodeURI(
-        `https://www.google.com/maps/dir/?api=1&destination=${event.address}&travelmode=transit`
-      )})`,
-    }
-  );
+    });
+  }
+
+  if (event.maxGiveawayEntries) {
+    fields.push({
+      name: "**Giveaway Entries:**",
+      value: event.maxGiveawayEntries.toString(),
+    });
+  }
+
+  fields.push({
+    name: "**Location:**",
+    value: `[${event.address}](${encodeURI(
+      `https://www.google.com/maps/dir/?api=1&destination=${event.address}&travelmode=transit`
+    )})`,
+  });
 
   return {
     title: "New Event: " + event.name,
