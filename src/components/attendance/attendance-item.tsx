@@ -232,6 +232,7 @@ export const AttendanceItem: FC<ItemProps> = ({ attendee, attendance, id }) => {
                 ? {
                     earnedHours: 0,
                     earnedPoints: 0,
+                    earnedEntries: 0,
                   }
                 : {}),
               socketId,

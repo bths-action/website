@@ -38,7 +38,6 @@ const Home: FC = async () => {
         <ColorButton
           className="w-12 h-12 disabled:cursor-auto rounded-full pointer-events-auto shadowed sticky bottom-4"
           color="default"
-          disabled
         >
           <FaArrowDown className="w-6 h-6 text-white" />
         </ColorButton>

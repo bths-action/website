@@ -15,6 +15,7 @@ export const getAttendees = adminProcedure
         maxHours: true,
         maxPoints: true,
         eventTime: true,
+        maxGiveawayEntries: true,
         attendees: {
           include: {
             user: {

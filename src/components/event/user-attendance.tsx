@@ -147,8 +147,9 @@ export const UserAttendance: FC<Props> = ({ event }) => {
             check in and check out with an exec to get credit for the event.
           </h5>
           You have {!attendance.data.attendedAt && "not"} attended the event and
-          earned {attendance.data.earnedHours} hours and{" "}
-          {attendance.data.earnedPoints} points.
+          earned {attendance.data.earnedHours} hours,{" "}
+          {attendance.data.earnedPoints} points, and{" "}
+          {attendance.data.earnedEntries} giveaway entries.
           <br />
           {!notAccepting && (
             <ColorButton

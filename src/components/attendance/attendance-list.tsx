@@ -1,6 +1,6 @@
 "use client";
 import { GetAttendeesOutput, TRPCError, trpc } from "@/app/api/trpc/client";
-import { FC, useRef, useState } from "react";
+import { FC, useState } from "react";
 import { motion } from "framer-motion";
 import { AttendanceItem } from "./attendance-item";
 import { ColorButton, TransparentButton } from "../ui/buttons";
@@ -8,6 +8,8 @@ import { confirm } from "../ui/confirm";
 import { RequestError } from "../ui/error";
 import { MdOutlinePeople } from "react-icons/md";
 import { BsDatabaseDown } from "react-icons/bs";
+import { Field, Form, Formik } from "formik";
+import { z } from "zod";
 
 export interface ListProps {
   attendance: GetAttendeesOutput;
@@ -18,10 +20,8 @@ export const AttendanceList: FC<ListProps> = ({ attendance, id }) => {
   const utils = trpc.useUtils();
   const forceAdd = trpc.forceJoinEvent.useMutation();
   const editAttendance = trpc.editAttendance.useMutation();
-  const ref = useRef<HTMLInputElement>(null);
 
   const [batchEdit, setBatchEdit] = useState<number | null>(null);
-  const [forceAdding, setForceAdding] = useState(false);
 
   return (
     <motion.div
@@ -65,6 +65,7 @@ export const AttendanceList: FC<ListProps> = ({ attendance, id }) => {
                   user: attendee.userEmail,
                   earnedHours: attendance.maxHours,
                   earnedPoints: attendance.maxPoints,
+                  earnedEntries: attendance.maxGiveawayEntries,
                 });
 
                 oldData = {
@@ -132,48 +133,65 @@ export const AttendanceList: FC<ListProps> = ({ attendance, id }) => {
         </ColorButton>
       </div>
       <div className="flex justify-center flex-wrap">
-        <label htmlFor="email">Force Add: </label>
-        <input
-          ref={ref}
-          type="email"
-          id="email"
-          name="email"
-          placeholder="Email"
-        />
-        <TransparentButton
-          className="px-2 bordered"
-          onClick={async () => {
-            if (!ref.current?.value) return;
-            setForceAdding(true);
-            await forceAdd.mutateAsync(
-              { id, user: ref.current.value },
-              {
-                onSuccess: (data) => {
-                  utils.getAttendees.setData(
-                    {
-                      id,
-                    },
-                    {
-                      ...attendance,
-                      attendees: [...attendance.attendees, data],
-                    }
-                  );
-
-                  ref.current!.value = "";
-                },
-                onError: (error) => {
-                  confirm({
-                    title: "Error",
-                    children: <RequestError error={error} />,
-                  });
-                },
-              }
-            );
-            setForceAdding(false);
+        <Formik
+          initialValues={{
+            email: "",
+          }}
+          validate={(data) => {
+            try {
+              if (z.string().email().min(1).parse(data.email)) return {};
+            } catch (error) {
+              return { email: "Invalid email" };
+            }
+          }}
+          onSubmit={async (values) => {
+            try {
+              await forceAdd.mutateAsync(
+                { id, user: values.email },
+                {
+                  onSuccess: (data) => {
+                    utils.getAttendees.setData(
+                      {
+                        id,
+                      },
+                      {
+                        ...attendance,
+                        attendees: [...attendance.attendees, data],
+                      }
+                    );
+                  },
+                  onError: (error) => {
+                    if (error.data?.code === "NOT_FOUND")
+                      confirm({
+                        title: "User Not Found",
+                        children:
+                          "The user you are trying to add does not exist. Please make sure the email is correct.",
+                      });
+                    else
+                      confirm({
+                        title: "Error",
+                        children: <RequestError error={error} />,
+                      });
+                  },
+                }
+              );
+            } catch (error) {}
           }}
         >
-          Force Add{forceAdding && "ing"}
-        </TransparentButton>
+          {({ isValid, isSubmitting }) => (
+            <Form>
+              <label htmlFor="email">Force Add: </label>
+              <Field type="email" id="email" name="email" placeholder="Email" />
+              <TransparentButton
+                disabled={Boolean(!isValid || isSubmitting)}
+                type="submit"
+                className="px-2 bordered"
+              >
+                Force Add{isSubmitting && "ing"}
+              </TransparentButton>
+            </Form>
+          )}
+        </Formik>
       </div>
       {attendance.attendees.map((attendee) => (
         <AttendanceItem

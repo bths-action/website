@@ -125,6 +125,14 @@
     @apply max-w-[calc(100%-16px)] bordered focus:border-default focus:dark:border-default outline-none rounded-lg bg-gray-400 bg-opacity-20 focus:dark:bg-opacity-0 focus:bg-opacity-0 mx-2 px-1 transition-colors duration-200 ease-in-out;
   }
 
+  button:disabled {
+    @apply brightness-50;
+  }
+
+  button {
+    @apply transition-[filter] duration-300 ease-in-out;
+  }
+
   .underline-animation,
   a.default,
   #mdx a {
