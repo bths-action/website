@@ -83,7 +83,7 @@ export const Stats: FC<{
         Illegal and bullshit.
       </StatsCard>
       <StatsCard title="Giveaways" icon={FaTrophy} index={6}>
-        1300+ robux given away; Others to come!
+        $170+ in prizes.
       </StatsCard>
     </motion.div>
   );

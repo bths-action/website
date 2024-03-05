@@ -101,13 +101,41 @@ const baseEventSchema = z.object({
 export const createEventSchema = baseEventSchema
   .refine(
     (data) => {
-      console.log(data.maxHours, data.maxPoints);
-      if (data.maxHours == 0 && data.maxPoints == 0) return false;
-      return true;
+      return !(
+        data.maxHours == 0 &&
+        data.maxPoints == 0 &&
+        data.maxGiveawayEntries == 0
+      );
     },
     {
-      message: "Max points or max hours must be specified. ",
-      path: ["maxHours", "maxPoints"],
+      message: "Some reward must be specified. ",
+      path: ["maxHours"],
+    }
+  )
+  .refine(
+    (data) => {
+      return !(
+        data.maxHours == 0 &&
+        data.maxPoints == 0 &&
+        data.maxGiveawayEntries == 0
+      );
+    },
+    {
+      message: "Some reward must be specified. ",
+      path: ["maxPoints"],
+    }
+  )
+  .refine(
+    (data) => {
+      return !(
+        data.maxHours == 0 &&
+        data.maxPoints == 0 &&
+        data.maxGiveawayEntries == 0
+      );
+    },
+    {
+      message: "Some reward must be specified. ",
+      path: ["maxGiveawayEntries"],
     }
   )
   .refine(

@@ -33,6 +33,10 @@ export const About: FC = () => {
 
   return (
     <div className="text-xl my-4">
+      <h3 className="py-20">
+        "Action speaks louder than words." - Emma Katz, 2024
+      </h3>
+      <h2>What We Are:</h2>
       <div className="text-center grid grid-cols-1 lg:grid-cols-2 items-stretch gap-y-12 gap-x-2 lg:gap-y-36 my-14">
         <span ref={refs[0]}>
           <h3
