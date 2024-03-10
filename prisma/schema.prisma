@@ -55,6 +55,8 @@ model User {
   miscPoints   Float        @default(0)
   didOsis      Boolean      @default(false)
 
+  discordID String?
+
   eventAlerts Boolean
   lastUpdated DateTime @default(now())
 }
@@ -106,7 +108,7 @@ model Giveaway {
   id          String   @id @default(cuid())
   name        String
   description String   @db.VarChar(4000)
-  imageURL    String
+  imageURL    String?
   endsAt      DateTime
 
   maxWinners Int

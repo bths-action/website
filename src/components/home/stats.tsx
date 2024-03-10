@@ -77,7 +77,7 @@ export const Stats: FC<{
         {MAX_CREDITS}
       </StatsCard>
       <StatsCard title="Service Hours Contributed" icon={BiTime} index={4}>
-        {serviceHours} (This Year)
+        {serviceHours}
       </StatsCard>
       <StatsCard title="Pay to Win?" icon={MdOutlineMoneyOff} index={5}>
         Illegal and bullshit.

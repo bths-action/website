@@ -2,10 +2,23 @@ import { adminProcedure } from "../trpc";
 import { prisma } from "@/utils/prisma";
 
 export const getSpreadsheet = adminProcedure.query(async () => {
+  const today = new Date();
   const refsRaw = await prisma.user.findMany({
     where: {
       referredBy: {
         not: null,
+      },
+      registeredAt: {
+        gte: new Date(
+          today.getFullYear() + (today.getMonth() >= 6 ? 0 : -1),
+          6,
+          1
+        ),
+        lt: new Date(
+          today.getFullYear() + (today.getMonth() >= 6 ? 1 : 0),
+          6,
+          1
+        ),
       },
     },
     select: {

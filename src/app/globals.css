@@ -21,7 +21,7 @@
   }
 
   html {
-    font-size: 18px;
+    @apply text-[15px] md:text-[16.5px] lg:text-[18px];
   }
   body {
     @apply text-lg;
