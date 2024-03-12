@@ -29,3 +29,6 @@ export type NodeMap<T extends string | number | symbol> = {
 export const DISCORD_INVITE_LINK = "https://discord.gg/TepH9vuqn4";
 
 export const MAX_CREDITS = 12;
+export const BASE_URL = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_URL}`
+  : `http://localhost:3000`;

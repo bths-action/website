@@ -126,7 +126,7 @@
   }
 
   button:disabled {
-    @apply brightness-50;
+    @apply brightness-75 dark:brightness-50;
   }
 
   button {

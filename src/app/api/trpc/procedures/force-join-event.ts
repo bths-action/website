@@ -7,6 +7,7 @@ import { TRPCError } from "@trpc/server";
 export const forceJoinEvent = adminProcedure
   .input(forceAttendanceSchema)
   .mutation(async ({ ctx, input: { id, user } }) => {
+    user = user.toLowerCase();
     if (
       (await prisma.user.findUnique({
         where: { email: user },
@@ -18,6 +19,17 @@ export const forceJoinEvent = adminProcedure
         message: "User not found",
       });
     }
+    if (
+      await prisma.eventAttendance.findFirst({
+        where: { eventId: id, userEmail: user },
+      })
+    ) {
+      throw new TRPCError({
+        code: "CONFLICT",
+        message: "User is already attending",
+      });
+    }
+
     const attendance = await prisma.eventAttendance.create({
       data: {
         userEmail: user,

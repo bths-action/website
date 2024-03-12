@@ -55,7 +55,7 @@ model User {
   miscPoints   Float        @default(0)
   didOsis      Boolean      @default(false)
 
-  discordID String?
+  discordID String? @unique
 
   eventAlerts Boolean
   lastUpdated DateTime @default(now())

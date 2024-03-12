@@ -31,7 +31,10 @@ export default function RootLayout({
         <AppProviders>
           <div className="w-full overflow-y-hidden flex h-[calc(100dvh-70px)] md:h-[100dvh]">
             <Navbar />
-            <div className="h-full overflow-auto w-full break-words">
+            <div
+              className="h-[100dvh] overflow-auto w-full break-words"
+              id="content"
+            >
               <BannerAds />
               {children}
             </div>

@@ -167,6 +167,12 @@ export const AttendanceList: FC<ListProps> = ({ attendance, id }) => {
                         children:
                           "The user you are trying to add does not exist. Please make sure the email is correct.",
                       });
+                    else if (error.data?.code === "CONFLICT")
+                      confirm({
+                        title: "Already Attending",
+                        children:
+                          "The user you are trying to add is already attending this event.",
+                      });
                     else
                       confirm({
                         title: "Error",
@@ -175,7 +181,10 @@ export const AttendanceList: FC<ListProps> = ({ attendance, id }) => {
                   },
                 }
               );
-            } catch (error) {}
+            } catch (error) {
+            } finally {
+              values.email = "";
+            }
           }}
         >
           {({ isValid, isSubmitting }) => (
