@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Figtree, Space_Mono, Poppins } from "next/font/google";
 
-import "./globals.css";
+import "../globals.css";
 import { AppProviders } from "@/providers/providers";
 import { Navbar } from "@/components/ui/nav";
 import { BannerAds } from "@/components/ui/banner-ads";

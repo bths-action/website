@@ -34,7 +34,7 @@ import {
   BiXCircle,
 } from "react-icons/bi";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { BsGift, BsQuestionCircle } from "react-icons/bs";
+import { BsDiscord, BsGift, BsQuestionCircle } from "react-icons/bs";
 import { UserForm } from "../form/user-form";
 import { useAccount } from "@/providers/account";
 import { ExecForm } from "../form/exec-form";
@@ -42,6 +42,9 @@ import { twMerge } from "tailwind-merge";
 import { EmailQueryForm } from "../form/email-query-form";
 import { DISCORD_INVITE_LINK } from "@/utils/constants";
 import { PopupUI } from "./popup";
+import { TRPCError, trpc } from "@/app/api/trpc/client";
+import { confirm } from "./confirm";
+import { RequestError } from "./error";
 
 type Links = {
   [key: string]: {
@@ -172,8 +175,133 @@ const ProfileButton: FC<{
   const [formOpen, setFormOpen] = useState(false);
   const [execOpen, setExecOpen] = useState(false);
   const [queryOpen, setQueryOpen] = useState(false);
+  const [connecting, setConnecting] = useState(false);
+  const disconnectDiscord = trpc.disconnectDiscord.useMutation();
+  const utils = trpc.useUtils();
   const { status: accountStatus, data: accountData } = useAccount();
   const notDone = status == "loading" || accountStatus == "loading";
+
+  useEffect(() => {
+    if (sideId != "profile") return;
+    setSideContent(
+      <>
+        <NavButton icon={FaUserEdit} onClick={() => setFormOpen(true)}>
+          Edit Profile
+        </NavButton>
+        {accountStatus == "success" && accountData?.position == "EXEC" && (
+          <NavButton icon={FaUserEdit} onClick={() => setExecOpen(true)}>
+            Edit Exec Profile
+          </NavButton>
+        )}
+
+        <NavButton
+          icon={BsDiscord}
+          onClick={async () => {
+            setConnecting(true);
+            if (accountData?.discordID) {
+              disconnectDiscord.mutate(undefined, {
+                onSuccess: () => {
+                  utils.getForm.setData(undefined, {
+                    ...accountData,
+                    discordID: "",
+                  });
+                },
+                onSettled: () => {
+                  setConnecting(false);
+                },
+                onError: (e) => {
+                  confirm({
+                    title: "Error Disconnecting",
+                    children: (
+                      <>
+                        An error occurred while disconnecting Discord.
+                        <br />
+                        <RequestError error={e as TRPCError} />
+                      </>
+                    ),
+                  });
+                },
+              });
+            } else {
+              const win = open(
+                `${window.location.origin}/api/connections/discord/`,
+                "Discord Connection",
+                "width=800,height=800"
+              );
+              if (!win) {
+                confirm({
+                  title: "Error Connecting",
+                  children: (
+                    <>
+                      An error occurred while connecting Discord.
+                      <br />
+                      Please ensure that popups are enabled for this site.
+                    </>
+                  ),
+                });
+                return;
+              }
+              const timer = setInterval(() => {
+                if (win.closed) {
+                  clearInterval(timer);
+                  setConnecting(false);
+                  utils.getForm.refetch();
+                }
+              }, 500);
+            }
+          }}
+        >
+          {accountData?.discordID ? "Disc" : "C"}onnnect
+          {connecting && "ing"} Discord
+        </NavButton>
+        <NavButton
+          disabled={accountData?.didOsis}
+          icon={accountData?.didOsis ? FaClipboardCheck : FaClipboard}
+          className="relative"
+          onClick={() => {
+            open(
+              "https://docs.google.com/forms/d/e/1FAIpQLSd7yl28S0IVjgkKO2q-OUEwMxu963KK79HJd0Tqnoc-gl_xeQ/viewform?usp=sf_link"
+            );
+          }}
+        >
+          OSIS Form{" "}
+          {accountData?.didOsis ? (
+            "(Completed)"
+          ) : (
+            <>
+              (MUST DO)
+              <MdWarning className="inline w-6 h-6 text-red-500" />
+            </>
+          )}
+        </NavButton>
+
+        {accountStatus == "success" && accountData?.position == "EXEC" && (
+          <>
+            <NavButton icon={BiSearch} onClick={() => setQueryOpen(true)}>
+              Query Emails
+            </NavButton>
+            <NavButton
+              icon={BiAward}
+              href="/spreadsheet"
+              onClick={() => {
+                setSideId("");
+              }}
+            >
+              Credits Spreadsheet
+            </NavButton>
+          </>
+        )}
+        <ColorButton
+          color="red-500"
+          className="w-full rounded-none"
+          innerClass=" p-2 text-white"
+          onClick={() => signOut()}
+        >
+          <BiLogOut className="inline w-6 h-6 mr-1 " /> Logout
+        </ColorButton>
+      </>
+    );
+  }, [accountData, sideId, connecting]);
   return (
     <>
       {formOpen && <UserForm setOpen={setFormOpen} mode="edit" />}
@@ -198,73 +326,6 @@ const ProfileButton: FC<{
           if (status == "unauthenticated") signIn("auth0");
           else {
             setSideId(sideId == "profile" ? "" : "profile");
-            setSideContent(
-              <>
-                <NavButton icon={FaUserEdit} onClick={() => setFormOpen(true)}>
-                  Edit Profile
-                </NavButton>
-                {accountStatus == "success" &&
-                  accountData?.position == "EXEC" && (
-                    <NavButton
-                      icon={FaUserEdit}
-                      onClick={() => setExecOpen(true)}
-                    >
-                      Edit Exec Profile
-                    </NavButton>
-                  )}
-
-                {
-                  <NavButton
-                    disabled={accountData?.didOsis}
-                    icon={accountData?.didOsis ? FaClipboardCheck : FaClipboard}
-                    className="relative"
-                    onClick={() => {
-                      open(
-                        "https://docs.google.com/forms/d/e/1FAIpQLSd7yl28S0IVjgkKO2q-OUEwMxu963KK79HJd0Tqnoc-gl_xeQ/viewform?usp=sf_link"
-                      );
-                    }}
-                  >
-                    OSIS Form{" "}
-                    {accountData?.didOsis ? (
-                      "(Completed)"
-                    ) : (
-                      <>
-                        (MUST DO)
-                        <MdWarning className="inline w-6 h-6 text-red-500" />
-                      </>
-                    )}
-                  </NavButton>
-                }
-                {accountStatus == "success" &&
-                  accountData?.position == "EXEC" && (
-                    <>
-                      <NavButton
-                        icon={BiSearch}
-                        onClick={() => setQueryOpen(true)}
-                      >
-                        Query Emails
-                      </NavButton>
-                      <NavButton
-                        icon={BiAward}
-                        href="/spreadsheet"
-                        onClick={() => {
-                          setSideId("");
-                        }}
-                      >
-                        Credits Spreadsheet
-                      </NavButton>
-                    </>
-                  )}
-                <ColorButton
-                  color="red-500"
-                  className="w-full rounded-none"
-                  innerClass=" p-2 text-white"
-                  onClick={() => signOut()}
-                >
-                  <BiLogOut className="inline w-6 h-6 mr-1 " /> Logout
-                </ColorButton>
-              </>
-            );
           }
         }}
       >

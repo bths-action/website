@@ -24,7 +24,7 @@
     @apply text-[15px] md:text-[16.5px] lg:text-[18px];
   }
   body {
-    @apply text-lg;
+    @apply text-lg overflow-hidden;
   }
 
   h1,
@@ -126,7 +126,7 @@
   }
 
   button:disabled {
-    @apply brightness-75 dark:brightness-50;
+    @apply brightness-75 dark:brightness-50 text-opacity-50 cursor-not-allowed;
   }
 
   button {

@@ -23,6 +23,7 @@ import { getSpreadsheet } from "./procedures/get-spreadsheet";
 import { editCredits } from "./procedures/edit-credits";
 import { editSubscription } from "./procedures/edit-subscription";
 import { getGiveaways } from "./procedures/get-giveaways";
+import { disconnectDiscord } from "./procedures/disconnect-discord";
 
 export const appRouter = router({
   //generate smth random
@@ -55,6 +56,7 @@ export const appRouter = router({
   editCredits,
 
   editSubscription,
+  disconnectDiscord,
 
   getGiveaways,
 });
