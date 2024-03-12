@@ -1,22 +1,16 @@
 "use client";
-import { motion, useScroll } from "framer-motion";
+import { motion } from "framer-motion";
 import Image from "next/image";
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useState } from "react";
 
 export const Banner: FC = () => {
-  const ref = useRef(document.getElementById("content")!);
-  const { scrollY } = useScroll({
-    target: ref,
-  });
   const [animated, setAnimated] = useState(false);
   useEffect(() => {
     const timer = setTimeout(() => setAnimated(true), 750);
     return () => clearTimeout(timer);
   }, []);
   return (
-    <motion.div
-      className="relative w-full min-h-[570px] h-[75dvh] rounded-xl mb-4 "
-    >
+    <motion.div className="relative w-full min-h-[570px] h-[75dvh] rounded-xl mb-4 ">
       <div className="absolute w-full top-1/2 -translate-y-1/2 text-center banner z-20">
         <motion.span
           className="inline-block bg-black bg-opacity-50 rounded-3xl p-6"
