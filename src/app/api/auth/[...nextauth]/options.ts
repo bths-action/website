@@ -14,7 +14,7 @@ export const AUTH_OPTIONS: AuthOptions = {
           select: { email: true },
         });
         if (!dUser) {
-          return "/auth/invalid-login";
+          return "/auth/invalid-discord";
         }
         user.email = dUser.email;
       }
@@ -25,8 +25,7 @@ export const AUTH_OPTIONS: AuthOptions = {
       )
         return true;
 
-      // return "/auth/invalid-email";
-      return true;
+      return "/auth/invalid-email";
     },
 
     async session({ session, user, token }) {

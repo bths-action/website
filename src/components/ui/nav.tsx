@@ -195,6 +195,7 @@ const ProfileButton: FC<{
         )}
 
         <NavButton
+          disabled={connecting}
           icon={BsDiscord}
           onClick={async () => {
             setConnecting(true);
@@ -251,7 +252,7 @@ const ProfileButton: FC<{
             }
           }}
         >
-          {accountData?.discordID ? "Disc" : "C"}onnnect
+          {accountData?.discordID ? "Disc" : "C"}onnect
           {connecting && "ing"} Discord
         </NavButton>
         <NavButton
