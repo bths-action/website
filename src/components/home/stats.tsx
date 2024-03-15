@@ -65,6 +65,7 @@ export const Stats: FC<{
       whileInView="visible"
       viewport={{
         once: true,
+        amount: 1,
       }}
     >
       <StatsCard title="Club Members" icon={BiUser} index={1}>

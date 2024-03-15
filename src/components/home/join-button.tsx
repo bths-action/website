@@ -13,20 +13,16 @@ export const JoinButton: FC = () => {
       variants={{
         hidden: {
           opacity: 0,
-          x: "100%",
         },
         visible: {
           opacity: 1,
-          x: 0,
-          transition: {
-            delay: 0.5,
-          },
         },
       }}
       initial="hidden"
       whileInView="visible"
       viewport={{
         once: true,
+        amount: 1,
       }}
     >
       <ColorButton

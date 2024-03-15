@@ -5,8 +5,7 @@ import { Stats } from "@/components/home/stats";
 import { prisma } from "@/utils/prisma";
 import { JoinButton } from "@/components/home/join-button";
 import { About } from "@/components/home/about";
-import { ColorButton } from "@/components/ui/buttons";
-import { FaArrowDown } from "react-icons/fa";
+import { StickyDown } from "@/components/home/sticky-down";
 
 export const revalidate = 600;
 
@@ -30,18 +29,15 @@ const Home: FC = async () => {
   ]);
 
   return (
-    <main className="pt-0">
+    <main className="pt-0 relative">
       <Banner />
       <LimitedContainer>
         <br />
         <About />
-        <ColorButton
-          className="w-12 h-12 disabled:cursor-auto rounded-full pointer-events-auto shadowed sticky bottom-4"
-          color="default"
-        >
-          <FaArrowDown className="w-6 h-6 text-white" />
-        </ColorButton>
-        <JoinButton />
+      </LimitedContainer>
+      <StickyDown />
+      <JoinButton />
+      <LimitedContainer>
         <hr className="my-8" />
 
         <Stats members={members} serviceHours={serviceHours} events={events} />

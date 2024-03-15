@@ -26,18 +26,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${figtree.variable} ${poppins.variable} ${spaceMono.variable} bg-white font-anybody dark:bg-black`}
+        className={`${figtree.variable} ${poppins.variable} ${spaceMono.variable} bg-white font-anybody dark:bg-black w-full overflow-y-hidden flex h-[calc(100dvh-70px)] md:h-[100dvh]`}
       >
         <AppProviders>
-          <div className="w-full overflow-y-hidden flex h-[calc(100dvh-70px)] md:h-[100dvh]">
-            <Navbar />
-            <div
-              className="h-[100dvh] overflow-auto w-full break-words"
-              id="content"
-            >
-              <BannerAds />
-              {children}
-            </div>
+          <Navbar />
+          <div
+            className="h-[calc(100dvh-56px)] md:h-[100dvh]  overflow-auto w-full break-words"
+            id="content"
+          >
+            <BannerAds />
+            {children}
           </div>
         </AppProviders>
       </body>
