@@ -1,9 +1,9 @@
-import { EventPage } from "@/components/event/event-page";
-import { prisma } from "@/utils/prisma";
-import { Metadata } from "next";
-import { notFound } from "next/navigation";
 import { FC } from "react";
+import { Metadata } from "next";
+import { prisma } from "@/utils/prisma";
 import removeMarkdown from "remove-markdown";
+import { notFound } from "next/navigation";
+import { GiveawayPage } from "@/components/giveaway/giveaway-page";
 
 export const dynamicParams = true;
 export const revalidate = 15;
@@ -15,12 +15,12 @@ export type Params = {
 export async function generateMetadata({
   params: { id },
 }: Params): Promise<Metadata> {
-  const event = await prisma.event.findUnique({
+  const giveaway = await prisma.giveaway.findUnique({
     where: { id },
     select: { name: true, description: true, imageURL: true },
   });
 
-  if (!event) {
+  if (!giveaway) {
     return {
       creator: "BTHS Action",
       generator: "BTHS Action",
@@ -35,12 +35,12 @@ export async function generateMetadata({
         siteName: "BTHS Action",
         images: "https://bthsaction.org/icon.png",
       },
-      title: "Nonexistent Event",
+      title: "Nonexistent Giveaway",
       description: "You may have attached a bad link.",
     };
   }
 
-  const description = removeMarkdown(event.description);
+  const description = removeMarkdown(giveaway.description);
 
   const metadata: Metadata = {
     creator: "BTHS Action",
@@ -51,7 +51,7 @@ export async function generateMetadata({
       shortcut: "/icon.png",
     },
     manifest: "/manifest.json",
-    title: `Event: ${event.name}`,
+    title: `Giveaway: ${giveaway.name}`,
     description:
       description.length > 500
         ? description.substring(0, 500).trim() + "..."
@@ -60,11 +60,11 @@ export async function generateMetadata({
       siteName: "BTHS Action",
 
       images: {
-        url: event.imageURL || "https://bthsaction.org/icon.png",
+        url: giveaway.imageURL || "https://bthsaction.org/icon.png",
       },
     },
     twitter: {
-      card: event.imageURL ? "summary_large_image" : "summary",
+      card: giveaway.imageURL ? "summary_large_image" : "summary",
     },
   };
 
@@ -72,30 +72,29 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
-  const events = await prisma.event.findMany({
+  const giveaways = await prisma.giveaway.findMany({
     select: { id: true },
   });
 
-  return events.map((event) => ({ id: event.id }));
+  return giveaways.map((giveaways) => ({ id: giveaways.id }));
 }
 
-function fetchEvent(id: string) {
-  return prisma.event.findUnique({
+function fetchGiveaway(id: string) {
+  return prisma.giveaway.findUnique({
     where: { id },
   });
 }
 
-const Page: FC<Params> = async ({ params: { id } }) => {
-  const event = await fetchEvent(id);
-  if (!event) {
+const EventsPage: FC<Params> = async ({ params: { id } }) => {
+  const giveaway = await fetchGiveaway(id);
+  if (!giveaway) {
     notFound();
   }
-
   return (
-    <main>
-      <EventPage event={event} />
+    <main className="pt-0">
+      <GiveawayPage giveaway={giveaway} />
     </main>
   );
 };
 
-export default Page;
+export default EventsPage;

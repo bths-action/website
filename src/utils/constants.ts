@@ -1,4 +1,4 @@
-import { ExecPosition } from "@prisma/client";
+import { ExecPosition, GiveawayType } from "@prisma/client";
 import { ReactNode } from "react";
 
 export const OLDEST_GRAD_YEAR = 2024;
@@ -32,3 +32,11 @@ export const MAX_CREDITS = 12;
 export const BASE_URL = process.env.VERCEL_URL
   ? `https://bthsaction.org`
   : `http://localhost:3000`;
+
+export const GIVEAWAY_TYPE_MAP: Record<GiveawayType, string> = {
+  RANDOM: "Random",
+  FIRST_CLAIM: "First Claim",
+  ORDERED_CLAIM: "Ordered Claim",
+} as const;
+
+export const BANNED_USERS = ["junchaol2@nycstudents.net"];

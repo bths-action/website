@@ -4,8 +4,8 @@ import { z } from "zod";
 export const createExecSchema = z.object({
   position: z.nativeEnum(ExecPosition, {
     errorMap: (error) => {
-      if (error.code === "invalid_enum_value") {
-        return { message: "Invalid position. " };
+      if (error.code === "invalid_enum_value" && error.received == "") {
+        return { message: "Please specify a position. " };
       }
       return { message: "Unknown error. " };
     },

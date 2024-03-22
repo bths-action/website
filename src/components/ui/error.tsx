@@ -44,15 +44,38 @@ export const RequestError: FC<
 };
 
 export const FormError: FC<
-  HTMLProps<HTMLDivElement> & {
-    name: string;
+  HTMLProps<HTMLDivElement> &
+    (
+      | {
+          name: string;
+          error?: undefined;
+        }
+      | {
+          error: string | undefined;
+          name?: undefined;
+        }
+    )
+> = ({ className, name, error, ...props }) => {
+  if (!name) {
+    if (!error) return null;
+    return (
+      <div
+        className={` bg-red-500 flex items-center flex-wrap justify-center rounded-lg p-1 m-1 text-white ${
+          className || ""
+        }`}
+        {...props}
+      >
+        <BiXCircle className="inline w-6 h-6 mr-1" />
+        {error}
+      </div>
+    );
   }
-> = ({ className, name, ...props }) => {
+
   return (
     <ErrorMessage name={name}>
       {(msg) => (
         <div
-          className={` bg-red-500 flex items-center flex-wrap justify-center rounded-lg p-1 mt-2 text-white ${
+          className={` bg-red-500 flex items-center flex-wrap justify-center rounded-lg p-1 m-1 text-white ${
             className || ""
           }`}
           {...props}

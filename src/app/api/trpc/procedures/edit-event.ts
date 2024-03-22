@@ -1,7 +1,7 @@
 import { adminProcedure } from "../trpc";
 import { updateEventSchema } from "@/schema/events";
 import { prisma } from "@/utils/prisma";
-import { editMessage, generateEmbed } from "@/utils/webhook";
+import { editMessage, generateEvent } from "@/utils/webhook";
 
 export const editEvent = adminProcedure
   .input(updateEventSchema)
@@ -23,7 +23,7 @@ export const editEvent = adminProcedure
     });
 
     await editMessage(event.messageID, {
-      embeds: [generateEmbed(event, event.id)],
+      embeds: [generateEvent(event, event.id)],
     }).catch(() => {});
 
     return event;

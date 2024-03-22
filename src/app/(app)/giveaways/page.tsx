@@ -1,3 +1,4 @@
+import { Giveaways } from "@/components/giveaways";
 import { LimitedContainer } from "@/components/ui/container";
 import { FC } from "react";
 
@@ -17,6 +18,7 @@ const EventsPage: FC = () => {
           President, Justin Li, 2023
         </h5>
         Page under construction. Expect epic giveaways soon! 🎉
+        <Giveaways />
       </LimitedContainer>
     </main>
   );

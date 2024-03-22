@@ -1,4 +1,4 @@
-import { CreateEventInput } from "@/app/api/trpc/client";
+import { CreateEventInput, CreateGiveawayInput } from "@/app/api/trpc/client";
 import {
   APIEmbed,
   APIEmbedField,
@@ -6,8 +6,9 @@ import {
   RESTPatchAPIWebhookWithTokenMessageJSONBody,
   RESTPostAPIWebhookWithTokenJSONBody,
 } from "discord-api-types/v10";
+import { GIVEAWAY_TYPE_MAP } from "./constants";
 
-export function generateEmbed(event: CreateEventInput, id: string): APIEmbed {
+export function generateEvent(event: CreateEventInput, id: string): APIEmbed {
   const fields: APIEmbedField[] = [
     {
       name: `**Event ${event.finishTime ? "Start " : ""}Time:**`,
@@ -83,10 +84,59 @@ export function generateEmbed(event: CreateEventInput, id: string): APIEmbed {
   };
 }
 
+export function generateGiveaway(
+  giveaway: CreateGiveawayInput,
+  id: string
+): APIEmbed[] {
+  const fields: APIEmbedField[] = [
+    {
+      name: "**Giveaway End Date:**",
+      value: giveaway.endsAt.toLocaleString("en-US", {
+        timeZone: "America/New_York",
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+      }),
+    },
+    {
+      name: "**Winners:**",
+      value: giveaway.maxWinners.toString(),
+    },
+    {
+      name: "Giveaway Type:",
+      value: GIVEAWAY_TYPE_MAP[giveaway.type],
+    },
+  ];
+
+  return [
+    {
+      title: "New Giveaway: " + giveaway.name,
+      description: giveaway.description,
+      image: {
+        url: giveaway.imageURL || "https://bthsaction.org/icon.png",
+      },
+      timestamp: new Date().toISOString(),
+      url: `https://bthsaction.org/giveaways/${id}`,
+      fields,
+    },
+    {
+      title: "Prizes:",
+      timestamp: new Date().toISOString(),
+      fields: giveaway.prizes.map((prize) => ({
+        name: prize.name,
+        value: prize.details,
+      })),
+    },
+  ];
+}
+
 export async function sendMessage(
-  options: string | RESTPostAPIWebhookWithTokenJSONBody
+  options: string | RESTPostAPIWebhookWithTokenJSONBody,
+  url = process.env.EVENT_WEBHOOK!
 ): Promise<APIMessage> {
-  return fetch(process.env.EVENT_WEBHOOK! + "?wait=true", {
+  return fetch(url + "?wait=true", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -97,9 +147,10 @@ export async function sendMessage(
 
 export async function editMessage(
   id: string,
-  options: string | RESTPatchAPIWebhookWithTokenMessageJSONBody
+  options: string | RESTPatchAPIWebhookWithTokenMessageJSONBody,
+  url = process.env.EVENT_WEBHOOK!
 ): Promise<APIMessage> {
-  return await fetch(`${process.env.EVENT_WEBHOOK!}/messages/${id}`, {
+  return await fetch(`${url}/messages/${id}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
@@ -108,10 +159,13 @@ export async function editMessage(
   }).then((e) => e.json());
 }
 
-export async function deleteMessage(id: string): Promise<void> {
+export async function deleteMessage(
+  id: string,
+  url = process.env.EVENT_WEBHOOK!
+): Promise<void> {
   if (!id) return;
   try {
-    await fetch(`${process.env.EVENT_WEBHOOK!}/messages/${id}`, {
+    await fetch(`${url}/messages/${id}`, {
       method: "DELETE",
     });
   } catch (e) {}

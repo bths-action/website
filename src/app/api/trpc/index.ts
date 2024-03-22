@@ -24,6 +24,9 @@ import { editCredits } from "./procedures/edit-credits";
 import { editSubscription } from "./procedures/edit-subscription";
 import { getGiveaways } from "./procedures/get-giveaways";
 import { disconnectDiscord } from "./procedures/disconnect-discord";
+import { createGiveaway } from "./procedures/create-giveaway";
+import { editGiveaway } from "./procedures/edit-giveaway";
+import { deleteGiveaway } from "./procedures/delete-giveaway";
 
 export const appRouter = router({
   //generate smth random
@@ -59,6 +62,9 @@ export const appRouter = router({
   disconnectDiscord,
 
   getGiveaways,
+  createGiveaway,
+  editGiveaway,
+  deleteGiveaway,
 });
 
 export const createContext = async () => {

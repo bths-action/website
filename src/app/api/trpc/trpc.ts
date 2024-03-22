@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import { AUTH_OPTIONS } from "../auth/[...nextauth]/options";
 import { Context } from ".";
 import superjson from "superjson";
+import { BANNED_USERS } from "@/utils/constants";
 
 const t = initTRPC.context<Context>().create({
   transformer: superjson,
@@ -49,6 +50,13 @@ const isAuthedAndExists = isAuthed.unstable_pipe(async (opts) => {
     throw new TRPCError({
       code: "UNAUTHORIZED",
       message: "You are not registered.",
+    });
+  }
+
+  if (BANNED_USERS.includes(user.email.toLowerCase())) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "You are banned.",
     });
   }
 

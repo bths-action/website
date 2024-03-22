@@ -4,7 +4,7 @@ import { createId } from "@paralleldrive/cuid2";
 import { CreateEventInput } from "../client";
 import { Converter } from "showdown";
 import { prisma } from "@/utils/prisma";
-import { generateEmbed, sendMessage } from "@/utils/webhook";
+import { generateEvent, sendMessage } from "@/utils/webhook";
 import { sendEmail } from "@/utils/mail";
 import { Event } from "@prisma/client";
 
@@ -23,7 +23,7 @@ export const createEvent = adminProcedure
         "Tired of events? Go to <#1134529490740064307> to remove <@&1136780952274735266>.\n# New event posted!",
       username: ctx.user.preferredName,
       avatar_url: ctx.user.execDetails?.selfieURL || undefined,
-      embeds: [generateEmbed(input, id)],
+      embeds: [generateEvent(input, id)],
     });
 
     const emailBody = emailGenerator(input, id);

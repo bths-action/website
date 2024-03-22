@@ -13,7 +13,7 @@ export const FormQuestion: FC<
 > = ({ children, className, errored, ...props }) => {
   return (
     <div
-      className={`inline-block p-2 rounded-lg max-w-full my-1 ${
+      className={`inline-block p-1 my-1 rounded-lg max-w-full ${
         errored ? "border-red-500 border-2 bg-opacity-20 bg-red-500 " : ""
       } ${className ? className : ""}`}
       {...props}

@@ -12,7 +12,7 @@ import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { AUTH_OPTIONS } from "@/app/api/auth/[...nextauth]/options";
 
-interface Params {
+export interface Params {
   params: {
     email: string;
   };

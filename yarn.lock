@@ -2290,6 +2290,11 @@ react-markdown@^9.0.1:
     unist-util-visit "^5.0.0"
     vfile "^6.0.0"
 
+react-slot-counter@^2.2.5:
+  version "2.2.5"
+  resolved "https://registry.yarnpkg.com/react-slot-counter/-/react-slot-counter-2.2.5.tgz#19245a144c8e04b6d4b3afce13a5b27832ba5ddd"
+  integrity sha512-0PccUY3lbhgBuKdY1HAJSAsmapPsBb9t8vS3idsvWCXoqerNdkzzr4tiU9Pf0UJe/eicKr7uLLpfVhYqlRZefg==
+
 react-spinners@^0.13.8:
   version "0.13.8"
   resolved "https://registry.yarnpkg.com/react-spinners/-/react-spinners-0.13.8.tgz#5262571be0f745d86bbd49a1e6b49f9f9cb19acc"

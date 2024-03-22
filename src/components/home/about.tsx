@@ -45,6 +45,11 @@ const ORGANIZATIONS = [
     logo: "/logos/sjbl.png",
     url: "https://www.breadandlife.org/",
   },
+  {
+    name: "9 Million Reasons",
+    logo: "/logos/9mr.jpg",
+    url: "https://9millionreasons.nyc/",
+  },
 ].map((e) => (
   <Link href={e.url} target="_blank" className="w-48 h-48 mx-8 rounded-full">
     <div className="w-48 h-48 mb-4 relative rounded-full">
@@ -55,7 +60,7 @@ const ORGANIZATIONS = [
         width={200}
         height={200}
       />
-      <div className="absolute top-0 left-0 flex justify-center items-center bg-black opacity-0 rounded-full z-30 w-48 h-48 hover:opacity-70 transition-all duration-700">
+      <div className="absolute top-0 left-0 flex justify-center text-white items-center bg-black opacity-0 rounded-full z-30 w-48 h-48 hover:opacity-70 transition-all duration-700">
         <BiLinkExternal className="inline w-10 h-10" />
       </div>
     </div>
