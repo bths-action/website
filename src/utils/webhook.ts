@@ -1,4 +1,7 @@
-import { CreateEventInput, CreateGiveawayInput } from "@/app/api/trpc/client";
+import {
+  CreateEventInput,
+  CreateGiveawayInput,
+} from "@/app/(api)/api/trpc/client";
 import {
   APIEmbed,
   APIEmbedField,

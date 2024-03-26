@@ -1,5 +1,5 @@
 "use client";
-import { trpc } from "@/app/api/trpc/client";
+import { trpc } from "@/app/(api)/api/trpc/client";
 import { useAccount } from "@/providers/account";
 import Link from "next/link";
 import { useRouter } from "next/navigation";

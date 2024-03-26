@@ -1,5 +1,5 @@
 "use client";
-import { GetExecsOutput } from "@/app/api/trpc/client";
+import { GetExecsOutput } from "@/app/(api)/api/trpc/client";
 import { FC } from "react";
 import { motion } from "framer-motion";
 import { POSITIONS_MAP } from "@/utils/constants";

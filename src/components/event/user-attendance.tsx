@@ -2,7 +2,7 @@
 import { FC, useState } from "react";
 import { Props } from "./event-page";
 import { useAccount } from "@/providers/account";
-import { GetAttendanceOutput, trpc } from "@/app/api/trpc/client";
+import { GetAttendanceOutput, trpc } from "@/app/(api)/api/trpc/client";
 import { Loading } from "../ui/loading";
 import { RequestError } from "../ui/error";
 import { MdOutlineWarningAmber } from "react-icons/md";

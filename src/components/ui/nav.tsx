@@ -42,7 +42,7 @@ import { twMerge } from "tailwind-merge";
 import { EmailQueryForm } from "../form/email-query-form";
 import { DISCORD_INVITE_LINK } from "@/utils/constants";
 import { PopupUI } from "./popup";
-import { TRPCError, trpc } from "@/app/api/trpc/client";
+import { TRPCError, trpc } from "@/app/(api)/api/trpc/client";
 import { confirm } from "./confirm";
 import { RequestError } from "./error";
 
@@ -269,10 +269,10 @@ const ProfileButton: FC<{
           {accountData?.didOsis ? (
             "(Completed)"
           ) : (
-            <>
+            <span>
               (MUST DO)
-              <MdWarning className="inline w-6 h-6 text-red-500" />
-            </>
+              <MdWarning className="inline w-6 h-6 text-yellow-500 animate-pulse" />
+            </span>
           )}
         </NavButton>
 
@@ -340,7 +340,9 @@ const ProfileButton: FC<{
           className="rounded-full min-w-8 min-h-8 bg-black bordered"
         />
         {accountStatus == "success" && accountData?.didOsis == false && (
-          <MdWarning className="absolute right-0 top-0 w-8 h-8 text-red-500 translate-x-1/2 -translate-y-1/2" />
+          <span className="translate-x-1/2 absolute right-0 top-0">
+            <MdWarning className=" w-8 h-8 animate-bounce text-yellow-500" />
+          </span>
         )}
       </TransparentButton>
     </>

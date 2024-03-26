@@ -1,5 +1,9 @@
 "use client";
-import { GetSpreadsheetOutput, trpc, TRPCError } from "@/app/api/trpc/client";
+import {
+  GetSpreadsheetOutput,
+  trpc,
+  TRPCError,
+} from "@/app/(api)/api/trpc/client";
 import { FC, RefObject, useState } from "react";
 import { ColorButton } from "../ui/buttons";
 import { MAX_CREDITS } from "@/utils/constants";

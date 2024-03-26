@@ -1,5 +1,5 @@
 "use client";
-import { GetFormOutput, GetStatsOutput } from "@/app/api/trpc/client";
+import { GetFormOutput, GetStatsOutput } from "@/app/(api)/api/trpc/client";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { FC } from "react";

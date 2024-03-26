@@ -1,4 +1,4 @@
-import { GetEmailsInput, trpc } from "@/app/api/trpc/client";
+import { GetEmailsInput, trpc } from "@/app/(api)/api/trpc/client";
 import { GRAD_YEARS } from "@/utils/constants";
 import { Field, Form, Formik } from "formik";
 import { ChangeEvent, FC, useEffect, useState } from "react";

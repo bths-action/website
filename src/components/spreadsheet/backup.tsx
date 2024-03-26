@@ -1,5 +1,5 @@
 "use client";
-import { GetSpreadsheetOutput } from "@/app/api/trpc/client";
+import { GetSpreadsheetOutput } from "@/app/(api)/api/trpc/client";
 import { FC } from "react";
 import { ColorButton } from "../ui/buttons";
 import { MdOutlineBackup } from "react-icons/md";

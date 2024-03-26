@@ -1,5 +1,9 @@
 "use client";
-import { GetEventsOutput, trpc, GetEventsInput } from "@/app/api/trpc/client";
+import {
+  GetEventsOutput,
+  trpc,
+  GetEventsInput,
+} from "@/app/(api)/api/trpc/client";
 import { useState, FC } from "react";
 import { EventCard } from "./event-card";
 import { TransparentButton } from "../ui/buttons";

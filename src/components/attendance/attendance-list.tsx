@@ -1,5 +1,9 @@
 "use client";
-import { GetAttendeesOutput, TRPCError, trpc } from "@/app/api/trpc/client";
+import {
+  GetAttendeesOutput,
+  TRPCError,
+  trpc,
+} from "@/app/(api)/api/trpc/client";
 import { FC, useState } from "react";
 import { motion } from "framer-motion";
 import { AttendanceItem } from "./attendance-item";

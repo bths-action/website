@@ -1,5 +1,5 @@
 "use client";
-import { TRPCError } from "@/app/api/trpc/client";
+import { TRPCError } from "@/app/(api)/api/trpc/client";
 import { ErrorMessage } from "formik";
 import { FC, Fragment, HTMLProps, PropsWithChildren } from "react";
 import { BiXCircle } from "react-icons/bi";

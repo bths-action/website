@@ -1,5 +1,5 @@
 "use client";
-import { GetFormOutput, TRPCError, trpc } from "@/app/api/trpc/client";
+import { GetFormOutput, TRPCError, trpc } from "@/app/(api)/api/trpc/client";
 import { UserForm } from "@/components/form/user-form";
 import { UseTRPCQueryResult } from "@trpc/react-query/shared";
 import {

@@ -10,7 +10,7 @@ import { prisma } from "@/utils/prisma";
 import { UserPosition } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
-import { AUTH_OPTIONS } from "@/app/api/auth/[...nextauth]/options";
+import { AUTH_OPTIONS } from "@/app/(api)/api/auth/[...nextauth]/options";
 
 export interface Params {
   params: {

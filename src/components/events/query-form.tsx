@@ -1,5 +1,5 @@
 "use client";
-import { GetEventsInput } from "@/app/api/trpc/client";
+import { GetEventsInput } from "@/app/(api)/api/trpc/client";
 import { Field, Form, Formik } from "formik";
 import { Dispatch, FC, SetStateAction, useState } from "react";
 import { TransparentButton } from "../ui/buttons";

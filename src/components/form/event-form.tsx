@@ -1,6 +1,6 @@
 "use client";
 
-import { TRPCError, trpc } from "@/app/api/trpc/client";
+import { TRPCError, trpc } from "@/app/(api)/api/trpc/client";
 import { useAccount } from "@/providers/account";
 import { Field, Form, Formik } from "formik";
 import { FC, useState } from "react";

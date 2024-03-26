@@ -1,5 +1,5 @@
 "use client";
-import { trpc } from "@/app/api/trpc/client";
+import { trpc } from "@/app/(api)/api/trpc/client";
 import { useAccount } from "@/providers/account";
 import { NodeMap, Status } from "@/utils/constants";
 import { useSession } from "next-auth/react";

@@ -3,7 +3,7 @@ import { ColorButton } from "../ui/buttons";
 import { FaUserCheck, FaUserSlash } from "react-icons/fa";
 import { confirm } from "../ui/confirm";
 import { RequestError } from "../ui/error";
-import { GetAttendeesOutput, trpc } from "@/app/api/trpc/client";
+import { GetAttendeesOutput, trpc } from "@/app/(api)/api/trpc/client";
 import { motion } from "framer-motion";
 import { FC, useEffect, useRef, useState } from "react";
 import { ListProps } from "./attendance-list";

@@ -1,7 +1,7 @@
 "use client";
 import { FC, useEffect, useState } from "react";
 import { TransparentButton } from "../ui/buttons";
-import { trpc, TRPCError } from "@/app/api/trpc/client";
+import { trpc, TRPCError } from "@/app/(api)/api/trpc/client";
 import { confirm } from "../ui/confirm";
 import { RequestError } from "../ui/error";
 import Link from "next/link";

@@ -6,7 +6,7 @@ import {
   EditAttendanceOutput,
   JoinEventOutput,
   trpc,
-} from "@/app/api/trpc/client";
+} from "@/app/(api)/api/trpc/client";
 import { Loading } from "../ui/loading";
 import { useAccount } from "@/providers/account";
 import { RequestError } from "../ui/error";

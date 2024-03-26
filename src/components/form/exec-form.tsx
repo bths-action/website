@@ -1,5 +1,5 @@
 "use client";
-import { TRPCError, trpc } from "@/app/api/trpc/client";
+import { TRPCError, trpc } from "@/app/(api)/api/trpc/client";
 import { createExecSchema } from "@/schema/exec";
 import { useAccount } from "@/providers/account";
 import { ExecPosition } from "@prisma/client";

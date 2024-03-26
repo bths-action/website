@@ -18,6 +18,11 @@ export const JoinButton: FC = () => {
           opacity: 1,
         },
       }}
+      className={`${
+        status == "unauthenticated" ? "sticky bottom-4" : ""
+      } pointer-events-none mt-4 transition-transform duration-1000 ${
+        status !== "loading" ? "scale-100" : "scale-0"
+      }`}
       initial="hidden"
       whileInView="visible"
       viewport={{
@@ -25,24 +30,29 @@ export const JoinButton: FC = () => {
         amount: 1,
       }}
     >
-      <ColorButton
-        color="default"
-        className={`mt-4 shadowed  ${
-          status == "unauthenticated" ? "animate-pulse" : ""
+      <span
+        className={`bg-white dark:bg-black rounded-full inline-block ${
+          status == "unauthenticated" ? "animate-bounce" : ""
         }`}
-        innerClass="p-4 text-xl text-white "
-        disabled={status !== "unauthenticated"}
-        onClick={() => {
-          signIn("auth0");
-        }}
       >
-        <FaFistRaised className="inline w-6 h-6 mr-2" />{" "}
-        {status === "loading"
-          ? "Loading Invite..."
-          : status === "unauthenticated"
-          ? "Take Action."
-          : "Welcome to the Family!"}
-      </ColorButton>
+        <ColorButton
+          color="default"
+          className="shadowed"
+          innerClass="p-4 text-xl text-white pointer-events-auto"
+          disabled={status !== "unauthenticated"}
+          onClick={() => {
+            signIn("auth0");
+          }}
+        >
+          <FaFistRaised className="inline w-6 h-6 mr-2" />{" "}
+          {status === "loading"
+            ? "Loading Invite..."
+            : status === "unauthenticated"
+            ? "Take Action."
+            : "Welcome to the Family!"}
+        </ColorButton>
+      </span>
+
       {status === "authenticated" && (
         <div>
           You can check out our{" "}

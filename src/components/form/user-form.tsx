@@ -10,7 +10,7 @@ import { ZodError } from "zod";
 import { registerSchema } from "@/schema/form";
 import { FormQuestion } from "../ui/container";
 import { GRAD_YEARS, OLDEST_GRAD_YEAR } from "@/utils/constants";
-import { TRPCError, trpc } from "@/app/api/trpc/client";
+import { TRPCError, trpc } from "@/app/(api)/api/trpc/client";
 import { RoundButton } from "../ui/buttons";
 import { Collapse } from "../ui/collapse";
 import { confirm } from "../ui/confirm";
