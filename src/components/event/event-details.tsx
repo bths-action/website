@@ -10,7 +10,7 @@ import Image from "next/image";
 
 export const EventDetails: FC<Props> = ({ event }) => {
   return (
-    <>
+    <div>
       {event.imageURL && (
         <div className="relative mt-auto pb-2">
           <Image
@@ -73,14 +73,14 @@ export const EventDetails: FC<Props> = ({ event }) => {
         )}
         className="w-full h-60 rounded-xl shadowed"
       ></iframe>
-    </>
+    </div>
   );
 };
 
 export const EventDescription: FC<Props> = ({ event }) => {
   return (
     <>
-      <h4>Event Description: </h4>
+      <h4>Event Details: </h4>
       <div className="min-h-[200px] max-h-[400px] m-2 bordered bg-gray-100 dark:bg-zinc-900 shadowed overflow-auto break-words p-2 rounded-md">
         <MarkDownView>{event.description}</MarkDownView>
       </div>

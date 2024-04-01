@@ -4,7 +4,6 @@ import { Figtree, Space_Mono, Poppins } from "next/font/google";
 import "../globals.css";
 import { AppProviders } from "@/providers/providers";
 import { Navbar } from "@/components/ui/nav";
-import { BannerAds } from "@/components/ui/banner-ads";
 
 const figtree = Figtree({ subsets: ["latin"], variable: "--font-figtree" });
 const poppins = Poppins({
@@ -34,7 +33,6 @@ export default function RootLayout({
             className="h-[calc(100dvh-56px)] md:h-[100dvh]  overflow-auto w-full break-words"
             id="content"
           >
-            <BannerAds />
             {children}
           </div>
         </AppProviders>

@@ -10,7 +10,7 @@ export const metadata = {
 
 const EventsPage: FC = () => {
   return (
-    <main>
+    <>
       <LimitedContainer>
         <h1>Giveaways</h1>
         <h5>
@@ -20,7 +20,7 @@ const EventsPage: FC = () => {
         Page under construction. Expect epic giveaways soon! 🎉
         <Giveaways />
       </LimitedContainer>
-    </main>
+    </>
   );
 };
 

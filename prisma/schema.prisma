@@ -129,7 +129,7 @@ model GiveawayEntry {
   won        Boolean  @default(false)
   order      Int?
   rewardId   Int?
-  entries    Int      @default(1)
+  entries    Int      @default(0)
 
   createdAt DateTime @default(now())
 

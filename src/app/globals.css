@@ -71,11 +71,11 @@
     @apply text-default dark:text-default hover:text-default-darker hover:cursor-pointer hover:underline-animated underline-animated hover:dark:text-default-lighter;
   }
 
-  #mdx ul li {
+  ul li {
     @apply list-disc list-inside;
   }
 
-  #mdx ol li {
+  ol li {
     @apply list-decimal list-inside;
   }
 

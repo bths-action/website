@@ -3,14 +3,17 @@
 import { Giveaway } from "@prisma/client";
 import { FC, useEffect, useState } from "react";
 import { GiveawayBanner } from "./giveaway-banner";
+import { GiveawayDescription } from "./giveaway-details";
+import { GiveawayEntries } from "./giveaway-entries";
 
-export const GiveawayPage: FC<{
+export interface Props {
   giveaway: Giveaway;
-}> = ({ giveaway }) => {
+}
+
+export const GiveawayPage: FC<Props> = ({ giveaway }) => {
   const [date, setDate] = useState<Date | null>(null);
   const tick = () => {
     setDate(new Date());
-    console.log("tick");
   };
 
   useEffect(() => {
@@ -23,10 +26,10 @@ export const GiveawayPage: FC<{
   return (
     <div>
       <GiveawayBanner date={date} giveaway={giveaway} />
-      Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sunt officiis
-      commodi libero earum optio dolorum laborum, voluptas corrupti, id, cum
-      repellendus eos ducimus recusandae ut soluta adipisci vitae architecto
-      possimus.
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
+        <GiveawayDescription giveaway={giveaway} />
+        <GiveawayEntries />
+      </div>
     </div>
   );
 };

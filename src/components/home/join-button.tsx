@@ -1,13 +1,19 @@
 "use client";
 import { signIn, useSession } from "next-auth/react";
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { FaFistRaised } from "react-icons/fa";
 import { ColorButton } from "../ui/buttons";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
 export const JoinButton: FC = () => {
+  const [mounted, setMounted] = useState(false);
   const { status } = useSession();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <motion.div
       variants={{
@@ -19,9 +25,9 @@ export const JoinButton: FC = () => {
         },
       }}
       className={`${
-        status == "unauthenticated" ? "sticky bottom-4" : ""
-      } pointer-events-none mt-4 transition-transform duration-1000 ${
-        status !== "loading" ? "scale-100" : "scale-0"
+        status == "unauthenticated" && mounted ? "sticky bottom-0" : ""
+      } pointer-events-none mt-4 p-4 transition-transform duration-1000 ${
+        status !== "loading" && mounted ? "scale-100" : "scale-0"
       }`}
       initial="hidden"
       whileInView="visible"
@@ -31,11 +37,12 @@ export const JoinButton: FC = () => {
       }}
     >
       <span
-        className={`bg-white dark:bg-black rounded-full inline-block ${
-          status == "unauthenticated" ? "animate-bounce" : ""
+        className={`${
+          status == "unauthenticated" && mounted ? "animate-bounce" : ""
         }`}
       >
         <ColorButton
+          id="join-button"
           color="default"
           className="shadowed"
           innerClass="p-4 text-xl text-white pointer-events-auto"
@@ -54,7 +61,7 @@ export const JoinButton: FC = () => {
       </span>
 
       {status === "authenticated" && (
-        <div>
+        <div className="pointer-events-auto">
           You can check out our{" "}
           <Link href="/events" className="default">
             events

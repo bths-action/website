@@ -74,6 +74,6 @@ export const updateGiveawaySchema = baseGiveawaySchema.partial().extend({
   id: z.string(),
 });
 
-export const deleteGiveawaySchema = z.object({
+export const targetGiveawaySchema = z.object({
   id: z.string(),
 });

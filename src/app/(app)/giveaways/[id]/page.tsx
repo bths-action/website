@@ -90,11 +90,7 @@ const EventsPage: FC<Params> = async ({ params: { id } }) => {
   if (!giveaway) {
     notFound();
   }
-  return (
-    <main className="pt-0">
-      <GiveawayPage giveaway={giveaway} />
-    </main>
-  );
+  return <GiveawayPage giveaway={giveaway} />;
 };
 
 export default EventsPage;

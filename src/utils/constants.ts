@@ -25,6 +25,10 @@ export type Status = "loading" | "unauthorized" | "success" | "error";
 export type NodeMap<T extends string | number | symbol> = {
   [key in T]: ReactNode;
 };
+export type GiveawayPrize = {
+  name: string;
+  details: string;
+};
 
 export const DISCORD_INVITE_LINK = "https://discord.gg/TepH9vuqn4";
 
@@ -40,3 +44,8 @@ export const GIVEAWAY_TYPE_MAP: Record<GiveawayType, string> = {
 } as const;
 
 export const BANNED_USERS = ["junchaol2@nycstudents.net"];
+
+export const REFERRAL_POINTS = 5;
+export const REFERRAL_ENTRIES = 0.5;
+export const MAX_REFERRALS = 20;
+export const CREDIT_RATE = 25;

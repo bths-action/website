@@ -13,7 +13,7 @@ export const Banner: FC = () => {
     <motion.div className="relative w-full h-[100dvh] rounded-xl mb-4">
       <div className="absolute w-full top-1/2 -translate-y-1/2 text-center banner z-20">
         <motion.span
-          className="inline-block bg-black bg-opacity-50 rounded-3xl p-6"
+          className="inline-block backdrop-blur-sm bg-black bg-opacity-50 rounded-3xl p-6"
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{
             opacity: 1,

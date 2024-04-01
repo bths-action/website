@@ -3,7 +3,7 @@ import { prisma } from "@/utils/prisma";
 
 export const getStats = authedProcedure.query(async ({ ctx }) => {
   const today = new Date();
-  const [attendances, referrals] = await Promise.all([
+  const [attendances, referrals, giveaways] = await Promise.all([
     prisma.eventAttendance.findMany({
       where: {
         userEmail: ctx.session.user.email,
@@ -43,10 +43,26 @@ export const getStats = authedProcedure.query(async ({ ctx }) => {
         },
       })
       .then((users) => users.length),
+    prisma.giveawayEntry.findMany({
+      where: {
+        userEmail: ctx.session.user.email,
+      },
+      select: {
+        giveaway: {
+          select: {
+            name: true,
+          },
+        },
+        giveawayId: true,
+        entries: true,
+        createdAt: true,
+      },
+    }),
   ]);
 
   return {
     attendances,
     referrals,
+    giveaways,
   };
 });

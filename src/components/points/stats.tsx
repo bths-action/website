@@ -1,16 +1,20 @@
 "use client";
 import { GetFormOutput, GetStatsOutput } from "@/app/(api)/api/trpc/client";
-import { motion } from "framer-motion";
-import Link from "next/link";
+import {
+  CREDIT_RATE,
+  MAX_REFERRALS,
+  REFERRAL_ENTRIES,
+  REFERRAL_POINTS,
+} from "@/utils/constants";
 import { FC } from "react";
-import { BsTriangleFill } from "react-icons/bs";
+import { EventSummary, EventSummaryProps, SummaryCard } from "./card";
 
 export const PointsStats: FC<{
   account: NonNullable<GetFormOutput>;
   data: GetStatsOutput;
 }> = ({ account, data }) => {
-  const refPoints = Math.min(data.referrals, 20) * 5;
-  const refEntries = data.referrals * 0.5;
+  const refPoints = Math.min(data.referrals, MAX_REFERRALS) * REFERRAL_POINTS;
+  const refEntries = data.referrals * REFERRAL_ENTRIES;
   const eventPoints = data.attendances.reduce(
     (acc, cur) => acc + cur.earnedPoints,
     0
@@ -21,46 +25,68 @@ export const PointsStats: FC<{
   );
   const totalPoints = refPoints + eventPoints + (account.miscPoints || 0);
   // bths is 32 credits; 25 points per credit
-  const credits = Math.ceil(totalPoints / 25);
+  const credits = Math.ceil(totalPoints / CREDIT_RATE);
   const totalEntries =
     refEntries +
-    data.attendances.reduce((acc, cur) => acc + cur.earnedEntries, 0);
+    data.attendances.reduce((acc, cur) => acc + cur.earnedEntries, 0) -
+    data.giveaways.reduce((acc, cur) => acc + cur.entries, 0);
+
+  const eventSummary: EventSummaryProps[] = [
+    {
+      name: "Referrals",
+      points: refPoints,
+      entries: refEntries,
+      hours: 0,
+      index: 0,
+      date: undefined,
+    },
+    ...data.attendances.map(
+      (
+        { event, earnedPoints, earnedEntries, earnedHours, eventId },
+        index
+      ) => ({
+        name: "Event: " + event.name,
+        points: earnedPoints,
+        entries: earnedEntries,
+        hours: earnedHours,
+        link: `/events/${eventId}`,
+        index: 0,
+        date: event.eventTime,
+      })
+    ),
+    ...data.giveaways.map(
+      ({ giveaway, entries, createdAt, giveawayId }, index) => ({
+        name: "Giveaway: " + giveaway.name,
+        points: 0,
+        entries: -entries,
+        hours: 0,
+        link: `/giveaways/${giveawayId}`,
+        index: 0,
+        date: createdAt,
+      })
+    ),
+  ]
+    .sort((a, b) => {
+      // put no date ones at the end
+      if (!a.date) return 1;
+      if (!b.date) return -1;
+
+      // put most recent first
+      return b.date.getTime() - a.date.getTime();
+    })
+    .map((props, index) => ({
+      ...props,
+      index,
+    }));
+
   return (
     <div>
       <div className="text-3xl font-bold">Summary</div>
       <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-4 gap-3 my-3">
-        <div className="bg-gray-50 dark:bg-zinc-900 rounded-lg overflow-hidden h-full shadowed">
-          <div className="h-14 overflow-visible z-20 bg-default -mb-1 flex justify-center items-center text-white relative">
-            <div className="font-bold">Total Points</div>
-          </div>
-          <div className="p-4">
-            <div className="font-bold text-center">{totalPoints}</div>
-          </div>
-        </div>
-        <div className="bg-gray-50 dark:bg-zinc-900 rounded-lg overflow-hidden h-full shadowed">
-          <div className="h-14 overflow-visible z-20 bg-default -mb-1 flex justify-center items-center text-white relative">
-            <div className="font-bold">Total Hours</div>
-          </div>
-          <div className="p-4">
-            <div className="font-bold text-center">{eventHours}</div>
-          </div>
-        </div>
-        <div className="bg-gray-50 dark:bg-zinc-900 rounded-lg overflow-hidden h-full shadowed">
-          <div className="h-14 overflow-visible z-20 bg-default flex justify-center items-center text-white relative">
-            <div className="font-bold">Club Credits</div>
-          </div>
-          <div className="p-4">
-            <div className="font-bold text-center">{credits}</div>
-          </div>
-        </div>
-        <div className="bg-gray-50 dark:bg-zinc-900 rounded-lg overflow-hidden h-full shadowed">
-          <div className="h-14 overflow-visible z-20 bg-default -mb-1 flex justify-center items-center text-white relative">
-            <div className="font-bold">Total Giveaway Entries</div>
-          </div>
-          <div className="p-4">
-            <div className="font-bold text-center">{totalEntries}</div>
-          </div>
-        </div>
+        <SummaryCard title="Total Points" value={totalPoints} />
+        <SummaryCard title="Total Hours" value={eventHours} />
+        <SummaryCard title="Club Credits" value={credits} />
+        <SummaryCard title="Total Giveaway Entries" value={totalEntries} />
       </div>
       <div className="text-3xl font-bold pt-10">Breakdown</div>
       <div className="w-full">
@@ -68,108 +94,8 @@ export const PointsStats: FC<{
           <span className="text-left text-xl font-semibold">Event/Task</span>
           <span className="text-right text-xl font-semibold">Rewards</span>
         </div>
-        <hr />
-        <motion.div
-          animate={{
-            x: 0,
-          }}
-          transition={{
-            type: "spring",
-            delay: 0.15,
-            bounce: 0.2,
-            duration: 0.6,
-          }}
-          initial={{
-            x: "100%",
-          }}
-          className="grid grid-cols-2 justify-between items-center hover:dark:bg-zinc-900 hover:bg-zinc-100 px-2 py-1"
-        >
-          <span className="text-left">
-            {data.referrals} Referral{data.referrals != 1 && "s"}
-          </span>
-          <span className="text-right">
-            <BsTriangleFill className="text-green-500 inline mr-2 w-3 h-3" />
-            {refPoints} Point{refPoints != 1 && "s"}
-            <br />
-            <BsTriangleFill className="text-green-500 inline mr-2 w-3 h-3" />
-            {refEntries} Entr{refEntries != 1 ? "ies" : "y"}
-          </span>
-        </motion.div>
-        {data.attendances.map((attendance, index) => (
-          <>
-            <hr />
-            <motion.div
-              animate={{
-                x: 0,
-              }}
-              transition={{
-                type: "spring",
-                delay: 0.15 * (index + 1),
-                bounce: 0.2,
-                duration: 0.6,
-              }}
-              initial={{
-                x: "100%",
-              }}
-              key={index}
-              className="grid grid-cols-2 justify-between items-center hover:dark:bg-zinc-900 hover:bg-zinc-100 px-2 py-1"
-            >
-              <span className="text-left">
-                <Link
-                  href={`/events/${attendance.eventId}`}
-                  className="default"
-                >
-                  {attendance.event.name}
-                </Link>
-              </span>
-              <span className="text-right">
-                {attendance.earnedPoints == 0 &&
-                  attendance.earnedHours == 0 &&
-                  attendance.earnedEntries == 0 && <>---</>}
-                {attendance.earnedPoints != 0 && (
-                  <div>
-                    <BsTriangleFill
-                      className={`${
-                        attendance.earnedPoints > 0
-                          ? "text-green-500 "
-                          : "text-red-500 rotate-180"
-                      } inline mr-2 w-3 h-3`}
-                    />
-                    {attendance.earnedPoints} Point
-                    {attendance.earnedPoints != 1 && "s"}
-                  </div>
-                )}
-
-                {attendance.earnedHours != 0 && (
-                  <div>
-                    <BsTriangleFill
-                      className={`${
-                        attendance.earnedHours > 0
-                          ? "text-green-500 "
-                          : "text-red-500 rotate-180"
-                      } inline mr-2 w-3 h-3`}
-                    />
-                    {attendance.earnedHours} Hour
-                    {attendance.earnedHours != 1 && "s"}
-                  </div>
-                )}
-
-                {attendance.earnedEntries != 0 && (
-                  <div>
-                    <BsTriangleFill
-                      className={`${
-                        attendance.earnedEntries > 0
-                          ? "text-green-500"
-                          : "text-red-500 rotate-180"
-                      } inline mr-2 w-3 h-3`}
-                    />
-                    {attendance.earnedEntries} Entr
-                    {attendance.earnedEntries != 1 ? "ies" : "y"}
-                  </div>
-                )}
-              </span>
-            </motion.div>
-          </>
+        {eventSummary.map((props, index) => (
+          <EventSummary key={index} {...props} />
         ))}
       </div>
     </div>

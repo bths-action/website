@@ -1,10 +1,10 @@
-import { deleteGiveawaySchema } from "@/schema/giveaways";
+import { targetGiveawaySchema } from "@/schema/giveaways";
 import { adminProcedure } from "../trpc";
 import { prisma } from "@/utils/prisma";
 import { deleteMessage } from "@/utils/webhook";
 
 export const deleteGiveaway = adminProcedure
-  .input(deleteGiveawaySchema)
+  .input(targetGiveawaySchema)
   .mutation(async ({ input: { id } }) => {
     await prisma.giveawayEntry.deleteMany({
       where: {

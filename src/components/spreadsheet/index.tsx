@@ -1,7 +1,12 @@
 "use client";
 import { trpc } from "@/app/(api)/api/trpc/client";
 import { useAccount } from "@/providers/account";
-import { NodeMap, Status } from "@/utils/constants";
+import {
+  MAX_REFERRALS,
+  NodeMap,
+  REFERRAL_POINTS,
+  Status,
+} from "@/utils/constants";
 import { useSession } from "next-auth/react";
 import { FC, useRef } from "react";
 import { Loading } from "../ui/loading";
@@ -98,7 +103,7 @@ export const Spreadsheet: FC = () => {
                 {query.data.users.map((user) => {
                   const total =
                     user.miscPoints +
-                    user.refCount * 5 +
+                    user.refCount * REFERRAL_POINTS +
                     Object.values(user.events).reduce(
                       (acc, event) => acc + event,
                       0
@@ -175,7 +180,10 @@ export const Spreadsheet: FC = () => {
                       <td className="px-4">{user.gradYear}</td>
                       <td className="px-4">{user.prefect}</td>
                       <td className="px-8">{user.miscPoints}</td>
-                      <td className="px-8">{user.refCount * 5}</td>
+                      <td className="px-8">
+                        {Math.min(user.refCount, MAX_REFERRALS) *
+                          REFERRAL_POINTS}
+                      </td>
                       {query.data.events.map((event) => {
                         return (
                           <td className="px-24">
