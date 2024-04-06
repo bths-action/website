@@ -21,7 +21,7 @@ export const Banner: FC = () => {
         transition={{
           duration: 1,
         }}
-        className="-rotate-3 z-30 absolute left-1/2 -translate-x-1/2 h-20 w-[105%] text-white bg-gradient-to-r flex items-center text-3xl justify-center from-default-lighter to-default-darker"
+        className="-rotate-3 z-10 absolute left-1/2 -translate-x-1/2 h-20 w-[105%] text-white bg-gradient-to-r flex items-center text-3xl justify-center from-default-lighter to-default-darker"
       >
         🎊🎈 100 Members! 🥳🎉
       </motion.div>

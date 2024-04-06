@@ -533,7 +533,7 @@ export const Navbar: FC<PropsWithChildren> = ({ children }) => {
             sideId
               ? "h-60 w-[100dvw]  md:w-60 overflow-y-auto"
               : "h-0 w-0 overflow-y-hidden"
-          } bg-gray-50  md:border-0 md:border-r-2 border-t-2  dark:bg-zinc-900 bg-opacity-90 dark:bg-opacity-90 md:translate-x-full  right-0 top-0 translate-x-0 -translate-y-full md:translate-y-0 transition-[height,width] duration-300 ease-in-out md:overflow-hidden`}
+          } bg-gray-50 z-50 md:border-0 md:border-r-2 border-t-2  dark:bg-zinc-900 bg-opacity-90 dark:bg-opacity-90 md:translate-x-full  right-0 top-0 translate-x-0 -translate-y-full md:translate-y-0 transition-[height,width] duration-300 ease-in-out md:overflow-hidden`}
         >
           <div className="md:w-60 w-full ">
             <NavButton
@@ -551,7 +551,7 @@ export const Navbar: FC<PropsWithChildren> = ({ children }) => {
       </nav>
       {sideId && (
         <div
-          className="z-[29] w-[100dvw] h-[100dvh] fixed left-0 top-0 bg-black bg-opacity-50"
+          className="z-20 w-[100dvw] h-[100dvh] fixed left-0 top-0 bg-black bg-opacity-50"
           onClick={() => {
             setSideId("");
           }}
