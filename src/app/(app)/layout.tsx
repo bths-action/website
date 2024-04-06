@@ -4,6 +4,7 @@ import { Figtree, Space_Mono, Poppins } from "next/font/google";
 import "../globals.css";
 import { AppProviders } from "@/providers/providers";
 import { Navbar } from "@/components/ui/nav";
+import { SplashScreen } from "@/components/ui/splash";
 
 const figtree = Figtree({ subsets: ["latin"], variable: "--font-figtree" });
 const poppins = Poppins({
@@ -28,13 +29,15 @@ export default function RootLayout({
         className={`${figtree.variable} ${poppins.variable} ${spaceMono.variable} bg-white font-anybody dark:bg-black w-full overflow-y-hidden flex h-[calc(100dvh-70px)] md:h-[100dvh]`}
       >
         <AppProviders>
-          <Navbar />
-          <div
-            className="h-[calc(100dvh-56px)] md:h-[100dvh]  overflow-auto w-full break-words"
-            id="content"
-          >
-            {children}
-          </div>
+          <SplashScreen>
+            <Navbar />
+            <div
+              className="h-[calc(100dvh-56px)] md:h-[100dvh]  overflow-auto w-full break-words"
+              id="content"
+            >
+              {children}
+            </div>
+          </SplashScreen>
         </AppProviders>
       </body>
     </html>

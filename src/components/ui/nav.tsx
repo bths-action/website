@@ -116,7 +116,7 @@ const NavButton: FC<
   const content = (
     <>
       {icon}
-      <span className={`ml-1 ${hideSmall ? "lg:inline hidden" : ""}`}>
+      <span className={`ml-1.5 ${hideSmall ? "lg:inline hidden" : ""}`}>
         {children}
       </span>
     </>
@@ -414,15 +414,24 @@ export const Navbar: FC<PropsWithChildren> = ({ children }) => {
           />
         </PopupUI>
       )}
-      <nav className="flex items-center justify-around md:justify-start md:flex-col bg-zinc-100 dark:bg-zinc-900 md:h-[100dvh] w-screen md:w-20 lg:w-60 bottom-0 py-2 md:relative absolute flex-row z-30 border-r-0 md:border-r-2 border-t-2 md:border-t-0 ">
-        <Link href="/" className="hidden md:inline-block">
+      <nav className="flex items-center justify-around md:justify-start md:flex-col bg-zinc-100 dark:bg-zinc-900 md:h-[100dvh] w-screen md:w-20 lg:w-60 bottom-0 py-1 md:relative absolute flex-row z-30 border-r-0 md:border-r-2 border-t-2 md:border-t-0 ">
+        <Link
+          href="/"
+          style={{
+            background: `radial-gradient(ellipse farthest-corner at right bottom, #FEDB37 0%, #FDB931 8%, #9f7928 30%, #8A6E2F 40%, transparent 80%),radial-gradient(ellipse farthest-corner at left top, #FFFFFF 0%, #FFFFAC 8%, #D1B464 25%, #5d4a1f 62.5%, #5d4a1f 100%)`,
+          }}
+          className="hidden md:inline-block my-3 rounded-full p-2 relative"
+        >
           <Image
             src="/icon.png"
             alt="BTHS Action"
             width={40}
             height={40}
-            className="rounded-full w-12 h-12"
+            className=" w-12 h-12 rounded-full"
           />
+          <div className="inline-block absolute bottom-0.5 -translate-x-1/2 left-1/2 translate-y-1/2 font-poppins bold px-0.5 bg-default text-white text-sm rounded-b-lg">
+            100
+          </div>
         </Link>
         <div className="overflow-y-auto w-full flex-1">
           <div className="flex-row md:flex-col flex items-center justify-around md:justify-start">

@@ -11,6 +11,20 @@ export const Banner: FC = () => {
   }, []);
   return (
     <motion.div className="relative w-full h-[100dvh] rounded-xl mb-4">
+      <motion.div
+        initial={{
+          top: "-100%",
+        }}
+        animate={{
+          top: 20,
+        }}
+        transition={{
+          duration: 1,
+        }}
+        className="-rotate-3 z-30 absolute left-1/2 -translate-x-1/2 h-20 w-[105%] text-white bg-gradient-to-r flex items-center text-3xl justify-center from-default-lighter to-default-darker"
+      >
+        🎊🎈 100 Members! 🥳🎉
+      </motion.div>
       <div className="absolute w-full top-1/2 -translate-y-1/2 text-center banner z-20">
         <motion.span
           className="inline-block backdrop-blur-sm bg-black bg-opacity-50 rounded-3xl p-6"
