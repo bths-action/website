@@ -27,7 +27,7 @@ export const UserAttendance: FC<Props> = ({ event }) => {
         },
         {
           ...space.data,
-          attendees: space.data.attendees - 1,
+          attendees: space.data.attendees + 1,
         }
       );
     }
@@ -40,7 +40,7 @@ export const UserAttendance: FC<Props> = ({ event }) => {
         },
         {
           ...space.data,
-          attendees: space.data.attendees + 1,
+          attendees: space.data.attendees - 1,
         }
       );
     }

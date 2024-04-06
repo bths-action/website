@@ -28,7 +28,7 @@ export const GiveawayPage: FC<Props> = ({ giveaway }) => {
       <GiveawayBanner date={date} giveaway={giveaway} />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
         <GiveawayDescription giveaway={giveaway} />
-        <GiveawayEntries />
+        <GiveawayEntries giveaway={giveaway} />
       </div>
     </div>
   );

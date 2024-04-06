@@ -77,3 +77,7 @@ export const updateGiveawaySchema = baseGiveawaySchema.partial().extend({
 export const targetGiveawaySchema = z.object({
   id: z.string(),
 });
+
+export const editEntrySchema = targetGiveawaySchema.extend({
+  entries: z.number().int().positive(),
+});
