@@ -25,7 +25,7 @@ export const PopupUI: FC<
   }, []);
   return (
     <div
-      className="flex fixed inset-0 z-40 flex-row justify-center items-center w-[100dvw] h-[100dvh] bg-black bg-opacity-50"
+      className="flex fixed inset-0 z-[60] flex-row justify-center items-center w-[100dvw] h-[100dvh] bg-black bg-opacity-50"
       onClick={(e: MouseEvent<HTMLDivElement>) => {
         if (e.target === e.currentTarget) {
           !disabledExit && setOpen?.(false);
