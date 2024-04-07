@@ -3,13 +3,16 @@ import { FC, useEffect, useState } from "react";
 import { ColorButton } from "../ui/buttons";
 import { FaArrowDown } from "react-icons/fa";
 import { useSession } from "next-auth/react";
+import { useAccount } from "@/providers/account";
 
 export const StickyDown: FC = () => {
   const { status } = useSession();
+  const account = useAccount();
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
+    if (account.status == "loading" || status == "loading") return;
     setMounted(true);
-  }, []);
+  }, [account, status]);
   return (
     <ColorButton
       className={`w-12 h-12 disabled:cursor-auto rounded-full shadowed transition-all duration-1000 ${

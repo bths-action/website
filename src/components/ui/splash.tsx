@@ -7,9 +7,15 @@ export const SplashScreen: FC<PropsWithChildren> = ({ children }) => {
   const account = useAccount();
   const { status } = useSession();
 
-  if (status == "loading" || account.status == "loading")
-    return (
-      <div className="w-[100dvw] h-[100dvh] z-[10000] bg-white dark:bg-black flex flex-col items-center justify-center p-10">
+  return (
+    <>
+      <div
+        className={`w-[100dvw] h-[100dvh] z-[10000] transition-all  duration-300 fixed ${
+          status == "loading" || account.status == "loading"
+            ? "top-0 opacity-100"
+            : "-top-full opacity-0"
+        } bg-white dark:bg-black flex flex-col items-center justify-center p-10`}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="100"
@@ -28,7 +34,7 @@ export const SplashScreen: FC<PropsWithChildren> = ({ children }) => {
           />
         </svg>
       </div>
-    );
-
-  return children;
+      {children}
+    </>
+  );
 };
