@@ -17,7 +17,6 @@ const EventsPage: FC = () => {
           "We are a win to get paid club, not a pay to win club." - Club
           President, Justin Li, 2023
         </h5>
-        Page under construction. Expect epic giveaways soon! 🎉
         <Giveaways />
       </LimitedContainer>
     </>

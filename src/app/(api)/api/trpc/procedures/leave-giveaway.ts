@@ -2,10 +2,11 @@ import { targetGiveawaySchema } from "@/schema/giveaways";
 import { memberProcedure } from "../trpc";
 import { prisma } from "@/utils/prisma";
 import { TRPCError } from "@trpc/server";
+import { pusher } from "@/utils/pusher";
 
 export const leaveGiveaway = memberProcedure
   .input(targetGiveawaySchema)
-  .mutation(async ({ input: { id }, ctx: { user } }) => {
+  .mutation(async ({ input: { id, socketId }, ctx: { user } }) => {
     const giveaway = await prisma.giveaway.findUnique({
       where: {
         id,
@@ -37,6 +38,17 @@ export const leaveGiveaway = memberProcedure
         },
       },
     });
+
+    await pusher().trigger(
+      `private-g${id}`,
+      "delete",
+      {
+        email: entry.userEmail,
+      },
+      {
+        socket_id: socketId,
+      }
+    );
 
     return entry;
   });

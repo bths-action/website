@@ -3,10 +3,11 @@ import { memberProcedure } from "../trpc";
 import { prisma } from "@/utils/prisma";
 import { REFERRAL_ENTRIES } from "@/utils/constants";
 import { TRPCError } from "@trpc/server";
+import { pusher } from "@/utils/pusher";
 
 export const editEntryBalance = memberProcedure
   .input(editEntrySchema)
-  .mutation(async ({ input: { id, entries }, ctx: { user } }) => {
+  .mutation(async ({ input: { id, entries, socketId }, ctx: { user } }) => {
     const giveaway = await prisma.giveaway.findUnique({
       where: {
         id,
@@ -65,9 +66,6 @@ export const editEntryBalance = memberProcedure
             giveawayId: id,
           },
         },
-        select: {
-          entries: true,
-        },
       }),
     ]);
 
@@ -83,7 +81,7 @@ export const editEntryBalance = memberProcedure
       referrals * REFERRAL_ENTRIES -
       used.reduce((acc, { entries }) => acc + entries, 0);
 
-    if (balance > 0) {
+    if (balance > 0 || entry.entries > entries) {
       const newEntry = await prisma.giveawayEntry.update({
         where: {
           userEmail_giveawayId: {
@@ -94,16 +92,17 @@ export const editEntryBalance = memberProcedure
         data: {
           entries: Math.min(entry.entries + balance, entries),
         },
-        select: {
-          entries: true,
-        },
       });
 
       return {
         entry: newEntry,
-        balance: balance + entry.entries - entry.entries,
+        balance: balance + entry.entries - newEntry.entries,
       };
     }
+
+    await pusher().trigger(`private-g${id}`, "update", entry, {
+      socket_id: socketId,
+    });
 
     return {
       balance,

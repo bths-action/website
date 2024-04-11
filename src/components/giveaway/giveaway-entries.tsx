@@ -1,4 +1,6 @@
-import { FC, useState } from "react";
+"use client";
+
+import { FC, useEffect, useRef, useState } from "react";
 import { Props } from "./giveaway-page";
 import { trpc } from "@/app/(api)/api/trpc/client";
 import { signIn, useSession } from "next-auth/react";
@@ -15,8 +17,22 @@ export const GiveawayEntries: FC<Props> = ({ giveaway }) => {
   const entry = trpc.getGiveawayEntry.useQuery({ id: giveaway.id });
   const joinGiveaway = trpc.enterGiveaway.useMutation();
   const leaveGiveaway = trpc.leaveGiveaway.useMutation();
+  const editEntries = trpc.editEntryBalance.useMutation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const utils = trpc.useUtils();
+
+  const entryRef = useRef<HTMLInputElement>(null);
+
+  const [date, setDate] = useState<Date>(new Date());
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setDate(new Date());
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
 
   return (
     <div>
@@ -55,7 +71,7 @@ export const GiveawayEntries: FC<Props> = ({ giveaway }) => {
       ) : !entry.data ? (
         <>
           <h5>You have not joined the giveaway.</h5>
-          {giveaway.endsAt > new Date() ? (
+          {giveaway.endsAt > date ? (
             <ColorButton
               color="default"
               className="rounded-xl shadowed"
@@ -100,7 +116,82 @@ export const GiveawayEntries: FC<Props> = ({ giveaway }) => {
         </>
       ) : (
         <>
-          <h5>You have joined the giveaway.</h5>
+          <h5>
+            You have{" "}
+            {date < giveaway.endsAt
+              ? "joined"
+              : entry.data.won
+              ? "won"
+              : "not won"}{" "}
+            the giveaway.
+          </h5>
+          {entry.data && (
+            <>
+              Entries:{" "}
+              <input
+                ref={entryRef}
+                type="number"
+                min={0}
+                step={1}
+                defaultValue={entry.data.entries}
+                onBlur={() => {
+                  let prev = entryRef.current!.valueAsNumber;
+                  if (!Number.isInteger(prev) || prev < 0) {
+                    confirm({
+                      title: "Invalid Entry Input",
+                      children: (
+                        <>
+                          The number of entries must be an positive integer.
+                          This has been corrected for you.
+                        </>
+                      ),
+                    });
+                    prev = entryRef.current!.valueAsNumber = Math.max(
+                      0,
+                      Math.floor(entry.data!.entries)
+                    );
+                  }
+                  if (prev === entry.data!.entries) return;
+                  editEntries.mutate(
+                    {
+                      id: giveaway.id,
+                      entries: prev || 0,
+                    },
+                    {
+                      onSuccess: (data) => {
+                        entryRef.current!.valueAsNumber = data.entry.entries;
+                        utils.getGiveawayEntry.setData(
+                          {
+                            id: giveaway.id,
+                          },
+                          data.entry
+                        );
+
+                        if (prev !== data.entry.entries) {
+                          confirm({
+                            title: "Too Many Entries",
+                            children: (
+                              <>
+                                You cannot get {prev} entries. You can only have
+                                a max of <b>{data.entry.entries} entries.</b>
+                                This has been corrected for you.
+                              </>
+                            ),
+                          });
+                        }
+
+                        utils.getEntryBalance.setData(undefined, {
+                          entries: data.balance,
+                        });
+                      },
+                    }
+                  );
+                }}
+              />
+              <br />
+            </>
+          )}
+
           {giveaway.endsAt > new Date() ? (
             <ColorButton
               color="default"

@@ -76,8 +76,13 @@ export const updateGiveawaySchema = baseGiveawaySchema.partial().extend({
 
 export const targetGiveawaySchema = z.object({
   id: z.string(),
+  socketId: z.string().optional(),
 });
 
 export const editEntrySchema = targetGiveawaySchema.extend({
-  entries: z.number().int().positive(),
+  entries: z.number().int().min(0),
+});
+
+export const getGiveawaysSchema = z.object({
+  cursor: z.number().int().min(0).default(0),
 });

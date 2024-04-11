@@ -40,64 +40,68 @@ export const GiveawayBanner: FC<{
         <h2 className="break-all">{giveaway.name}</h2>
         <h4 className="inline-block font-space-mono h-10 max-w-md">
           {date ? (
-            <>
-              Ends in{" "}
-              <SlotCounter
-                ref={(el) => {
-                  if (el) {
-                    countRef.current.push(el);
-                  }
-                }}
-                useMonospaceWidth
-                value={Math.floor(diff / 86400000)}
-                sequentialAnimationMode
-              />
-              d,{" "}
-              <SlotCounter
-                ref={(el) => {
-                  if (el) {
-                    countRef.current.push(el);
-                  }
-                }}
-                useMonospaceWidth
-                value={Math.floor((diff % 86400000) / 3600000)
-                  .toString()
-                  .padStart(2, "0")}
-                sequentialAnimationMode
-              />
-              h,{" "}
-              <SlotCounter
-                ref={(el) => {
-                  if (el) {
-                    countRef.current.push(el);
-                  }
-                }}
-                useMonospaceWidth
-                value={Math.floor((diff % 3600000) / 60000)
-                  .toString()
-                  .padStart(2, "0")}
-                sequentialAnimationMode
-              />
-              m,{" "}
-              <SlotCounter
-                ref={(el) => {
-                  if (el) {
-                    countRef.current.push(el);
-                  }
-                }}
-                useMonospaceWidth
-                value={Math.floor((diff % 60000) / 1000)
-                  .toString()
-                  .padStart(2, "0")}
-                sequentialAnimationMode
-              />
-              s!
-              {/* `Ends in ${Math.floor(diff / 86400000)}d, ${Math.floor(
+            date < giveaway.endsAt ? (
+              <>
+                Ends in{" "}
+                <SlotCounter
+                  ref={(el) => {
+                    if (el) {
+                      countRef.current.push(el);
+                    }
+                  }}
+                  useMonospaceWidth
+                  value={Math.floor(diff / 86400000)}
+                  sequentialAnimationMode
+                />
+                d,{" "}
+                <SlotCounter
+                  ref={(el) => {
+                    if (el) {
+                      countRef.current.push(el);
+                    }
+                  }}
+                  useMonospaceWidth
+                  value={Math.floor((diff % 86400000) / 3600000)
+                    .toString()
+                    .padStart(2, "0")}
+                  sequentialAnimationMode
+                />
+                h,{" "}
+                <SlotCounter
+                  ref={(el) => {
+                    if (el) {
+                      countRef.current.push(el);
+                    }
+                  }}
+                  useMonospaceWidth
+                  value={Math.floor((diff % 3600000) / 60000)
+                    .toString()
+                    .padStart(2, "0")}
+                  sequentialAnimationMode
+                />
+                m,{" "}
+                <SlotCounter
+                  ref={(el) => {
+                    if (el) {
+                      countRef.current.push(el);
+                    }
+                  }}
+                  useMonospaceWidth
+                  value={Math.floor((diff % 60000) / 1000)
+                    .toString()
+                    .padStart(2, "0")}
+                  sequentialAnimationMode
+                />
+                s!
+                {/* `Ends in ${Math.floor(diff / 86400000)}d, ${Math.floor(
               (diff % 86400000) / 3600000
             )}h, ${Math.floor((diff % 3600000) / 60000)}m, ${Math.floor(
               (diff % 60000) / 1000
             )}s!` */}
-            </>
+              </>
+            ) : (
+              <>Giveaway has ended.</>
+            )
           ) : (
             "Loading time..."
           )}

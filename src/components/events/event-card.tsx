@@ -108,7 +108,7 @@ export const EventCard: FC<{
               )}
             </div>
 
-            {imageURL && (
+            {imageURL ? (
               <>
                 <div className="relative mt-auto pt-2 -z-50">
                   <Image
@@ -120,6 +120,8 @@ export const EventCard: FC<{
                   />
                 </div>
               </>
+            ) : (
+              <br className="h-8" />
             )}
           </div>
         </Link>

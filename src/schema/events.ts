@@ -4,7 +4,7 @@ export const queryEventsSchema = z.object({
   startRange: z.date().optional(),
   endRange: z.date().optional(),
   search: z.string().optional(),
-  cursor: z.number().default(0),
+  cursor: z.number().int().min(0).default(0),
   orderBy: z.enum(["eventTime", "createdAt"]).default("eventTime"),
   order: z.enum(["asc", "desc"]).default("desc"),
   includeStatus: z

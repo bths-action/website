@@ -128,7 +128,7 @@ model GiveawayEntry {
   giveawayId String
   won        Boolean  @default(false)
   order      Int?
-  rewardId   Int?
+  rewardId   Int?     @unique
   entries    Int      @default(0)
 
   createdAt DateTime @default(now())

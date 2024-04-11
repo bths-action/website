@@ -5,7 +5,6 @@ import { MarkDownView } from "../ui/md-view";
 import { GiveawayPrize } from "@/utils/constants";
 
 export const GiveawayDescription: FC<Props> = ({ giveaway }) => {
-  console.log(giveaway.prizes);
   return (
     <div>
       <h4>Giveaway Details: </h4>
