@@ -6,6 +6,4 @@ interface Params {
   };
 }
 
-export const endGiveaway = async (id: string) => {};
-
 export const GET = async (req: NextRequest, { params: { id } }: Params) => {};
