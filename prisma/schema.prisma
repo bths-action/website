@@ -110,14 +110,14 @@ model Giveaway {
   description String   @db.VarChar(4000)
   imageURL    String?
   endsAt      DateTime
+  ended       Boolean  @default(false)
 
   maxWinners Int
   prizes     Json
   entries    GiveawayEntry[]
   type       GiveawayType
 
-  cronID    String? @unique
-  messageID String  @unique
+  messageID String @unique
 
   createdAt DateTime @default(now())
 }
