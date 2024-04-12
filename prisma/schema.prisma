@@ -116,7 +116,8 @@ model Giveaway {
   entries    GiveawayEntry[]
   type       GiveawayType
 
-  messageID String @unique
+  cronID    String? @unique
+  messageID String  @unique
 
   createdAt DateTime @default(now())
 }
@@ -128,7 +129,7 @@ model GiveawayEntry {
   giveawayId String
   won        Boolean  @default(false)
   order      Int?
-  rewardId   Int?     @unique
+  rewardId   Int?
   entries    Int      @default(0)
 
   createdAt DateTime @default(now())

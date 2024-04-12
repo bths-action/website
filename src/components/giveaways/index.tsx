@@ -6,6 +6,7 @@ import { TransparentButton } from "../ui/buttons";
 import { RequestError } from "../ui/error";
 import { Loading } from "../ui/loading";
 import { GiveawayCard } from "./giveaway-card";
+import { CreateGiveaway } from "./create-giveaway";
 
 export type GiveawayPreview = GetGiveawaysOutput["giveaways"][number];
 
@@ -19,7 +20,7 @@ export const Giveaways: FC = () => {
   );
 
   return (
-    <main>
+    <>
       <div className="flex flex-col gap-3 mb-2 overflow-visible pt-3">
         {giveaways.data?.pages
           .map((page) => page.giveaways)
@@ -70,8 +71,7 @@ export const Giveaways: FC = () => {
         ) : (
           "No More Giveaways"
         ))}
-
-      {/* <GiveawayForm mode="create" setOpen={() => {}} />                           */}
-    </main>
+      <CreateGiveaway />
+    </>
   );
 };

@@ -10,6 +10,9 @@ import { ColorButton } from "../ui/buttons";
 import { BiLogIn, BiParty } from "react-icons/bi";
 import { RequestError } from "../ui/error";
 import { confirm } from "../ui/confirm";
+import { FaTrophy } from "react-icons/fa";
+import { GIVEAWAY_TYPE_MAP } from "@/utils/constants";
+import { MdLeaderboard } from "react-icons/md";
 
 export const GiveawayEntries: FC<Props> = ({ giveaway }) => {
   const { status } = useSession();
@@ -17,6 +20,7 @@ export const GiveawayEntries: FC<Props> = ({ giveaway }) => {
   const entry = trpc.getGiveawayEntry.useQuery({ id: giveaway.id });
   const joinGiveaway = trpc.enterGiveaway.useMutation();
   const leaveGiveaway = trpc.leaveGiveaway.useMutation();
+  const balance = trpc.getEntryBalance.useQuery();
   const editEntries = trpc.editEntryBalance.useMutation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const utils = trpc.useUtils();
@@ -36,7 +40,18 @@ export const GiveawayEntries: FC<Props> = ({ giveaway }) => {
 
   return (
     <div>
-      <h4>Giveaway Entries:</h4>
+      <h4>Winners and Selection:</h4>
+      <span className="text-yellow-600 dark:text-yellow-500 mr-2">
+        <FaTrophy className="inline w" /> {giveaway.maxWinners} Winner
+        {giveaway.maxWinners != 1 && "s"}
+      </span>
+      <br />
+
+      <span className="text-blue-500 mr-2">
+        <MdLeaderboard className="inline" /> Claim Order:{" "}
+        {GIVEAWAY_TYPE_MAP[giveaway.type]}
+      </span>
+      <h4 className="mt-4">Giveaway Entries:</h4>
       {entry.status === "loading" ||
       status === "loading" ||
       account.status === "loading" ? (
@@ -202,14 +217,19 @@ export const GiveawayEntries: FC<Props> = ({ giveaway }) => {
                 leaveGiveaway.mutate(
                   { id: giveaway.id },
                   {
-                    onSettled: () => {
-                      setIsSubmitting(false);
+                    onSuccess: (data) => {
                       utils.getGiveawayEntry.setData(
                         {
                           id: giveaway.id,
                         },
                         null
                       );
+                      utils.getEntryBalance.setData(undefined, {
+                        entries: balance.data!.entries + data.entries,
+                      });
+                    },
+                    onSettled: () => {
+                      setIsSubmitting(false);
                     },
                     onError: (error) => {
                       confirm({

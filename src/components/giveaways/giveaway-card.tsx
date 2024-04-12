@@ -61,7 +61,8 @@ export const GiveawayCard: FC<{
               <br />
 
               <span className="text-yellow-600 dark:text-yellow-500 mr-2">
-                <FaTrophy className="inline w" /> {maxWinners} Winners
+                <FaTrophy className="inline w" /> {maxWinners} Winner
+                {maxWinners != 1 && "s"}
               </span>
 
               <span className="text-blue-500 mr-2">

@@ -11,7 +11,9 @@ export const GiveawayDescription: FC<Props> = ({ giveaway }) => {
       <div className="min-h-[200px] max-h-[400px] m-2 bordered bg-gray-100 dark:bg-zinc-900 shadowed overflow-auto break-words p-2 rounded-md">
         <MarkDownView>{giveaway.description}</MarkDownView>
       </div>
+
       <h4>Prizes:</h4>
+
       <ol>
         {(giveaway.prizes as GiveawayPrize[]).map((prize, i) => (
           <li key={i}>

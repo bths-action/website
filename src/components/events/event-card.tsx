@@ -91,19 +91,22 @@ export const EventCard: FC<{
               <br />
               {maxHours != 0 && (
                 <span className="text-yellow-600 dark:text-yellow-500 mr-2">
-                  <BsClock className="inline w" /> +{maxHours} Hours
+                  <BsClock className="inline w" /> +{maxHours} Hour
+                  {maxHours != 1 && "s"}
                 </span>
               )}
 
               {maxPoints != 0 && (
                 <span className="text-blue-500 mr-2">
-                  <BsAward className="inline" /> +{maxPoints} Points
+                  <BsAward className="inline" /> +{maxPoints} Point
+                  {maxPoints != 1 && "s"}
                 </span>
               )}
               {maxGiveawayEntries != 0 && (
                 <span className="text-pink-600 dark:text-pink-500 mr-2">
                   <BsTicketPerforated className="inline" /> +
-                  {maxGiveawayEntries} Entries
+                  {maxGiveawayEntries} Entr
+                  {maxGiveawayEntries != 1 ? "ies" : "y"}
                 </span>
               )}
             </div>
