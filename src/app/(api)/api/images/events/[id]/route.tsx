@@ -14,7 +14,7 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   const anybody = await fetch(
-    "https://fonts.bunny.net/anybody/files/anybody-latin-500-normal.woff"
+    "https://github.com/webfontworld/Poppins/raw/main/Poppins-Regular.ttf"
   ).then((res) => res.arrayBuffer());
 
   const figtree = await fetch(
