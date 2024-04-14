@@ -13,6 +13,8 @@ import { confirm } from "../ui/confirm";
 import { FaTrophy } from "react-icons/fa";
 import { GIVEAWAY_TYPE_MAP } from "@/utils/constants";
 import { MdLeaderboard } from "react-icons/md";
+import { useChannel, useEvent, usePusher } from "@harelpls/use-pusher";
+import { GiveawayEntry } from "@prisma/client";
 
 export const GiveawayEntries: FC<Props> = ({ giveaway }) => {
   const { status } = useSession();
@@ -24,8 +26,33 @@ export const GiveawayEntries: FC<Props> = ({ giveaway }) => {
   const editEntries = trpc.editEntryBalance.useMutation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const utils = trpc.useUtils();
-
   const entryRef = useRef<HTMLInputElement>(null);
+
+  // just start by connectng to the proper channel, and proper events but dont implement behavior yet
+
+  const pusher = usePusher();
+
+  const channel = useChannel(`private-g${giveaway.id}`);
+  // nice work
+  useEvent(channel, "update", (raw) => {
+    const data = raw as GiveawayEntry;
+    // yep lets implement it now
+    if (
+      entry.status == "success" &&
+      entry.data &&
+      account.data?.email === data.userEmail
+    ) {
+      utils.getGiveawayEntry.setData(
+        {
+          id: giveaway.id,
+        },
+        {
+          ...entry.data,
+          ...data,
+        }
+      );
+    }
+  });
 
   const [date, setDate] = useState<Date>(new Date());
   useEffect(() => {
@@ -94,7 +121,10 @@ export const GiveawayEntries: FC<Props> = ({ giveaway }) => {
               onClick={() => {
                 setIsSubmitting(true);
                 joinGiveaway.mutate(
-                  { id: giveaway.id },
+                  {
+                    id: giveaway.id,
+                    socketId: pusher.client?.connection.socket_id,
+                  },
                   {
                     onSettled: (data) => {
                       setIsSubmitting(false);
@@ -144,8 +174,10 @@ export const GiveawayEntries: FC<Props> = ({ giveaway }) => {
             <>
               Entries:{" "}
               <input
+                disabled={giveaway.endsAt < date || giveaway.ended}
                 ref={entryRef}
                 type="number"
+                className="w-20"
                 min={0}
                 step={1}
                 defaultValue={entry.data.entries}
@@ -171,6 +203,7 @@ export const GiveawayEntries: FC<Props> = ({ giveaway }) => {
                     {
                       id: giveaway.id,
                       entries: prev || 0,
+                      socketId: pusher.client?.connection.socket_id,
                     },
                     {
                       onSuccess: (data) => {
@@ -215,7 +248,10 @@ export const GiveawayEntries: FC<Props> = ({ giveaway }) => {
               onClick={() => {
                 setIsSubmitting(true);
                 leaveGiveaway.mutate(
-                  { id: giveaway.id },
+                  {
+                    id: giveaway.id,
+                    socketId: pusher.client?.connection.socket_id,
+                  },
                   {
                     onSuccess: (data) => {
                       utils.getGiveawayEntry.setData(

@@ -14,20 +14,20 @@ export const GiveawayDescription: FC<Props> = ({ giveaway }) => {
 
       <h4>Prizes:</h4>
 
-      <ol>
-        {(giveaway.prizes as GiveawayPrize[]).map((prize, i) => (
-          <li key={i}>
-            <h5 className="inline">{prize.name}</h5>
-            <p>
-              {prize.details
-                .split("\n")
-                .map((val) => [<br />, val])
-                .flat()
-                .slice(1)}
-            </p>
-          </li>
-        ))}
-      </ol>
+      {(giveaway.prizes as GiveawayPrize[]).map((prize, i) => (
+        <div key={i}>
+          <h5 className="inline underline-animation underline-animated">
+            {prize.name}
+          </h5>
+          <p>
+            {prize.details
+              .split("\n")
+              .map((val) => [<br />, val])
+              .flat()
+              .slice(1)}
+          </p>
+        </div>
+      ))}
     </div>
   );
 };

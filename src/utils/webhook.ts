@@ -87,6 +87,17 @@ export function generateEvent(event: CreateEventInput, id: string): APIEmbed {
   };
 }
 
+export function generateGiveawayMessage(
+  id: string,
+  winners: { preferredName: string; discordID: string | null }[]
+) {
+  return `[GIVEAWAY](https://bthsaction.org/giveaways/${id})\nCongratulations to the following winners: ${winners
+    .map(({ preferredName, discordID }) =>
+      discordID ? `<@${discordID}>` : preferredName
+    )
+    .join(", ")}`;
+}
+
 export function generateGiveaway(
   giveaway: CreateGiveawayInput,
   id: string

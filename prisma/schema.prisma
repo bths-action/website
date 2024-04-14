@@ -117,7 +117,8 @@ model Giveaway {
   entries    GiveawayEntry[]
   type       GiveawayType
 
-  messageID String @unique
+  messageID   String  @unique
+  winnerMsgID String? @unique
 
   createdAt DateTime @default(now())
 }

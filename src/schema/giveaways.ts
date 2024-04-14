@@ -86,3 +86,7 @@ export const editEntrySchema = targetGiveawaySchema.extend({
 export const getGiveawaysSchema = z.object({
   cursor: z.number().int().min(0).default(0),
 });
+
+export const targetEntrySchema = targetGiveawaySchema.extend({
+  userEmail: z.string(),
+});

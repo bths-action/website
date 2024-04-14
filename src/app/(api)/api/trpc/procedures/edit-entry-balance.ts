@@ -100,6 +100,8 @@ export const editEntryBalance = memberProcedure
       };
     }
 
+    // take a look a this, examine its types and make an educated guess on what it does
+    // feel free to take a look at function content
     await pusher().trigger(`private-g${id}`, "update", entry, {
       socket_id: socketId,
     });

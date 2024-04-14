@@ -21,6 +21,7 @@ const isAuthed = t.middleware(async (opts) => {
       message: "You are not logged in.",
     });
   }
+
   return opts.next({
     ...opts,
     ctx: {
@@ -86,6 +87,7 @@ const isExecOnly = isAuthedAndExists.unstable_pipe(async (opts) => {
       message: "You are not an exec.",
     });
   }
+
   return opts.next(opts);
 });
 

@@ -5,7 +5,6 @@ import { prisma } from "@/utils/prisma";
 export const AUTH_OPTIONS: AuthOptions = {
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
-      console.log("signIn", user, account, profile, email, credentials);
       if (profile?.sub?.includes("discord")) {
         const s = profile.sub.split("|");
         const discordID = s[s.length - 1];
@@ -29,7 +28,6 @@ export const AUTH_OPTIONS: AuthOptions = {
     },
 
     async session({ session, user, token }) {
-      console.log("session", session, user, token);
       return session;
     },
   },

@@ -32,6 +32,7 @@ import { getEntryBalance } from "./procedures/get-balance";
 import { leaveGiveaway } from "./procedures/leave-giveaway";
 import { editEntryBalance } from "./procedures/edit-entry-balance";
 import { getGiveawayEntry } from "./procedures/get-giveaway-entry";
+import { endGiveawayProcedure } from "./procedures/end-giveaway";
 
 export const appRouter = router({
   //generate smth random
@@ -70,6 +71,7 @@ export const appRouter = router({
   createGiveaway,
   editGiveaway,
   deleteGiveaway,
+  endGiveaway: endGiveawayProcedure,
 
   enterGiveaway,
   getEntryBalance,

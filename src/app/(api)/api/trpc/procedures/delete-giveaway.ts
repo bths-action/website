@@ -12,15 +12,23 @@ export const deleteGiveaway = adminProcedure
       },
     });
 
-    const event = await prisma.giveaway.delete({
+    const giveaway = await prisma.giveaway.delete({
       where: {
         id,
       },
     });
 
-    await deleteMessage(event.messageID, process.env.GIVEAWAY_WEBHOOK).catch(
-      () => {}
-    );
+    await Promise.all([
+      deleteMessage(giveaway.messageID, process.env.GIVEAWAY_WEBHOOK).catch(
+        () => {}
+      ),
+      giveaway.winnerMsgID
+        ? deleteMessage(
+            giveaway.winnerMsgID,
+            process.env.GIVEAWAY_WEBHOOK
+          ).catch()
+        : undefined,
+    ]);
 
-    return event;
+    return giveaway;
   });

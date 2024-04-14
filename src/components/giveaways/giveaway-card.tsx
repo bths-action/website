@@ -52,10 +52,11 @@ export const GiveawayCard: FC<{
               <span className="">
                 Ends on{" "}
                 {new Date(endsAt).toLocaleDateString("en-US", {
-                  weekday: "long",
                   year: "numeric",
                   month: "long",
                   day: "numeric",
+                  hour: "numeric",
+                  minute: "numeric",
                 })}
               </span>
               <br />

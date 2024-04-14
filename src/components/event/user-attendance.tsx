@@ -51,6 +51,7 @@ export const UserAttendance: FC<Props> = ({ event }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const pusher = usePusher();
+
   const channel = useChannel(`private-${event.id}`);
 
   const notAccepting =
@@ -60,8 +61,14 @@ export const UserAttendance: FC<Props> = ({ event }) => {
   console.log(notAccepting, event.finishTime, event.eventTime);
   const wait = event.finishTime && event.eventTime.valueOf() > Date.now();
 
-  useEvent(channel, "update", (data) => {
-    if (attendance.status == "success" && attendance.data)
+  // lets move to giveaway entries, and try to put some boilerplate code there
+  useEvent(channel, "update", (raw) => {
+    const data = raw as EventAttendance;
+    if (
+      attendance.status == "success" &&
+      attendance.data &&
+      data.userEmail == account.data?.email
+    )
       utils.getAttendance.setData(
         {
           id: event.id,
