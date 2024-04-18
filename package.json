@@ -36,6 +36,7 @@
     "prisma": "^5.10.2",
     "pusher": "^5.2.0",
     "react": "^18",
+    "react-charts": "^3.0.0-beta.57",
     "react-confirm": "^0.3.0-7",
     "react-dom": "^18",
     "react-icons": "^4.12.0",

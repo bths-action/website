@@ -115,7 +115,7 @@
 
   /** select options */
   option {
-    @apply bg-zinc-200 dark:bg-zinc-600 dark:text-white;
+    @apply bg-white dark:bg-black dark:text-white;
   }
 
   input[type="checkbox"] {

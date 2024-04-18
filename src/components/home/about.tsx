@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { FC } from "react";
+import { FC, PropsWithChildren } from "react";
 import { IconType } from "react-icons";
 import {
   BiLinkExternal,
@@ -18,6 +18,54 @@ import {
   SiPusher,
   SiTrpc,
 } from "react-icons/si";
+
+const Title: FC<PropsWithChildren> = ({ children }) => (
+  <motion.h2
+    className="mb-16"
+    variants={{
+      hidden: {
+        y: "-100%",
+        opacity: 0.5,
+      },
+      visible: {
+        y: 0,
+        opacity: 1,
+      },
+    }}
+  >
+    {children}
+  </motion.h2>
+);
+
+const Description: FC<PropsWithChildren> = ({ children }) => (
+  <motion.span
+    variants={{
+      hidden: {
+        rotate: 180,
+        opacity: 0,
+      },
+      visible: {
+        rotate: 0,
+        opacity: 1,
+      },
+    }}
+  >
+    {children}
+  </motion.span>
+);
+
+const AboutGroup: FC<PropsWithChildren> = ({ children }) => (
+  <motion.span
+    initial="hidden"
+    whileInView="visible"
+    viewport={{
+      once: true,
+      amount: 1,
+    }}
+  >
+    {children}
+  </motion.span>
+);
 
 const ORGANIZATIONS = [
   {
@@ -75,150 +123,73 @@ export const About: FC = () => {
       </h3>
       <h2>What We Are:</h2>
       <div className="text-center grid grid-cols-1 lg:grid-cols-2 items-stretch gap-y-40 mb-40 gap-x-2 lg:gap-y-36 my-14">
-        <motion.span
-          initial="hidden"
-          whileInView="visible"
-          viewport={{
-            once: true,
-            amount: 1,
-          }}
-        >
-          <motion.h2
-            variants={{
-              hidden: {
-                y: "-100%",
-                opacity: 0,
-              },
-              visible: {
-                y: 0,
-                opacity: 1,
-              },
-            }}
-          >
-            Modern
-          </motion.h2>
-          <br />
-          <br />
-          <motion.span
-            variants={{
-              hidden: {
-                rotate: 180,
-                opacity: 0,
-              },
-              visible: {
-                rotate: 0,
-                opacity: 1,
-              },
-            }}
-          >
+        <AboutGroup>
+          <Title>Modern</Title>
+
+          <Description>
             We use the latest technologies to make our club functions more
             efficent, and to make our members' lives easier.
-          </motion.span>
-        </motion.span>
-        <motion.span
-          initial="hidden"
-          whileInView="visible"
-          viewport={{
-            once: true,
-            amount: 1,
-          }}
-          className="flex w-full justify-center items-center gap-3 flex-wrap"
-        >
-          {[
-            BiLogoTailwindCss,
-            SiNextdotjs,
-            BiLogoTypescript,
-            FaReact,
-            SiTrpc,
-            FaCloudflare,
-            SiAuth0,
-            SiFramer,
-            SiPusher,
-            SiDiscord,
-          ].map((Icon: IconType, i) => (
-            <motion.span
-              variants={{
-                hidden: {
-                  rotate: Math.pow(-1, i) * 360,
-                  scale: 0,
-                  opacity: 0,
-                  x: "300%",
-                },
-                visible: {
-                  rotate: 0,
-                  scale: 1,
-                  opacity: 1,
-                  x: 0,
-                },
-              }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-            >
-              <Icon
-                key={i}
-                style={{
-                  transitionDelay: `${i * 75 + 300}ms`,
-                  transitionDuration: "300ms",
+          </Description>
+        </AboutGroup>
+        <AboutGroup>
+          <span className="flex flex-wrap gap-3 justify-center">
+            {[
+              BiLogoTailwindCss,
+              SiNextdotjs,
+              BiLogoTypescript,
+              FaReact,
+              SiTrpc,
+              FaCloudflare,
+              SiAuth0,
+              SiFramer,
+              SiPusher,
+              SiDiscord,
+            ].map((Icon: IconType, i) => (
+              <motion.span
+                variants={{
+                  hidden: {
+                    rotate: Math.pow(-1, i) * 360,
+                    scale: 0,
+                    opacity: 0,
+                    x: "300%",
+                  },
+                  visible: {
+                    rotate: 0,
+                    scale: 1,
+                    opacity: 1,
+                    x: 0,
+                  },
                 }}
-                className="w-16 h-16"
-              />
-            </motion.span>
-          ))}
-        </motion.span>
-        <motion.span
-          initial="hidden"
-          whileInView="visible"
-          viewport={{
-            once: true,
-            amount: 1,
-          }}
-        >
-          <motion.h2
-            variants={{
-              hidden: {
-                y: "-100%",
-                opacity: 0.5,
-              },
-              visible: {
-                y: 0,
-                opacity: 1,
-              },
-            }}
-          >
-            Non Pay to Win
-          </motion.h2>
-          <br />
-          <br />
-          <motion.span
-            variants={{
-              hidden: {
-                rotate: 180,
-                opacity: 0,
-              },
-              visible: {
-                rotate: 0,
-                opacity: 1,
-              },
-            }}
-          >
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+              >
+                <Icon
+                  key={i}
+                  style={{
+                    transitionDelay: `${i * 75 + 300}ms`,
+                    transitionDuration: "300ms",
+                  }}
+                  className="w-16 h-16"
+                />
+              </motion.span>
+            ))}
+          </span>
+        </AboutGroup>
+        <AboutGroup>
+          <Title>Non Pay to Win</Title>
+
+          <Description>
             We strive to make our club as accessible as possible, and we do not
             engage in such usury. We are a club, not a business. We give away
             stuff instead.
-          </motion.span>
-        </motion.span>
-        <motion.span
-          initial="hidden"
-          whileInView="visible"
-          viewport={{
-            once: true,
-            amount: 1,
-          }}
-        >
+          </Description>
+        </AboutGroup>
+        <AboutGroup>
           <motion.span
             variants={{
               hidden: {
                 rotate: 180,
                 opacity: 0,
-                translateX: "100%",
+                translateX: "200%",
               },
               visible: {
                 rotate: 0,
@@ -226,6 +197,7 @@ export const About: FC = () => {
                 translateX: 0,
               },
             }}
+            transition={{ duration: 1 }}
             className="flex justify-center items-center"
           >
             <Image
@@ -236,15 +208,20 @@ export const About: FC = () => {
               className="rounded-xl border-2 shadowed "
             />
           </motion.span>
-        </motion.span>
+        </AboutGroup>
+        <AboutGroup>
+          <Title>Community</Title>
+          <br />
+        </AboutGroup>
       </div>
+
       <h2>We Have Worked With:</h2>
       <div className="relative flex overflow-x-hidden">
         <div className="py-12 animate-marquee whitespace-nowrap flex">
           {ORGANIZATIONS}
         </div>
 
-        <div className="absolute top-0 py-12 animate-marquee2 whitespace-nowrap flex">
+        <div className="py-12 animate-marquee2 whitespace-nowrap flex">
           {ORGANIZATIONS}
         </div>
       </div>

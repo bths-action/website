@@ -49,3 +49,5 @@ export const REFERRAL_POINTS = 5;
 export const REFERRAL_ENTRIES = 0.5;
 export const MAX_REFERRALS = 20;
 export const CREDIT_RATE = 25;
+
+export const PRIMARY_COLOR = "#19b1a0";

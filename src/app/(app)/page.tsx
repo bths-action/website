@@ -6,13 +6,27 @@ import { prisma } from "@/utils/prisma";
 import { JoinButton } from "@/components/home/join-button";
 import { About } from "@/components/home/about";
 import { StickyDown } from "@/components/home/sticky-down";
+import { MemberChart } from "@/components/home/charts";
 
 export const revalidate = 600;
 
 const Home: FC = async () => {
-  // -1 to exclude advisor
-  const [members, events, serviceHours] = await Promise.all([
-    prisma.user.count().then((e) => e - 1),
+  const [joins, events, serviceHours] = await Promise.all([
+    prisma.user
+      .findMany({
+        where: {
+          email: {
+            not: process.env.ADVISOR_EMAIL,
+          },
+        },
+        select: { registeredAt: true },
+
+        orderBy: {
+          registeredAt: "asc",
+        },
+      })
+      .then((users) => users.map((user) => user.registeredAt)), // now lets try to examine react chart
+    // https://react-charts.tanstack.com/ feel free to examine the docs (cuz I have too as well)
     prisma.event.count(),
     prisma.eventAttendance
       .findMany({
@@ -34,13 +48,20 @@ const Home: FC = async () => {
       <LimitedContainer>
         <br />
         <About />
+        <h2>Membership</h2>
+        <MemberChart joins={joins} />
       </LimitedContainer>
+
       <StickyDown />
       <JoinButton />
       <LimitedContainer>
         <hr className="my-8" />
 
-        <Stats members={members} serviceHours={serviceHours} events={events} />
+        <Stats
+          members={joins.length}
+          serviceHours={serviceHours}
+          events={events}
+        />
       </LimitedContainer>
     </main>
   );
