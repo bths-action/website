@@ -38,7 +38,7 @@ export const PopupUI: FC<
         } text-center bg-white dark:bg-zinc-900 rounded-lg border-2`}
       >
         <div className="w-full flex items-center flex-row">
-          <h6 className="mx-auto px-2 text-2xl overflow-auto whitespace-nowrap">
+          <h6 className="mx-auto px-2 text-2xl overflow-x-auto overflow-y-hidden whitespace-nowrap">
             {title}
           </h6>
           {!disabledExit && (
