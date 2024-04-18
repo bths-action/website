@@ -43,7 +43,7 @@ export const ExecCard: FC<{
           duration: 0.6,
         }}
       >
-        <div className="h-14 overflow-visible z-20 bg-default -mb-1 flex justify-center items-center text-white relative">
+        <div className="h-14 overflow-visible z-10 bg-default -mb-1 flex justify-center items-center text-white relative">
           {alumni ? (
             "Alumni Executive"
           ) : (
