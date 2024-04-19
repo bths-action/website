@@ -68,17 +68,17 @@ export async function GET(
         <div tw="flex flex-row">
           <div tw="flex flex-col w-1/2 p-2">
             <h2 tw="text-3xl my-1 flex flex-row text-center justify-center items-center">
-              <BsClock tw="mr-1" /> Total Hours: {data.maxHours}
+              <BsClock /> Total Hours: {data.maxHours}
             </h2>
             <h2 tw="text-3xl my-1 flex flex-row text-center justify-center  items-center">
-              <BsAward tw="mr-1" /> Total Points: {data.maxPoints}
+              <BsAward /> Total Points: {data.maxPoints}
             </h2>
 
             <h2 tw="text-3xl my-1 flex flex-row flex-wrap justify-center text-center  items-center">
-              <MdLocationOn tw="mr-1" /> Location: <br /> {data.address}
+              <MdLocationOn /> Location: <br /> {data.address}
             </h2>
             <h2 tw="text-3xl my-1 flex flex-row flex-wrap justify-center text-center  items-center">
-              <MdOutlineAccessTime tw="mr-1" /> Time: <br />
+              <MdOutlineAccessTime /> Time: <br />
               {data.eventTime.toLocaleString("en-US", {
                 timeZone: "America/New_York",
                 month: "long",

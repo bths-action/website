@@ -1,7 +1,4 @@
-import {
-  CreateEventInput,
-  CreateGiveawayInput,
-} from "@/app/(api)/api/trpc/client";
+import { CreateEventInput } from "@/app/(api)/api/trpc/client";
 import {
   APIEmbed,
   APIEmbedField,
@@ -10,6 +7,8 @@ import {
   RESTPostAPIWebhookWithTokenJSONBody,
 } from "discord-api-types/v10";
 import { GIVEAWAY_TYPE_MAP } from "./constants";
+import { createGiveawaySchema } from "@/schema/giveaways";
+import { z } from "zod";
 
 export function generateEvent(event: CreateEventInput, id: string): APIEmbed {
   const fields: APIEmbedField[] = [
@@ -99,8 +98,14 @@ export function generateGiveawayMessage(
 }
 
 export function generateGiveaway(
-  giveaway: CreateGiveawayInput,
-  id: string
+  giveaway: z.infer<typeof createGiveawaySchema>,
+
+  id: string,
+  winners?: {
+    discordID: string | null;
+    rewardID: number;
+    preferredName: string;
+  }[]
 ): APIEmbed[] {
   const fields: APIEmbedField[] = [
     {
@@ -138,10 +143,21 @@ export function generateGiveaway(
     {
       title: "Prizes:",
       timestamp: new Date().toISOString(),
-      fields: giveaway.prizes.map((prize) => ({
-        name: prize.name,
-        value: prize.details,
-      })),
+      fields: giveaway.prizes.map((prize, index) => {
+        const winner = winners?.find((winner) => winner.rewardID === index);
+        return {
+          name: `${prize.name}${
+            winner
+              ? ` (Claimed by ${
+                  winner.discordID
+                    ? `<@${winner.discordID}>`
+                    : winner.preferredName
+                })`
+              : ""
+          }`,
+          value: prize.details,
+        };
+      }),
     },
   ];
 }

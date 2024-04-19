@@ -40,25 +40,38 @@ export const MemberChart: FC<Props> = ({ joins }) => {
   const data = [
     {
       label: "Members",
-      data: joins.map((date, index) => {
-        date.setMilliseconds(0);
-        return {
-          date,
-          members: index + 1,
-        };
-      }),
+      data: [
+        ...joins.map((date, index) => {
+          date.setMilliseconds(0);
+          return {
+            date,
+            members: index + 1,
+          };
+        }),
+        {
+          date: new Date(),
+          members: joins.length,
+        },
+      ],
     },
   ];
 
   if (!mounted) return null;
 
   return (
-    <div className="w-full h-[50dvh]">
+    <div className="w-full h-[50dvh] my-4">
       <Chart
-        className="font-poppins"
         options={{
           data,
+
           primaryAxis,
+          primaryCursor: {
+            showLabel: false,
+          },
+          secondaryCursor: {
+            showLabel: false,
+          },
+
           secondaryAxes,
           dark: resolvedTheme === "dark",
           showDebugAxes: false,
@@ -67,13 +80,30 @@ export const MemberChart: FC<Props> = ({ joins }) => {
             align: "auto",
             render: ({ focusedDatum }) => {
               return (
-                <div className="bg-white dark:bg-zinc-900 shadowed p-2 rounded-lg">
-                  {focusedDatum?.originalDatum.date.toLocaleDateString()} -{" "}
-                  {focusedDatum?.originalDatum.members} members
+                <div className="bg-white dark:bg-zinc-900 shadowed rounded-lg bordered">
+                  <p className="font-poppins font-bold p-2">
+                    {focusedDatum?.originalDatum.date.toLocaleString(
+                      undefined,
+                      {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                        hour12: true,
+                        hour: "numeric",
+                        minute: "numeric",
+                      }
+                    )}
+                  </p>
+                  <hr />
+                  <p className="p-2">
+                    <p className="h-3.5 w-3.5 rounded-full bg-default inline-block" />{" "}
+                    {focusedDatum?.originalDatum.members} Members
+                  </p>
                 </div>
               );
             },
           },
+          getDatumStyle: () => ({}),
         }}
       />
     </div>

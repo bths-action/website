@@ -3,7 +3,12 @@ import { adminProcedure } from "../trpc";
 import { prisma } from "@/utils/prisma";
 import { TRPCError } from "@trpc/server";
 import { chooseWinners, shuffle } from "@/utils/helpers";
-import { generateGiveawayMessage, sendMessage } from "@/utils/webhook";
+import {
+  editMessage,
+  generateGiveaway,
+  generateGiveawayMessage,
+  sendMessage,
+} from "@/utils/webhook";
 import { pusher } from "@/utils/pusher";
 
 // the reason im export    ing endGiveaway is cuz for the cron job btw
@@ -19,6 +24,10 @@ export const endGiveaway = async (
     select: {
       id: true,
       maxWinners: true,
+      name: true,
+      description: true,
+      endsAt: true,
+      prizes: true,
       type: true,
       ended: true,
       messageID: true,
@@ -69,6 +78,16 @@ export const endGiveaway = async (
   // so when we end the giveaway, it says I have not won cuz no socket msg has been sent.
   // we can fix this by sending a pusher msg just like seen previously
 
+  const winnerObjs = winners.map(
+    (email) => giveaway.entries.find((entry) => entry.userEmail === email)!.user
+  );
+
+  let winnersPrizes: {
+    rewardID: number;
+    discordID: string | null;
+    preferredName: string;
+  }[] = [];
+
   if (giveaway.type === "RANDOM" || giveaway.type === "ORDERED_CLAIM") {
     const list: number[] = [
       ...shuffle(
@@ -94,28 +113,34 @@ export const endGiveaway = async (
               [giveaway.type == "RANDOM" ? "rewardId" : "order"]: list[i],
             },
           })
-          .then((entry) =>
+          .then((entry) => {
+            if (giveaway.type === "RANDOM") {
+              winnersPrizes = winnerObjs.map((winner) => ({
+                ...winner,
+                rewardID: entry.rewardId!,
+              }));
+            }
             pushClient.trigger(`private-g${id}`, "update", entry, {
               socket_id: socketId,
-            })
-          );
+            });
+          });
       })
     );
   }
 
-  const message = await sendMessage(
-    {
-      // lets go back to reroll winner and regenerate the message
-      content: generateGiveawayMessage(
-        giveaway.id,
-        winners.map(
-          (email) =>
-            giveaway.entries.find((entry) => entry.userEmail === email)!.user
-        )!
-      ),
-    },
-    process.env.GIVEAWAY_WEBHOOK!
-  );
+  const [message] = await Promise.all([
+    sendMessage(
+      {
+        // lets go back to reroll winner and regenerate the message
+        content: generateGiveawayMessage(giveaway.id, winnerObjs),
+      },
+      process.env.GIVEAWAY_WEBHOOK!
+    ),
+    editMessage(giveaway.messageID, {
+      embeds: generateGiveaway(giveaway as any, id, winnersPrizes),
+    }),
+  ]);
+
   const updated = await prisma.giveaway.update({
     where: {
       id,

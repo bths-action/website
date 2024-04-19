@@ -99,7 +99,12 @@ const ORGANIZATIONS = [
     url: "https://9millionreasons.nyc/",
   },
 ].map((e) => (
-  <Link href={e.url} target="_blank" className="w-48 h-48 mx-8 rounded-full">
+  <Link
+    href={e.url}
+    target="_blank"
+    className="w-48 h-48 mx-8 rounded-full"
+    key={e.url}
+  >
     <div className="w-48 h-48 mb-4 relative rounded-full">
       <Image
         src={e.logo}
@@ -146,6 +151,7 @@ export const About: FC = () => {
               SiDiscord,
             ].map((Icon: IconType, i) => (
               <motion.span
+                key={i}
                 variants={{
                   hidden: {
                     rotate: Math.pow(-1, i) * 360,
@@ -163,7 +169,6 @@ export const About: FC = () => {
                 transition={{ duration: 0.5, delay: i * 0.1 }}
               >
                 <Icon
-                  key={i}
                   style={{
                     transitionDelay: `${i * 75 + 300}ms`,
                     transitionDuration: "300ms",
@@ -221,7 +226,7 @@ export const About: FC = () => {
           {ORGANIZATIONS}
         </div>
 
-        <div className="py-12 animate-marquee2 whitespace-nowrap flex">
+        <div className="absolute top-0 py-12 animate-marquee2 whitespace-nowrap flex">
           {ORGANIZATIONS}
         </div>
       </div>
