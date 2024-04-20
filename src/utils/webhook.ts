@@ -146,16 +146,16 @@ export function generateGiveaway(
       fields: giveaway.prizes.map((prize, index) => {
         const winner = winners?.find((winner) => winner.rewardID === index);
         return {
-          name: `${prize.name}${
+          name: prize.name,
+          value: `${prize.details}${
             winner
-              ? ` (Claimed by ${
+              ? `\n(Claimed by ${
                   winner.discordID
                     ? `<@${winner.discordID}>`
                     : winner.preferredName
                 })`
               : ""
           }`,
-          value: prize.details,
         };
       }),
     },

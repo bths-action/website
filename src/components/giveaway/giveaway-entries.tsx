@@ -237,6 +237,12 @@ export const GiveawayEntries: FC<Props> = ({ giveaway }) => {
                 }}
               />
               <br />
+              {entry.data.entries == 0 && (
+                <div>
+                  You have no entries. You must add entries to join the
+                  giveaway.
+                </div>
+              )}
             </>
           )}
 

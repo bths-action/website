@@ -82,11 +82,13 @@ export const endGiveaway = async (
     (email) => giveaway.entries.find((entry) => entry.userEmail === email)!.user
   );
 
-  let winnersPrizes: {
-    rewardID: number;
-    discordID: string | null;
-    preferredName: string;
-  }[] = [];
+  let winnersPrizes:
+    | {
+        rewardID: number;
+        discordID: string | null;
+        preferredName: string;
+      }[]
+    | undefined;
 
   if (giveaway.type === "RANDOM" || giveaway.type === "ORDERED_CLAIM") {
     const list: number[] = [
@@ -96,6 +98,14 @@ export const endGiveaway = async (
           .map((_, i) => i)
       ),
     ];
+
+    if (giveaway.type === "RANDOM") {
+      winnersPrizes = winnerObjs.map((user, i) => ({
+        rewardID: list[i],
+        discordID: user.discordID,
+        preferredName: user.preferredName,
+      }));
+    }
 
     const pushClient = pusher();
 
@@ -114,12 +124,6 @@ export const endGiveaway = async (
             },
           })
           .then((entry) => {
-            if (giveaway.type === "RANDOM") {
-              winnersPrizes = winnerObjs.map((winner) => ({
-                ...winner,
-                rewardID: entry.rewardId!,
-              }));
-            }
             pushClient.trigger(`private-g${id}`, "update", entry, {
               socket_id: socketId,
             });
@@ -136,9 +140,13 @@ export const endGiveaway = async (
       },
       process.env.GIVEAWAY_WEBHOOK!
     ),
-    editMessage(giveaway.messageID, {
-      embeds: generateGiveaway(giveaway as any, id, winnersPrizes),
-    }),
+    editMessage(
+      giveaway.messageID,
+      {
+        embeds: generateGiveaway(giveaway as any, id, winnersPrizes),
+      },
+      process.env.GIVEAWAY_WEBHOOK
+    ).then(console.log),
   ]);
 
   const updated = await prisma.giveaway.update({
