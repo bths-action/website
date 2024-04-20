@@ -23,6 +23,8 @@ export const MemberChart: FC<Props> = ({ joins }) => {
   const primaryAxis = useMemo(
     (): AxisOptions<DailyMembers> => ({
       getValue: (datum) => datum.date,
+      hardMin: joins[0],
+      hardMax: new Date(),
     }),
     []
   );

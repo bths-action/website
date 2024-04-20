@@ -98,6 +98,11 @@ const ORGANIZATIONS = [
     logo: "/logos/9mr.jpg",
     url: "https://9millionreasons.nyc/",
   },
+  {
+    name: "Metroquest",
+    logo: "/logos/metroquest.jpg",
+    url: "https://discord.gg/gyMcdvgFUN",
+  },
 ].map((e) => (
   <Link
     href={e.url}
@@ -216,7 +221,11 @@ export const About: FC = () => {
         </AboutGroup>
         <AboutGroup>
           <Title>Community</Title>
-          <br />
+          <Description>
+            You are one of us. You get to express criticism and dissent regardng
+            non hate speech content, and contribute towards a more inclusive and
+            diverse community.
+          </Description>
         </AboutGroup>
       </div>
 
