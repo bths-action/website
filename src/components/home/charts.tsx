@@ -37,6 +37,7 @@ export const MemberChart: FC<Props> = ({ joins }) => {
     ],
     []
   );
+  // play with the code
 
   // btw since each member increments one, we can use map index to get the number of members
   const data = [

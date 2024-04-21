@@ -90,3 +90,7 @@ export const getGiveawaysSchema = z.object({
 export const targetEntrySchema = targetGiveawaySchema.extend({
   userEmail: z.string(),
 });
+
+export const claimPrizeSchema = targetEntrySchema.extend({
+  rewardId: z.number().int().min(0),
+});

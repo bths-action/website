@@ -75,9 +75,6 @@ export const endGiveaway = async (
     },
   });
 
-  // so when we end the giveaway, it says I have not won cuz no socket msg has been sent.
-  // we can fix this by sending a pusher msg just like seen previously
-
   const winnerObjs = winners.map(
     (email) => giveaway.entries.find((entry) => entry.userEmail === email)!.user
   );

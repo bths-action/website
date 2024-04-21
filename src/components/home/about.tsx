@@ -197,18 +197,16 @@ export const About: FC = () => {
           <motion.span
             variants={{
               hidden: {
-                rotate: 180,
                 opacity: 0,
                 translateX: "200%",
               },
               visible: {
-                rotate: 0,
                 opacity: 1,
                 translateX: 0,
               },
             }}
             transition={{ duration: 1 }}
-            className="flex justify-center items-center"
+            className="flex justify-center w-full h-full items-center"
           >
             <Image
               src="/images/giveaway-1.png"
@@ -227,6 +225,7 @@ export const About: FC = () => {
             diverse community.
           </Description>
         </AboutGroup>
+        <AboutGroup></AboutGroup>
       </div>
 
       <h2>We Have Worked With:</h2>
