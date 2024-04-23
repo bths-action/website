@@ -7,10 +7,7 @@ export default function NotFound() {
     <main>
       <h1>Not Found</h1>
       <NotFoundWidget />
-      <p>
-        Emma's Action Frog couldn't find what you were looking for. But he does
-        have a message for you when you click on him!
-      </p>
+      <h5>Emma's Action Frog couldn't find what you were looking for.</h5>
       <RoundButton>
         <Link href="/">Return Home</Link>
       </RoundButton>

@@ -8,6 +8,7 @@ import { MarkDownView } from "../ui/md-view";
 import { isAlumni } from "@/utils/helpers";
 import { TransparentButton } from "../ui/buttons";
 import { BiMailSend } from "react-icons/bi";
+import { BsPersonCircle } from "react-icons/bs";
 
 type Exec = GetExecsOutput[number];
 
@@ -64,15 +65,16 @@ export const ExecCard: FC<{
           }}
         >
           <div className="rounded-full overflow-hidden relative w-[140px] h-[140px]">
-            <Image
-              src={
-                exec.selfieURL ||
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/340px-Default_pfp.svg.png?20220226140232"
-              }
-              alt=""
-              fill
-              className="object-cover"
-            />
+            {exec.selfieURL ? (
+              <Image
+                src={exec.selfieURL}
+                alt=""
+                fill
+                className="object-cover"
+              />
+            ) : (
+              <BsPersonCircle className="w-full h-full bg-default text-white p-2" />
+            )}
           </div>
         </div>
         <div className="m-2 pt-5">

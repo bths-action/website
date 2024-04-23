@@ -5,6 +5,7 @@ import "../globals.css";
 import { AppProviders } from "@/providers/providers";
 import { Navbar } from "@/components/ui/nav";
 import { SplashScreen } from "@/components/ui/splash";
+import { ScrollRefProvider } from "@/providers/scroll";
 
 const figtree = Figtree({ subsets: ["latin"], variable: "--font-figtree" });
 const poppins = Poppins({
@@ -31,12 +32,7 @@ export default function RootLayout({
         <AppProviders>
           <SplashScreen>
             <Navbar />
-            <div
-              className="h-[calc(100dvh-56px)] md:h-[100dvh]  overflow-auto w-full break-words"
-              id="content"
-            >
-              {children}
-            </div>
+            <ScrollRefProvider> {children}</ScrollRefProvider>
           </SplashScreen>
         </AppProviders>
       </body>

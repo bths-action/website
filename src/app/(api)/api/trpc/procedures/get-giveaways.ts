@@ -6,9 +6,6 @@ export const getGiveaways = publicProcedure
   .input(getGiveawaysSchema)
   .query(async ({ ctx, input: { cursor } }) => {
     const giveaways = await prisma.giveaway.findMany({
-      cacheStrategy: {
-        ttl: 15,
-      },
       take: 7,
       skip: cursor * 6,
       select: {
@@ -24,6 +21,6 @@ export const getGiveaways = publicProcedure
     return {
       giveaways,
       nextCursor:
-        giveaways.length === 13 ? giveaways.pop()! && cursor + 1 : null,
+        giveaways.length === 7 ? giveaways.pop()! && cursor + 1 : null,
     };
   });

@@ -41,11 +41,9 @@ const Description: FC<PropsWithChildren> = ({ children }) => (
   <motion.span
     variants={{
       hidden: {
-        rotate: 180,
         opacity: 0,
       },
       visible: {
-        rotate: 0,
         opacity: 1,
       },
     }}
@@ -55,16 +53,17 @@ const Description: FC<PropsWithChildren> = ({ children }) => (
 );
 
 const AboutGroup: FC<PropsWithChildren> = ({ children }) => (
-  <motion.span
+  <motion.div
     initial="hidden"
     whileInView="visible"
+    className="relative min-h-[75dvh] flex justify-center items-center flex-col"
     viewport={{
       once: true,
       amount: 1,
     }}
   >
     {children}
-  </motion.span>
+  </motion.div>
 );
 
 const ORGANIZATIONS = [
@@ -107,7 +106,7 @@ const ORGANIZATIONS = [
   <Link
     href={e.url}
     target="_blank"
-    className="w-48 h-48 mx-8 rounded-full"
+    className="w-48 h-48 mx-8 rounded-full hover:scale-110 transition-all duration-300"
     key={e.url}
   >
     <div className="w-48 h-48 mb-4 relative rounded-full">
@@ -131,8 +130,29 @@ export const About: FC = () => {
       <h3 className="py-20">
         "Action speaks louder than words." - Emma Katz, 2024
       </h3>
-      <h2>What We Are:</h2>
-      <div className="text-center grid grid-cols-1 lg:grid-cols-2 items-stretch gap-y-40 mb-40 gap-x-2 lg:gap-y-36 my-14">
+      <motion.h2
+        initial={{
+          opacity: 0,
+          rotate: 360,
+          y: "200%",
+        }}
+        whileInView={{
+          opacity: 1,
+          rotate: 0,
+          y: 0,
+        }}
+        viewport={{
+          once: true,
+        }}
+        transition={{
+          duration: 1,
+
+          ease: "easeInOut",
+        }}
+      >
+        What We Are:
+      </motion.h2>
+      <div className="text-center grid grid-cols-1 lg:grid-cols-2 items-stretch  mb-40 gap-x-2 my-14">
         <AboutGroup>
           <Title>Modern</Title>
 
@@ -171,7 +191,12 @@ export const About: FC = () => {
                     x: 0,
                   },
                 }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
+                transition={{
+                  duration: 1,
+                  delay: i * 0.1,
+                  type: "spring",
+                  bounce: 0.25,
+                }}
               >
                 <Icon
                   style={{
@@ -194,7 +219,7 @@ export const About: FC = () => {
           </Description>
         </AboutGroup>
         <AboutGroup>
-          <motion.span
+          <motion.div
             variants={{
               hidden: {
                 opacity: 0,
@@ -206,16 +231,16 @@ export const About: FC = () => {
               },
             }}
             transition={{ duration: 1 }}
-            className="flex justify-center w-full h-full items-center"
+            className=" w-full h-full overflow-hidden flex items-center justify-center"
           >
             <Image
               src="/images/giveaway-1.png"
               alt=""
               width={400}
-              height={400}
-              className="rounded-xl border-2 shadowed "
+              height={200}
+              className="rounded-xl border-2 shadowed mx-auto"
             />
-          </motion.span>
+          </motion.div>
         </AboutGroup>
         <AboutGroup>
           <Title>Community</Title>
@@ -228,7 +253,40 @@ export const About: FC = () => {
         <AboutGroup></AboutGroup>
       </div>
 
-      <h2>We Have Worked With:</h2>
+      <motion.h2
+        initial="hidden"
+        whileInView="visible"
+        viewport={{
+          once: true,
+        }}
+      >
+        {"We Have Worked With:".split(" ").map((e, i) => (
+          <motion.span
+            className="font-poppins pr-2"
+            key={i}
+            variants={{
+              hidden: {
+                opacity: 0,
+                x: "200%",
+                scale: 0,
+              },
+              visible: {
+                opacity: 1,
+                x: 0,
+                scale: 1,
+              },
+            }}
+            transition={{
+              duration: 1,
+              delay: i * 0.5,
+              type: "spring",
+              bounce: 0.25,
+            }}
+          >
+            {e}
+          </motion.span>
+        ))}
+      </motion.h2>
       <div className="relative flex overflow-x-hidden">
         <div className="py-12 animate-marquee whitespace-nowrap flex">
           {ORGANIZATIONS}

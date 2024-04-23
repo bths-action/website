@@ -62,7 +62,7 @@ export const MemberChart: FC<Props> = ({ joins }) => {
   if (!mounted) return null;
 
   return (
-    <div className="w-full h-[50dvh] my-4">
+    <div className="w-full h-[50dvh] my-10">
       <Chart
         options={{
           data,
@@ -79,6 +79,7 @@ export const MemberChart: FC<Props> = ({ joins }) => {
           dark: resolvedTheme === "dark",
           showDebugAxes: false,
           defaultColors: [PRIMARY_COLOR],
+
           tooltip: {
             align: "auto",
             render: ({ focusedDatum }) => {
@@ -106,7 +107,6 @@ export const MemberChart: FC<Props> = ({ joins }) => {
               );
             },
           },
-          getDatumStyle: () => ({}),
         }}
       />
     </div>
