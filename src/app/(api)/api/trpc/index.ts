@@ -33,6 +33,7 @@ import { leaveGiveaway } from "./procedures/leave-giveaway";
 import { editEntryBalance } from "./procedures/edit-entry-balance";
 import { getGiveawayEntry } from "./procedures/get-giveaway-entry";
 import { endGiveawayProcedure } from "./procedures/end-giveaway";
+import { getGiveawayClaims } from "./procedures/get-giveaway-claims";
 
 export const appRouter = router({
   //generate smth random
@@ -78,6 +79,7 @@ export const appRouter = router({
   leaveGiveaway,
   editEntryBalance,
   getGiveawayEntry,
+  getGiveawayClaims,
 });
 
 export const createContext = async () => {

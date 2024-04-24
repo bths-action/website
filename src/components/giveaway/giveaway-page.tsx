@@ -36,7 +36,7 @@ export const GiveawayPage: FC<Props> = ({ giveaway: initial }) => {
       <div className="flex flex-wrap gap-2 my-2 justify-center">
         <AdminActions giveaway={giveaway} setGiveaway={setGiveaway} />
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-1 my-4">
         <GiveawayDescription giveaway={giveaway} />
         <GiveawayEntries giveaway={giveaway} />
       </div>

@@ -22,7 +22,6 @@ import {
   MdHomeFilled,
   MdOutlineBalance,
   MdOutlineWbSunny,
-  MdWarning,
 } from "react-icons/md";
 import {
   BiAward,
@@ -196,6 +195,7 @@ const ProfileButton: FC<{
 
         <NavButton
           disabled={connecting}
+          className="relative"
           icon={BsDiscord}
           onClick={async () => {
             setConnecting(true);
@@ -254,6 +254,12 @@ const ProfileButton: FC<{
         >
           {accountData?.discordID ? "Disc" : "C"}onnect
           {connecting && "ing"} Discord
+          {!accountData?.discordID && (
+            <span className=" absolute right-6 top-2">
+              <div className=" w-4 h-4 absolute bg-yellow-500 rounded-full animate-ping" />
+              <div className=" w-4 h-4 absolute bg-yellow-500 rounded-full" />
+            </span>
+          )}
         </NavButton>
         <NavButton
           disabled={accountData?.didOsis}
@@ -271,7 +277,10 @@ const ProfileButton: FC<{
           ) : (
             <span>
               (MUST DO)
-              <MdWarning className="inline w-6 h-6 text-yellow-500 animate-pulse" />
+              <span className=" absolute right-6 top-2">
+                <div className=" w-4 h-4 absolute bg-yellow-500 rounded-full animate-ping" />
+                <div className=" w-4 h-4 absolute bg-yellow-500 rounded-full" />
+              </span>
             </span>
           )}
         </NavButton>
@@ -322,7 +331,7 @@ const ProfileButton: FC<{
           scale: 1.1,
         }}
         disabled={notDone}
-        className="relative rounded-full md:my-2 h-10 w-10 mx-2"
+        className="relative rounded-full md:my-2 h-10 w-10 mx-6"
         onClick={() => {
           if (status == "unauthenticated") signIn("auth0");
           else {
@@ -339,11 +348,13 @@ const ProfileButton: FC<{
           }
           className="rounded-full min-w-8 min-h-8 bg-black bordered"
         />
-        {accountStatus == "success" && accountData?.didOsis == false && (
-          <span className="translate-x-1/2 absolute right-0 top-0">
-            <MdWarning className=" w-8 h-8 animate-bounce text-yellow-500" />
-          </span>
-        )}
+        {accountStatus == "success" &&
+          (accountData?.didOsis == false || accountData?.discordID == null) && (
+            <span className=" absolute right-2 top-0">
+              <div className=" w-4 h-4 absolute bg-yellow-500 rounded-full animate-ping" />
+              <div className=" w-4 h-4 absolute bg-yellow-500 rounded-full" />
+            </span>
+          )}
       </TransparentButton>
     </>
   );

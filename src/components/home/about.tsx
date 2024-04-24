@@ -56,7 +56,7 @@ const AboutGroup: FC<PropsWithChildren> = ({ children }) => (
   <motion.div
     initial="hidden"
     whileInView="visible"
-    className="relative min-h-[75dvh] flex justify-center items-center flex-col"
+    className="relative min-h-[50dvh] flex justify-center items-center flex-col"
     viewport={{
       once: true,
       amount: 1,
@@ -252,50 +252,51 @@ export const About: FC = () => {
         </AboutGroup>
         <AboutGroup></AboutGroup>
       </div>
-
-      <motion.h2
+      <motion.div
         initial="hidden"
         whileInView="visible"
         viewport={{
           once: true,
         }}
       >
-        {"We Have Worked With:".split(" ").map((e, i) => (
-          <motion.span
-            className="font-poppins pr-2"
-            key={i}
-            variants={{
-              hidden: {
-                opacity: 0,
-                x: "200%",
-                scale: 0,
-              },
-              visible: {
-                opacity: 1,
-                x: 0,
-                scale: 1,
-              },
-            }}
-            transition={{
-              duration: 1,
-              delay: i * 0.5,
-              type: "spring",
-              bounce: 0.25,
-            }}
-          >
-            {e}
-          </motion.span>
-        ))}
-      </motion.h2>
-      <div className="relative flex overflow-x-hidden">
-        <div className="py-12 animate-marquee whitespace-nowrap flex">
-          {ORGANIZATIONS}
-        </div>
+        <h2>
+          {"We Have Worked With:".split(" ").map((e, i) => (
+            <motion.span
+              className="font-poppins pr-2"
+              key={i}
+              variants={{
+                hidden: {
+                  opacity: 0,
+                  x: "200%",
+                  scale: 0,
+                },
+                visible: {
+                  opacity: 1,
+                  x: 0,
+                  scale: 1,
+                },
+              }}
+              transition={{
+                duration: 1,
+                delay: 0.5 + i * 0.3,
+                type: "spring",
+                bounce: 0.25,
+              }}
+            >
+              {e}
+            </motion.span>
+          ))}
+        </h2>
+        <div className="relative flex overflow-x-hidden">
+          <div className="py-12 animate-marquee whitespace-nowrap flex">
+            {ORGANIZATIONS}
+          </div>
 
-        <div className="absolute top-0 py-12 animate-marquee2 whitespace-nowrap flex">
-          {ORGANIZATIONS}
+          <div className="absolute top-0 py-12 animate-marquee2 whitespace-nowrap flex">
+            {ORGANIZATIONS}
+          </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

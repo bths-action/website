@@ -8,14 +8,19 @@ export const SummaryCard: FC<{ title: ReactNode; value: ReactNode }> = ({
   title,
   value,
 }) => (
-  <div className="bg-gray-50 dark:bg-zinc-900 rounded-lg overflow-hidden h-full shadowed">
+  <motion.div
+    whileHover={{
+      scale: 1.05,
+    }}
+    className="bg-gray-50 dark:bg-zinc-900 rounded-lg overflow-hidden h-full shadowed"
+  >
     <div className="h-14 overflow-visible z-20 bg-default -mb-1 flex justify-center items-center text-white relative">
       <div className="font-bold">{title}</div>
     </div>
     <div className="p-4">
       <div className="font-bold text-center">{value}</div>
     </div>
-  </div>
+  </motion.div>
 );
 
 export type EventSummaryProps = {

@@ -1,4 +1,5 @@
 "use client";
+
 import { GetFormOutput, GetStatsOutput } from "@/app/(api)/api/trpc/client";
 import {
   CREDIT_RATE,
@@ -82,7 +83,7 @@ export const PointsStats: FC<{
   return (
     <div>
       <div className="text-3xl font-bold">Summary</div>
-      <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-4 gap-3 my-3">
+      <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-4 gap-6 m-3">
         <SummaryCard title="Total Points" value={totalPoints} />
         <SummaryCard title="Total Hours" value={eventHours} />
         <SummaryCard title="Club Credits" value={credits} />
