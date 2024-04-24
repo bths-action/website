@@ -1,9 +1,9 @@
 import { ImageResponse } from "next/og";
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client/edge";
 import removeMarkdown from "remove-markdown";
 import { BsAward, BsClock } from "react-icons/bs";
 import { MdLocationOn, MdOutlineAccessTime } from "react-icons/md";
+import { prisma } from "@/utils/prisma";
 // App router includes @vercel/og.
 // No need to install it.
 
@@ -21,7 +21,7 @@ export async function GET(
     "https://fonts.bunny.net/figtree/files/figtree-latin-400-normal.woff"
   ).then((res) => res.arrayBuffer());
 
-  const data = await new PrismaClient().event.findUnique({
+  const data = await prisma.event.findUnique({
     where: {
       id: params.id,
     },
