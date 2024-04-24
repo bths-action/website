@@ -1,5 +1,4 @@
 "use client";
-
 import { TRPCError, trpc } from "@/app/(api)/api/trpc/client";
 import { useAccount } from "@/providers/account";
 import { Field, Form, Formik } from "formik";
@@ -33,6 +32,14 @@ type Props = (
   setOpen: (open: boolean) => any;
 };
 
+const TEMPLATES: { name: string; image: string; content: string }[] = [
+  {
+    name: "Club Meeting",
+    image: "",
+    content: ``,
+  },
+];
+
 const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
   const router = useRouter();
   const utils = trpc.useUtils();
@@ -43,6 +50,7 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
   const [finishOpen, setFinishOpen] = useState(
     mode == "edit" ? Boolean(event.finishTime) : false
   );
+  const [shownTemplates, setShownTemplates] = useState(false);
 
   const initialValues = {
     name: mode == "edit" ? event.name : "",
@@ -136,245 +144,265 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
           ])
         ) as typeof errorsRaw;
         return (
-          <Form className="py-2">
-            <FormQuestion errored={Boolean(errors.name)}>
-              <label htmlFor="name">Name:</label>
-              <Field
-                id="name"
-                name="name"
-                type="text"
-                placeholder="Event name"
-              />
-              <FormError name="name" />
-            </FormQuestion>
-            <br />
-            <FormQuestion errored={Boolean(errors.description)}>
-              <label htmlFor="description">
-                Description: ({4000 - values.description.length} chars
-                remaining)
-              </label>
-              <Field
-                name="description"
-                id="description"
-                as="textarea"
-                placeholder="Event description and instructions."
-                maxLength={5000}
-                className="w-full h-60 p-1 rounded-md"
-              />
-              <FormError name="description" />
-            </FormQuestion>
-            <br />
-            {values.description && (
-              <div className="mx-2 bg-gray-500 bg-opacity-20 overflow-auto break-words p-1 rounded-md">
-                <MarkDownView>{values.description}</MarkDownView>
-              </div>
+          <>
+            {shownTemplates && (
+              <PopupUI
+                setOpen={setShownTemplates}
+                title="Templates"
+                size="large"
+              >
+                dsds
+              </PopupUI>
             )}
-            <FormQuestion errored={Boolean(errors.maxHours)}>
-              <label htmlFor="maxHours">Max Hours:</label>
-              <Field
-                id="maxHours"
-                name="maxHours"
-                type="number"
-                step={0.25}
-                min={0}
-                placeholder="Max hours"
-              />
-              <FormError name="maxHours" />
-            </FormQuestion>
-            <br />
-            <FormQuestion errored={Boolean(errors.maxPoints)}>
-              <label htmlFor="maxPoints">Max Points:</label>
-              <Field
-                id="maxPoints"
-                name="maxPoints"
-                step={0.1}
-                type="number"
-                min={0}
-                placeholder="Max points"
-              />
-              <FormError name="maxPoints" />
-            </FormQuestion>
-            <br />
-            <FormQuestion errored={Boolean(errors.maxGiveawayEntries)}>
-              <label htmlFor="maxGiveawayEntries">Max Entries:</label>
-              <Field
-                id="maxGiveawayEntries"
-                name="maxGiveawayEntries"
-                type="number"
-                step={0.1}
-                min={0}
-                placeholder="Max giveaway entries"
-              />
-              <FormError name="maxGiveawayEntries" />
-            </FormQuestion>
-            <br />
-            <FormQuestion errored={Boolean(errors.eventTime)}>
-              <label htmlFor="eventTime">Event Time:</label>
-              <input
-                id="eventTime"
-                name="eventTime"
-                type="datetime-local"
-                value={
-                  values.eventTime
-                    ? // turn into date time local format with timezone alterations
-                      new Date(
-                        values.eventTime.getTime() -
-                          values.eventTime.getTimezoneOffset() * 60000
-                      )
-                        .toISOString()
-                        .slice(0, -1)
-                    : ""
-                }
-                onChange={(e) =>
-                  setFieldValue(
-                    "eventTime",
-                    e.target.value ? new Date(e.target.value) : null
-                  )
-                }
-              />
-              <FormError name="eventTime" />
-            </FormQuestion>
-            <br />
-            <RoundButton
-              type="button"
-              onClick={() => {
-                setFieldValue("finishTime", null);
-                setFinishOpen(!finishOpen);
-              }}
-            >
-              {finishOpen ? "Disable" : "Enable"} Range Event
-            </RoundButton>
-            <Collapse collapsed={!finishOpen}>
-              <FormQuestion errored={Boolean(errors.finishTime)}>
-                <label htmlFor="finishTime">Finish Time:</label>
+            <Form className="py-2">
+              <a
+                className="default"
+                onClick={() => {
+                  setShownTemplates(true);
+                }}
+              >
+                Use a template.
+              </a>
+              <br />
+              <FormQuestion errored={Boolean(errors.name)}>
+                <label htmlFor="name">Name:</label>
+                <Field
+                  id="name"
+                  name="name"
+                  type="text"
+                  placeholder="Event name"
+                />
+                <FormError name="name" />
+              </FormQuestion>
+              <br />
+              <FormQuestion errored={Boolean(errors.description)}>
+                <label htmlFor="description">
+                  Description: ({4000 - values.description.length} chars
+                  remaining)
+                </label>
+                <Field
+                  name="description"
+                  id="description"
+                  as="textarea"
+                  placeholder="Event description and instructions."
+                  maxLength={5000}
+                  className="w-full h-60 p-1 rounded-md"
+                />
+                <FormError name="description" />
+              </FormQuestion>
+              <br />
+              {values.description && (
+                <div className="mx-2 bg-gray-500 bg-opacity-20 overflow-auto break-words p-1 rounded-md">
+                  <MarkDownView>{values.description}</MarkDownView>
+                </div>
+              )}
+              <FormQuestion errored={Boolean(errors.maxHours)}>
+                <label htmlFor="maxHours">Max Hours:</label>
+                <Field
+                  id="maxHours"
+                  name="maxHours"
+                  type="number"
+                  step={0.25}
+                  min={0}
+                  placeholder="Max hours"
+                />
+                <FormError name="maxHours" />
+              </FormQuestion>
+              <br />
+              <FormQuestion errored={Boolean(errors.maxPoints)}>
+                <label htmlFor="maxPoints">Max Points:</label>
+                <Field
+                  id="maxPoints"
+                  name="maxPoints"
+                  step={0.1}
+                  type="number"
+                  min={0}
+                  placeholder="Max points"
+                />
+                <FormError name="maxPoints" />
+              </FormQuestion>
+              <br />
+              <FormQuestion errored={Boolean(errors.maxGiveawayEntries)}>
+                <label htmlFor="maxGiveawayEntries">Max Entries:</label>
+                <Field
+                  id="maxGiveawayEntries"
+                  name="maxGiveawayEntries"
+                  type="number"
+                  step={0.1}
+                  min={0}
+                  placeholder="Max giveaway entries"
+                />
+                <FormError name="maxGiveawayEntries" />
+              </FormQuestion>
+              <br />
+              <FormQuestion errored={Boolean(errors.eventTime)}>
+                <label htmlFor="eventTime">Event Time:</label>
                 <input
-                  id="finishTime"
-                  name="finishTime"
+                  id="eventTime"
+                  name="eventTime"
                   type="datetime-local"
                   value={
-                    values.finishTime
+                    values.eventTime
                       ? // turn into date time local format with timezone alterations
                         new Date(
-                          values.finishTime.getTime() -
-                            values.finishTime.getTimezoneOffset() * 60000
+                          values.eventTime.getTime() -
+                            values.eventTime.getTimezoneOffset() * 60000
                         )
                           .toISOString()
                           .slice(0, -1)
                       : ""
                   }
-                  onChange={(e) => {
-                    const time = new Date(e.target.value);
+                  onChange={(e) =>
                     setFieldValue(
-                      "finishTime",
+                      "eventTime",
                       e.target.value ? new Date(e.target.value) : null
-                    );
+                    )
+                  }
+                />
+                <FormError name="eventTime" />
+              </FormQuestion>
+              <br />
+              <RoundButton
+                type="button"
+                onClick={() => {
+                  setFieldValue("finishTime", null);
+                  setFinishOpen(!finishOpen);
+                }}
+              >
+                {finishOpen ? "Disable" : "Enable"} Range Event
+              </RoundButton>
+              <Collapse collapsed={!finishOpen}>
+                <FormQuestion errored={Boolean(errors.finishTime)}>
+                  <label htmlFor="finishTime">Finish Time:</label>
+                  <input
+                    id="finishTime"
+                    name="finishTime"
+                    type="datetime-local"
+                    value={
+                      values.finishTime
+                        ? // turn into date time local format with timezone alterations
+                          new Date(
+                            values.finishTime.getTime() -
+                              values.finishTime.getTimezoneOffset() * 60000
+                          )
+                            .toISOString()
+                            .slice(0, -1)
+                        : ""
+                    }
+                    onChange={(e) => {
+                      const time = new Date(e.target.value);
+                      setFieldValue(
+                        "finishTime",
+                        e.target.value ? new Date(e.target.value) : null
+                      );
+                    }}
+                  />
+                  <FormError name="finishTime" />
+                </FormQuestion>
+              </Collapse>
+              <FormQuestion errored={Boolean(errors.address)}>
+                <label htmlFor="address">Address:</label>
+                <Field
+                  id="address"
+                  name="address"
+                  type="text"
+                  placeholder="Address"
+                />
+                <FormError name="address" />
+              </FormQuestion>
+              <br />
+              {values.address && (
+                <div className="mx-2 p-1">
+                  <iframe
+                    src={encodeURI(
+                      `https://maps.google.com/maps?q=${values.address}&t=&z=13&ie=UTF8&iwloc=&output=embed`
+                    )}
+                    className="border-none w-full rounded-lg h-60"
+                  ></iframe>
+                </div>
+              )}
+
+              <FormQuestion errored={Boolean(errors.limit)}>
+                <label htmlFor="limit">Limit:</label>
+                <Field
+                  id="limit"
+                  name="limit"
+                  type="number"
+                  min={0}
+                  placeholder="Limit"
+                />
+                <FormError name="limit" />
+              </FormQuestion>
+              <br />
+
+              <FormQuestion errored={Boolean(errors.serviceLetters)}>
+                <label htmlFor="serviceLetters">Service Letters:</label>
+                <Field id="serviceLetters" name="serviceLetters" type="url" />
+                <FormError name="serviceLetters" />
+              </FormQuestion>
+              <br />
+
+              <FormQuestion errored={Boolean(errors.imageURL)}>
+                <label htmlFor="imageURL">Event Image:</label>
+                <input
+                  type="file"
+                  name="imageURL"
+                  id="imageURL"
+                  accept="image/*, .jpg,.png,.bmp,.gif,.webp,.jpeg"
+                  onChange={async (e) => {
+                    let file;
+                    if (!(file = e.target.files?.[0])) return;
+                    setUploading(true);
+                    const formData = new FormData();
+                    formData.append("source", file);
+
+                    const res = await fetch("/api/image-upload", {
+                      method: "POST",
+                      body: formData,
+                    });
+                    if (res.status !== 200) {
+                      setFieldError(
+                        "imageURL",
+                        "Error uploading image. You may have attached a bad file."
+                      );
+                      setUploading(false);
+                      return;
+                    }
+                    const body = await res.json();
+                    setFieldValue("imageURL", body.image.url);
+                    e.target.value = "";
+                    setUploading(false);
                   }}
                 />
-                <FormError name="finishTime" />
-              </FormQuestion>
-            </Collapse>
-            <FormQuestion errored={Boolean(errors.address)}>
-              <label htmlFor="address">Address:</label>
-              <Field
-                id="address"
-                name="address"
-                type="text"
-                placeholder="Address"
-              />
-              <FormError name="address" />
-            </FormQuestion>
-            <br />
-            {values.address && (
-              <div className="mx-2 p-1">
-                <iframe
-                  src={encodeURI(
-                    `https://maps.google.com/maps?q=${values.address}&t=&z=13&ie=UTF8&iwloc=&output=embed`
+                <div className="w-full flex justify-center relative items-center mt-2">
+                  {values.imageURL ? (
+                    <span className="relative">
+                      <img
+                        src={values.imageURL}
+                        className="max-w-full max-h-44 rounded-md"
+                      />
+                      <button
+                        type="button"
+                        className="absolute top-0 right-0 p-0 bg-black bg-opacity-20 rounded-full"
+                        onClick={() => {
+                          setFieldValue("imageURL", null);
+                        }}
+                      >
+                        <BiXCircle className="w-10 h-10 text-white" />
+                      </button>
+                    </span>
+                  ) : (
+                    "No image selected."
                   )}
-                  className="border-none w-full rounded-lg h-60"
-                ></iframe>
-              </div>
-            )}
-
-            <FormQuestion errored={Boolean(errors.limit)}>
-              <label htmlFor="limit">Limit:</label>
-              <Field
-                id="limit"
-                name="limit"
-                type="number"
-                min={0}
-                placeholder="Limit"
-              />
-              <FormError name="limit" />
-            </FormQuestion>
-            <br />
-
-            <FormQuestion errored={Boolean(errors.serviceLetters)}>
-              <label htmlFor="serviceLetters">Service Letters:</label>
-              <Field id="serviceLetters" name="serviceLetters" type="url" />
-              <FormError name="serviceLetters" />
-            </FormQuestion>
-            <br />
-
-            <FormQuestion errored={Boolean(errors.imageURL)}>
-              <label htmlFor="imageURL">Event Image:</label>
-              <input
-                type="file"
-                name="imageURL"
-                id="imageURL"
-                accept="image/*, .jpg,.png,.bmp,.gif,.webp,.jpeg"
-                onChange={async (e) => {
-                  let file;
-                  if (!(file = e.target.files?.[0])) return;
-                  setUploading(true);
-                  const formData = new FormData();
-                  formData.append("source", file);
-
-                  const res = await fetch("/api/image-upload", {
-                    method: "POST",
-                    body: formData,
-                  });
-                  if (res.status !== 200) {
-                    setFieldError(
-                      "imageURL",
-                      "Error uploading image. You may have attached a bad file."
-                    );
-                    setUploading(false);
-                    return;
-                  }
-                  const body = await res.json();
-                  setFieldValue("imageURL", body.image.url);
-                  e.target.value = "";
-                  setUploading(false);
-                }}
-              />
-              <div className="w-full flex justify-center relative items-center mt-2">
-                {values.imageURL ? (
-                  <span className="relative">
-                    <img
-                      src={values.imageURL}
-                      className="max-w-full max-h-44 rounded-md"
-                    />
-                    <button
-                      type="button"
-                      className="absolute top-0 right-0 p-0 bg-black bg-opacity-20 rounded-full"
-                      onClick={() => {
-                        setFieldValue("imageURL", null);
-                      }}
-                    >
-                      <BiXCircle className="w-10 h-10 text-white" />
-                    </button>
-                  </span>
-                ) : (
-                  "No image selected."
-                )}
-              </div>
-              <FormError name="imageURL" disabled={uploading} />
-            </FormQuestion>
-            <br />
-            <RoundButton disabled={isSubmitting} type="submit">
-              Submit{isSubmitting && "ting"} Event
-            </RoundButton>
-          </Form>
+                </div>
+                <FormError name="imageURL" disabled={uploading} />
+              </FormQuestion>
+              <br />
+              <RoundButton disabled={isSubmitting} type="submit">
+                Submit{isSubmitting && "ting"} Event
+              </RoundButton>
+            </Form>
+          </>
         );
       }}
     </Formik>
