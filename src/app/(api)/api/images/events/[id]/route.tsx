@@ -7,8 +7,6 @@ import { prisma } from "@/utils/prisma";
 // App router includes @vercel/og.
 // No need to install it.
 
-export const runtime = "edge";
-
 export async function GET(
   request: Request,
   { params }: { params: { id: string } }
