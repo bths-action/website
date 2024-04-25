@@ -44,7 +44,7 @@ export async function eventCommand({ user, interaction }: Params) {
             } Event`,
             description:
               action.name === "join"
-                ? `You have joined the event. However there may be more steps you have to take, please double check [the website](https://bthsaction.org/${event.value}) for more details.`
+                ? `You have joined the event. However there may be more steps you have to take, please double check [the website](https://bthsaction.org/events/${event.value}) for more details.`
                 : `You have left the event. Keep in mind that certain events may explicitly or implicitly require you to tell executives of such action.`,
           },
         ],
