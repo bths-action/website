@@ -85,5 +85,5 @@ export const joinEventProcedure = async (
 export const joinEvent = memberProcedure
   .input(attendanceWriteSchema)
   .mutation(async ({ ctx, input: { id, socketId } }) => {
-    return joinEventProcedure(ctx.user.email, id, socketId);
+    return await joinEventProcedure(ctx.user.email, id, socketId);
   });

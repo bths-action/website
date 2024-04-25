@@ -78,5 +78,5 @@ export const leaveEventProcedure = async (
 export const leaveEvent = memberProcedure
   .input(attendanceWriteSchema)
   .mutation(async ({ ctx, input: { id, socketId } }) => {
-    leaveEventProcedure(ctx.user.email, id, socketId);
+    return await leaveEventProcedure(ctx.user.email, id, socketId);
   });
