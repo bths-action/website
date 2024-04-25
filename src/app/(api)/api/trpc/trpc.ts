@@ -6,7 +6,7 @@ import { Context } from ".";
 import superjson from "superjson";
 import { BANNED_USERS } from "@/utils/constants";
 
-const t = initTRPC.context<Context>().create({
+export const t = initTRPC.context<Context>().create({
   transformer: superjson,
 });
 

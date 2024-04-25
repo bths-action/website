@@ -4,56 +4,79 @@ import { prisma } from "@/utils/prisma";
 import { pusher } from "@/utils/pusher";
 import { TRPCError } from "@trpc/server";
 
-export const leaveEvent = memberProcedure
-  .input(attendanceWriteSchema)
-  .mutation(async ({ ctx, input: { id, socketId } }) => {
-    const event = await prisma.event.findUnique({
-      where: {
-        id,
+export const leaveEventProcedure = async (
+  email: string,
+  id: string,
+  socketId?: string
+) => {
+  const event = await prisma.event.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      finishTime: true,
+      eventTime: true,
+      attendees: {
+        where: {
+          userEmail: email,
+        },
+        select: {
+          userEmail: true,
+        },
       },
-      select: {
-        finishTime: true,
-        eventTime: true,
-      },
+    },
+  });
+
+  if (event == null)
+    throw new TRPCError({
+      code: "NOT_FOUND",
+      message: "Event not found",
     });
 
-    if (event == null)
-      throw new TRPCError({
-        code: "NOT_FOUND",
-        message: "Event not found",
-      });
+  if (!event.attendees.length) {
+    throw new TRPCError({
+      code: "BAD_REQUEST",
+      message: "Cannot leave, since you are not in the event.",
+    });
+  }
 
-    if (event.finishTime) {
-      if (event.finishTime.valueOf() < new Date().valueOf())
-        throw new TRPCError({
-          code: "FORBIDDEN",
-          message: "Event has already ended.",
-        });
-    } else if (event.eventTime.valueOf() < new Date().valueOf())
+  if (event.finishTime) {
+    if (event.finishTime.valueOf() < new Date().valueOf())
       throw new TRPCError({
         code: "FORBIDDEN",
         message: "Event has already ended.",
       });
-
-    const attendance = await prisma.eventAttendance.delete({
-      where: {
-        userEmail_eventId: {
-          eventId: id,
-          userEmail: ctx.user.email,
-        },
-      },
+  } else if (event.eventTime.valueOf() < new Date().valueOf())
+    throw new TRPCError({
+      code: "FORBIDDEN",
+      message: "Event has already ended.",
     });
 
-    await pusher().trigger(
-      `private-${id}`,
-      "delete",
-      {
-        email: attendance.userEmail,
+  const attendance = await prisma.eventAttendance.delete({
+    where: {
+      userEmail_eventId: {
+        eventId: id,
+        userEmail: email,
       },
-      {
-        socket_id: socketId,
-      }
-    );
+    },
+  });
 
-    return attendance;
+  await pusher().trigger(
+    `private-${id}`,
+    "delete",
+    {
+      email: attendance.userEmail,
+    },
+    {
+      socket_id: socketId,
+    }
+  );
+
+  return attendance;
+};
+
+export const leaveEvent = memberProcedure
+  .input(attendanceWriteSchema)
+  .mutation(async ({ ctx, input: { id, socketId } }) => {
+    leaveEventProcedure(ctx.user.email, id, socketId);
   });

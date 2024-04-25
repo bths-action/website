@@ -51,3 +51,4 @@ export const MAX_REFERRALS = 20;
 export const CREDIT_RATE = 25;
 
 export const PRIMARY_COLOR = "#19b1a0";
+export const PRIMARY_COLOR_HEX = 0x19b1a0;

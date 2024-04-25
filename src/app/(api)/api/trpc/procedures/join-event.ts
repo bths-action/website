@@ -4,70 +4,86 @@ import { prisma } from "@/utils/prisma";
 import { TRPCError } from "@trpc/server";
 import { pusher } from "@/utils/pusher";
 
-export const joinEvent = memberProcedure
-  .input(attendanceWriteSchema)
-  .mutation(async ({ ctx, input: { id, socketId } }) => {
-    const event = await prisma.event.findUnique({
-      where: { id },
-      select: {
-        attendees: {
-          select: {
-            earnedPoints: true,
-          },
+export const joinEventProcedure = async (
+  email: string,
+  id: string,
+  socketId?: string
+) => {
+  const event = await prisma.event.findUnique({
+    where: { id },
+    select: {
+      attendees: {
+        select: {
+          earnedPoints: true,
+          userEmail: true,
         },
-        limit: true,
-        finishTime: true,
-        eventTime: true,
       },
+      limit: true,
+      finishTime: true,
+      eventTime: true,
+    },
+  });
+
+  if (!event)
+    throw new TRPCError({
+      code: "NOT_FOUND",
+      message: "Event not found.",
     });
 
-    if (!event)
+  if (event.finishTime) {
+    if (event.eventTime.valueOf() > new Date().valueOf())
       throw new TRPCError({
-        code: "NOT_FOUND",
-        message: "Event not found.",
+        code: "FORBIDDEN",
+        message: "Event has not started yet.",
       });
-
-    if (event.finishTime) {
-      if (event.eventTime.valueOf() > new Date().valueOf())
-        throw new TRPCError({
-          code: "FORBIDDEN",
-          message: "Event has not started yet.",
-        });
-      if (event.finishTime.valueOf() < new Date().valueOf())
-        throw new TRPCError({
-          code: "FORBIDDEN",
-          message: "Event has already ended.",
-        });
-    } else if (event.eventTime.valueOf() < new Date().valueOf())
+    if (event.finishTime.valueOf() < new Date().valueOf())
       throw new TRPCError({
         code: "FORBIDDEN",
         message: "Event has already ended.",
       });
+  } else if (event.eventTime.valueOf() < new Date().valueOf())
+    throw new TRPCError({
+      code: "FORBIDDEN",
+      message: "Event has already ended.",
+    });
 
-    if (event.limit && event.attendees.length >= event.limit)
-      throw new TRPCError({
-        code: "FORBIDDEN",
-        message: "Event limit reached.",
-      });
+  if (event.limit && event.attendees.length >= event.limit)
+    throw new TRPCError({
+      code: "FORBIDDEN",
+      message: "Event limit reached.",
+    });
 
-    const attendance = await prisma.eventAttendance.create({
-      data: {
-        userEmail: ctx.user.email,
-        eventId: id,
-      },
-      include: {
-        user: {
-          select: {
-            name: true,
-            preferredName: true,
-          },
+  if (event.attendees.find((user) => user.userEmail == email)) {
+    throw new TRPCError({
+      code: "FORBIDDEN",
+      message: "You have already joined the event.",
+    });
+  }
+
+  const attendance = await prisma.eventAttendance.create({
+    data: {
+      userEmail: email,
+      eventId: id,
+    },
+    include: {
+      user: {
+        select: {
+          name: true,
+          preferredName: true,
         },
       },
-    });
+    },
+  });
 
-    await pusher().trigger(`private-${id}`, "join", attendance, {
-      socket_id: socketId,
-    });
+  await pusher().trigger(`private-${id}`, "join", attendance, {
+    socket_id: socketId,
+  });
 
-    return attendance;
+  return attendance;
+};
+
+export const joinEvent = memberProcedure
+  .input(attendanceWriteSchema)
+  .mutation(async ({ ctx, input: { id, socketId } }) => {
+    return joinEventProcedure(ctx.user.email, id, socketId);
   });
