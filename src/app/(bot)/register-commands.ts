@@ -5,8 +5,7 @@ import {
 } from "discord-api-types/v10";
 import { prisma } from "@/utils/prisma";
 
-const FETCH_URL = `https://discord.com/api/v10/applications/${process.env.DISCORD_APP_ID}/commands`;
-
+const FETCH_URL = `https://discord.com/api/v10/applications/${process.env.DISCORD_APP_ID}/guilds/${process.env.DISCORD_GUILD_ID}/commands`;
 export async function registerCommands() {
   const now = new Date();
   const events = await prisma.event.findMany({
