@@ -133,22 +133,23 @@ export const About: FC = () => {
       <motion.h2
         initial={{
           opacity: 0,
-          rotate: 360,
-          y: "200%",
+
+          y: "-100%",
         }}
         whileInView={{
           opacity: 1,
-          rotate: 0,
+
           y: 0,
         }}
         viewport={{
           once: true,
         }}
         transition={{
-          duration: 1,
+          duration: 0.5,
 
           ease: "easeInOut",
         }}
+        className="my-14"
       >
         What We Are:
       </motion.h2>
