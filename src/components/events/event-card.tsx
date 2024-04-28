@@ -35,6 +35,8 @@ export const EventCard: FC<{
       : !registerBefore && eventTime.getTime() > Date.now()
       ? "upcoming"
       : "open";
+
+  const sameDay = eventTime.toDateString() === finishTime.toDateString();
   return (
     <motion.div
       initial="hidden"
@@ -90,11 +92,13 @@ export const EventCard: FC<{
                   hour: "numeric",
                   minute: "2-digit",
                 })}{" "}
-                -{" "}
+                to{" "}
                 {finishTime.toLocaleString([], {
-                  month: "short",
-                  day: "numeric",
-                  year: "numeric",
+                  ...(!sameDay && {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                  }),
                   hour: "numeric",
                   minute: "2-digit",
                 })}
@@ -129,7 +133,7 @@ export const EventCard: FC<{
                     src={imageURL}
                     alt=""
                     width={500}
-                    height={500}
+                    height={200}
                     className="max-h-44 w-auto h-auto mx-auto rounded-lg"
                   />
                 </div>

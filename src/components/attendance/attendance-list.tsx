@@ -28,20 +28,7 @@ export const AttendanceList: FC<ListProps> = ({ attendance, id }) => {
   const [batchEdit, setBatchEdit] = useState<number | null>(null);
 
   return (
-    <motion.div
-      variants={{
-        hidden: { opacity: 0 },
-        show: {
-          opacity: 1,
-          transition: {
-            staggerChildren: 0.2,
-          },
-        },
-      }}
-      initial="hidden"
-      animate="show"
-      className="overflow-x-visible flex flex-col"
-    >
+    <>
       <div className="p-2 flex flex-wrap gap-3 justify-center">
         <ColorButton
           color="default"
@@ -206,14 +193,29 @@ export const AttendanceList: FC<ListProps> = ({ attendance, id }) => {
           )}
         </Formik>
       </div>
-      {attendance.attendees.map((attendee) => (
-        <AttendanceItem
-          attendance={attendance}
-          id={id}
-          attendee={attendee}
-          key={attendee.userEmail}
-        />
-      ))}
-    </motion.div>
+      <motion.div
+        variants={{
+          hidden: { opacity: 0 },
+          show: {
+            opacity: 1,
+            transition: {
+              staggerChildren: 0.2,
+            },
+          },
+        }}
+        initial="hidden"
+        animate="show"
+        className="overflow-x-visible flex flex-col"
+      >
+        {attendance.attendees.map((attendee) => (
+          <AttendanceItem
+            attendance={attendance}
+            id={id}
+            attendee={attendee}
+            key={attendee.userEmail}
+          />
+        ))}
+      </motion.div>
+    </>
   );
 };

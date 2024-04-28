@@ -9,6 +9,8 @@ import { MarkDownView } from "../ui/md-view";
 import Image from "next/image";
 
 export const EventDetails: FC<Props> = ({ event }) => {
+  const sameDay =
+    event.eventTime.toDateString() === event.finishTime.toDateString();
   return (
     <div>
       {event.imageURL && (
@@ -31,7 +33,6 @@ export const EventDetails: FC<Props> = ({ event }) => {
         "Service letters are not available for this event."
       )}
       <h4>Rewards: </h4>
-
       {event.maxHours != 0 && (
         <div className="text-yellow-600 dark:text-yellow-500">
           <BsClock className="inline" /> Total Hours : {event.maxHours}
@@ -54,6 +55,16 @@ export const EventDetails: FC<Props> = ({ event }) => {
         month: "long",
         day: "numeric",
         year: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+      })}{" "}
+      to{" "}
+      {event.finishTime.toLocaleString([], {
+        ...(!sameDay && {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        }),
         hour: "numeric",
         minute: "2-digit",
       })}

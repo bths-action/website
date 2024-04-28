@@ -32,7 +32,7 @@ export default function RootLayout({
         <AppProviders>
           <SplashScreen>
             <Navbar />
-            <ScrollRefProvider> {children}</ScrollRefProvider>
+            <ScrollRefProvider>{children}</ScrollRefProvider>
           </SplashScreen>
         </AppProviders>
       </body>
