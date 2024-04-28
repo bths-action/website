@@ -54,12 +54,12 @@ export const UserAttendance: FC<Props> = ({ event }) => {
 
   const channel = useChannel(`private-${event.id}`);
 
-  const notAccepting =
-    (event.finishTime ? event.finishTime : event.eventTime).valueOf() <
-    Date.now();
-
-  console.log(notAccepting, event.finishTime, event.eventTime);
-  const wait = event.finishTime && event.eventTime.valueOf() > Date.now();
+  const afterEvent =
+    (event.registerBefore ? event.eventTime : event.finishTime) < new Date();
+  const limitReached = Boolean(
+    space.data?.limit && space.data.attendees >= space.data.limit
+  );
+  const wait = !event.registerBefore && event.eventTime > new Date();
 
   // lets move to giveaway entries, and try to put some boilerplate code there
   useEvent(channel, "update", (raw) => {
@@ -158,7 +158,7 @@ export const UserAttendance: FC<Props> = ({ event }) => {
           {attendance.data.earnedPoints} points, and{" "}
           {attendance.data.earnedEntries} giveaway entries.
           <br />
-          {!notAccepting && (
+          {!afterEvent && (
             <ColorButton
               innerClass="p-2 text-xl text-white"
               className="rounded-xl shadowed"
@@ -207,10 +207,12 @@ export const UserAttendance: FC<Props> = ({ event }) => {
         </>
       ) : (
         <>
-          <h5>
-            <MdOutlineWarningAmber className="inline w-6 h-6 mr-1" /> To earn
-            full credit, please read the instructions in the description.
-          </h5>
+          {attendance.data && (
+            <h5>
+              <MdOutlineWarningAmber className="inline w-6 h-6 mr-1" /> To earn
+              full credit, please read the instructions in the description.
+            </h5>
+          )}
           {space.data.limit && (
             <>
               Event Spots: {space.data.attendees}/{space.data.limit}
@@ -222,8 +224,10 @@ export const UserAttendance: FC<Props> = ({ event }) => {
               The event is not available for registration yet. Based on the
               description, you may be able to do other things.
             </>
-          ) : notAccepting ? (
+          ) : afterEvent ? (
             <>You cannot change attendance after an event.</>
+          ) : limitReached ? (
+            <>Cannot join event, event is full.</>
           ) : (
             <ColorButton
               innerClass="p-2 text-xl text-white"

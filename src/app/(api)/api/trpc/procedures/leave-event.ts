@@ -16,6 +16,7 @@ export const leaveEventProcedure = async (
     select: {
       finishTime: true,
       eventTime: true,
+      registerBefore: true,
       attendees: {
         where: {
           userEmail: email,
@@ -40,17 +41,14 @@ export const leaveEventProcedure = async (
     });
   }
 
-  if (event.finishTime) {
-    if (event.finishTime.valueOf() < new Date().valueOf())
-      throw new TRPCError({
-        code: "FORBIDDEN",
-        message: "Event has already ended.",
-      });
-  } else if (event.eventTime.valueOf() < new Date().valueOf())
+  if (
+    (event.registerBefore ? event.eventTime : event.finishTime) < new Date()
+  ) {
     throw new TRPCError({
       code: "FORBIDDEN",
       message: "Event has already ended.",
     });
+  }
 
   const attendance = await prisma.eventAttendance.delete({
     where: {

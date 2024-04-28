@@ -21,6 +21,8 @@ enum ExecPosition {
   TREASURER
 }
 
+// ur discord went offline
+
 model ExecDetails {
   user  User   @relation(fields: [email], references: [email])
   email String @id
@@ -60,18 +62,23 @@ model User {
 }
 
 model Event {
-  id                 String            @id @default(cuid())
-  name               String
-  description        String            @db.VarChar(4000)
+  id          String @id @default(cuid())
+  name        String
+  description String @db.VarChar(4000)
+
   maxPoints          Float
   maxHours           Float
   maxGiveawayEntries Float
-  attendees          EventAttendance[]
-  eventTime          DateTime
-  finishTime         DateTime?
-  limit              Int?
-  imageURL           String?
-  serviceLetters     String?
+
+  eventTime      DateTime
+  finishTime     DateTime
+  registerBefore Boolean  @default(true)
+  closed         Boolean  @default(false)
+
+  attendees      EventAttendance[]
+  limit          Int?
+  imageURL       String?
+  serviceLetters String?
 
   messageID String @unique
 

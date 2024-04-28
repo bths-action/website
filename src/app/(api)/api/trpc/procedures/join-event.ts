@@ -21,6 +21,8 @@ export const joinEventProcedure = async (
       limit: true,
       finishTime: true,
       eventTime: true,
+      closed: true,
+      registerBefore: true,
     },
   });
 
@@ -30,18 +32,21 @@ export const joinEventProcedure = async (
       message: "Event not found.",
     });
 
-  if (event.finishTime) {
-    if (event.eventTime.valueOf() > new Date().valueOf())
-      throw new TRPCError({
-        code: "FORBIDDEN",
-        message: "Event has not started yet.",
-      });
-    if (event.finishTime.valueOf() < new Date().valueOf())
-      throw new TRPCError({
-        code: "FORBIDDEN",
-        message: "Event has already ended.",
-      });
-  } else if (event.eventTime.valueOf() < new Date().valueOf())
+  if (event.closed) {
+    throw new TRPCError({
+      code: "FORBIDDEN",
+      message: "Event is closed.",
+    });
+  }
+
+  if (!event.registerBefore && event.eventTime > new Date()) {
+    throw new TRPCError({
+      code: "FORBIDDEN",
+      message: "Event has not started yet.",
+    });
+  }
+
+  if ((event.registerBefore ? event.eventTime : event.finishTime) < new Date())
     throw new TRPCError({
       code: "FORBIDDEN",
       message: "Event has already ended.",

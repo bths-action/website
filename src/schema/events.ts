@@ -65,7 +65,10 @@ const baseEventSchema = z.object({
   eventTime: z.date({
     invalid_type_error: "Event time must be a valid date. ",
   }),
-  finishTime: z.date().optional().nullish(),
+  finishTime: z.date({
+    invalid_type_error: "Event time must be a valid date. ",
+  }),
+  registerBefore: z.boolean().default(true),
   limit: z
     .number({
       invalid_type_error: "Max points must be a number. ",

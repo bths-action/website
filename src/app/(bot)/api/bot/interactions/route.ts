@@ -48,7 +48,19 @@ export async function POST(request: Request): Promise<NextResponse<any>> {
   // const { createCallerFactory } = t;
   const id = interaction.member?.user?.id;
   if (!id) {
-    return new NextResponse("No user", { status: 400 });
+    return NextResponse.json({
+      type: InteractionResponseType.ChannelMessageWithSource,
+      data: {
+        embeds: [
+          {
+            color: 0xff0000,
+            title: "DMs Not Supported",
+            description:
+              "Our bot does not support DMs. Please use our bot in our official club server.",
+          },
+        ],
+      },
+    } as APIInteractionResponse);
   }
 
   const user = await prisma.user.findUnique({

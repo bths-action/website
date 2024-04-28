@@ -223,7 +223,7 @@ const FormContent: FC<Props> = ({ mode, setOpen }) => {
               temporary prefect and let your counselor know!
             </Collapse>
             <FormQuestion>
-              <label className="flex items-center gap-1">
+              <label className="flex items-center flex-wrap gap-1">
                 <Field id="sgoSticker" name="sgoSticker" type="checkbox" />
                 Check if you have an SGO Sticker
               </label>

@@ -13,7 +13,6 @@ import { Event } from "@prisma/client";
 import { MarkDownView } from "../ui/md-view";
 import { createEventSchema } from "@/schema/events";
 import { ZodError } from "zod";
-import { Collapse } from "../ui/collapse";
 import { BiXCircle } from "react-icons/bi";
 import { useRouter } from "next/navigation";
 
@@ -47,9 +46,6 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
   const editEvent = trpc.editEvent.useMutation();
   const [error, setError] = useState<TRPCError | null>(null);
   const [uploading, setUploading] = useState(false);
-  const [finishOpen, setFinishOpen] = useState(
-    mode == "edit" ? Boolean(event.finishTime) : false
-  );
   const [shownTemplates, setShownTemplates] = useState(false);
 
   const initialValues = {
@@ -59,6 +55,7 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
     maxPoints: mode == "edit" ? event.maxPoints : 0,
     eventTime: mode == "edit" ? event.eventTime : null,
     finishTime: mode == "edit" ? event.finishTime : null,
+    registerBefore: mode == "edit" ? event.registerBefore : true,
     address: mode == "edit" ? event.address : "",
     limit: mode == "edit" ? event.limit || 0 : (0 as number | null),
     serviceLetters: mode == "edit" ? event.serviceLetters : null,
@@ -111,6 +108,7 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
               ...values,
               id: (mode == "edit" ? event.id : undefined)!,
               eventTime: values.eventTime!,
+              finishTime: values.finishTime!,
             },
             {
               onSuccess: (data) => {
@@ -262,44 +260,51 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
                 <FormError name="eventTime" />
               </FormQuestion>
               <br />
-              <RoundButton
-                type="button"
-                onClick={() => {
-                  setFieldValue("finishTime", null);
-                  setFinishOpen(!finishOpen);
-                }}
-              >
-                {finishOpen ? "Disable" : "Enable"} Range Event
-              </RoundButton>
-              <Collapse collapsed={!finishOpen}>
-                <FormQuestion errored={Boolean(errors.finishTime)}>
-                  <label htmlFor="finishTime">Finish Time:</label>
-                  <input
-                    id="finishTime"
-                    name="finishTime"
-                    type="datetime-local"
-                    value={
-                      values.finishTime
-                        ? // turn into date time local format with timezone alterations
-                          new Date(
-                            values.finishTime.getTime() -
-                              values.finishTime.getTimezoneOffset() * 60000
-                          )
-                            .toISOString()
-                            .slice(0, -1)
-                        : ""
-                    }
-                    onChange={(e) => {
-                      const time = new Date(e.target.value);
-                      setFieldValue(
-                        "finishTime",
-                        e.target.value ? new Date(e.target.value) : null
-                      );
-                    }}
+
+              <FormQuestion errored={Boolean(errors.finishTime)}>
+                <label htmlFor="finishTime">Finish Time:</label>
+                <input
+                  id="finishTime"
+                  name="finishTime"
+                  type="datetime-local"
+                  value={
+                    values.finishTime
+                      ? // turn into date time local format with timezone alterations
+                        new Date(
+                          values.finishTime.getTime() -
+                            values.finishTime.getTimezoneOffset() * 60000
+                        )
+                          .toISOString()
+                          .slice(0, -1)
+                      : ""
+                  }
+                  onChange={(e) => {
+                    const time = new Date(e.target.value);
+                    setFieldValue(
+                      "finishTime",
+                      e.target.value ? new Date(e.target.value) : null
+                    );
+                  }}
+                />
+                <FormError name="finishTime" />
+              </FormQuestion>
+              <br />
+              <FormQuestion errored={Boolean(errors.registerBefore)}>
+                <label
+                  htmlFor="registerBefore"
+                  className="flex items-center flex-wrap gap-1"
+                >
+                  <Field
+                    id="registerBefore"
+                    name="registerBefore"
+                    type="checkbox"
                   />
-                  <FormError name="finishTime" />
-                </FormQuestion>
-              </Collapse>
+                  Uncheck this if you want people to register between the above
+                  times.
+                </label>
+                <FormError name="registerBefore" />
+              </FormQuestion>
+              <br />
               <FormQuestion errored={Boolean(errors.address)}>
                 <label htmlFor="address">Address:</label>
                 <Field

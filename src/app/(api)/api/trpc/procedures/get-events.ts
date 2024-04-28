@@ -14,12 +14,15 @@ export const getEvents = publicProcedure
       whereConditions.push({
         OR: [
           {
-            finishTime: null,
+            closed: false,
+            registerBefore: true,
             eventTime: {
               gte: new Date(),
             },
           },
           {
+            closed: false,
+            registerBefore: false,
             eventTime: {
               lt: new Date(),
             },
@@ -32,32 +35,32 @@ export const getEvents = publicProcedure
 
     if (includeStatus.unavailable) {
       whereConditions.push({
-        finishTime: null,
-        eventTime: {
-          lt: new Date(),
-        },
-      });
-      whereConditions.push({
-        finishTime: {
-          lt: new Date(),
-        },
+        OR: [
+          {
+            registerBefore: true,
+            eventTime: {
+              lt: new Date(),
+            },
+          },
+          {
+            registerBefore: false,
+            finishTime: {
+              lt: new Date(),
+            },
+          },
+          {
+            closed: true,
+          },
+        ],
       });
     }
 
     if (includeStatus.upcoming) {
       whereConditions.push({
-        AND: [
-          {
-            finishTime: {
-              not: null,
-            },
-          },
-          {
-            eventTime: {
-              gte: new Date(),
-            },
-          },
-        ],
+        registerBefore: false,
+        eventTime: {
+          gte: new Date(),
+        },
       });
     }
 
@@ -89,6 +92,8 @@ export const getEvents = publicProcedure
           limit: true,
           maxHours: true,
           maxPoints: true,
+          closed: true,
+          registerBefore: true,
           attendees: {
             select: {
               eventId: true,

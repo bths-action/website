@@ -20,9 +20,21 @@ export const EventCard: FC<{
     limit,
     attendees,
     maxGiveawayEntries,
+    closed,
+    registerBefore,
   },
   index,
 }) => {
+  const eventStatus =
+    (registerBefore ? eventTime : finishTime) < new Date()
+      ? "occured"
+      : limit && attendees >= limit
+      ? "full"
+      : closed
+      ? "closed"
+      : !registerBefore && eventTime.getTime() > Date.now()
+      ? "upcoming"
+      : "open";
   return (
     <motion.div
       initial="hidden"
@@ -47,15 +59,19 @@ export const EventCard: FC<{
       >
         <Link key={id} href={`/events/${id}`} className="text-left">
           <div className="flex flex-col items-stretch w-full font-semibold flex-wrap h-full">
-            {(finishTime || eventTime).getTime() < Date.now() ? (
+            {eventStatus === "occured" ? (
               <div className="absolute bottom-0 right-0 bg-gray-500 text-white font-poppins uppercase py-0.5 px-2 rounded-tl-lg">
                 Occured
               </div>
-            ) : limit && attendees >= limit ? (
+            ) : eventStatus === "full" ? (
               <div className="absolute bottom-0 right-0 bg-red-500 text-white font-poppins uppercase py-0.5 px-2 rounded-tl-lg">
                 Full
               </div>
-            ) : finishTime && eventTime.getTime() > Date.now() ? (
+            ) : eventStatus === "closed" ? (
+              <div className="absolute bottom-0 right-0 bg-red-500 text-white font-poppins uppercase py-0.5 px-2 rounded-tl-lg">
+                Closed
+              </div>
+            ) : eventStatus === "upcoming" ? (
               <div className="absolute bottom-0 right-0 bg-yellow-500 text-white font-poppins uppercase py-0.5 px-2 rounded-tl-lg">
                 Upcoming
               </div>
@@ -67,26 +83,21 @@ export const EventCard: FC<{
             <div>
               <h5>{name}</h5>
               <span className="">
-                {(finishTime || eventTime).getTime() < Date.now()
-                  ? "Occured"
-                  : "Starts"}{" "}
-                {finishTime ? "from" : "on"}{" "}
                 {eventTime.toLocaleString([], {
                   month: "short",
                   day: "numeric",
                   year: "numeric",
                   hour: "numeric",
                   minute: "2-digit",
+                })}{" "}
+                -{" "}
+                {finishTime.toLocaleString([], {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                  hour: "numeric",
+                  minute: "2-digit",
                 })}
-                {finishTime &&
-                  " - " +
-                    finishTime.toLocaleString([], {
-                      month: "short",
-                      day: "numeric",
-                      year: "numeric",
-                      hour: "numeric",
-                      minute: "2-digit",
-                    })}
               </span>
               <br />
               {maxHours != 0 && (
