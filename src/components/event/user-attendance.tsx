@@ -219,15 +219,17 @@ export const UserAttendance: FC<Props> = ({ event }) => {
               <br />
             </>
           )}
-          {wait ? (
+          {afterEvent ? (
+            <>You cannot change attendance after an event.</>
+          ) : event.closed ? (
+            <>Cannot join event, event has been closed.</>
+          ) : limitReached ? (
+            <>Cannot join event, event is full.</>
+          ) : wait ? (
             <>
               The event is not available for registration yet. Based on the
               description, you may be able to do other things.
             </>
-          ) : afterEvent ? (
-            <>You cannot change attendance after an event.</>
-          ) : limitReached ? (
-            <>Cannot join event, event is full.</>
           ) : (
             <ColorButton
               innerClass="p-2 text-xl text-white"
