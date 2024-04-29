@@ -12,17 +12,52 @@ type DailyMembers = {
 // complete
 
 interface Props {
+  leaves: Date[];
   joins: Date[];
 }
 
-export const MemberChart: FC<Props> = ({ joins }) => {
-  const [mounted, setMounted] = useState(false);
+function calcMembers(joins: Date[], leaves: Date[]) {
+  const dataPoints: DailyMembers[] = [];
+  let i = 0;
+  let j = 0;
+  let members = 0;
+  while (i < joins.length && j < leaves.length) {
+    if (joins[i] < leaves[j]) {
+      members++;
+      dataPoints.push({ date: joins[i], members });
+      i++;
+    } else {
+      members--;
+      dataPoints.push({ date: leaves[j], members });
+      j++;
+    }
+  }
+  while (i < joins.length) {
+    members++;
+    dataPoints.push({ date: joins[i], members });
+    i++;
+  }
+  while (j < leaves.length) {
+    members--;
+    dataPoints.push({ date: leaves[j], members });
+    j++;
+  }
+
+  console.log(dataPoints);
+
+  return dataPoints;
+}
+
+export const MemberChart: FC<Props> = ({ joins, leaves }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, {
     once: true,
     amount: 1,
   });
-  useEffect(() => setMounted(true), []);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const { resolvedTheme } = useTheme();
   const primaryAxis = useMemo(
@@ -34,6 +69,8 @@ export const MemberChart: FC<Props> = ({ joins }) => {
     []
   );
 
+  const dataPoints = useMemo(() => calcMembers(joins, leaves), [joins, leaves]);
+
   const secondaryAxes = useMemo(
     (): AxisOptions<DailyMembers>[] => [
       {
@@ -42,34 +79,26 @@ export const MemberChart: FC<Props> = ({ joins }) => {
     ],
     []
   );
-  // play with the code
 
   // btw since each member increments one, we can use map index to get the number of members
-  const data = [
-    {
-      label: "Members",
-      data: [
-        ...joins.map((date, index) => {
-          date.setMilliseconds(0);
-          return {
-            date,
-            members: index + 1,
-          };
-        }),
-        {
-          date: new Date(),
-          members: joins.length,
-        },
-      ],
-    },
-  ];
 
   return (
     <div className="w-full h-[50dvh] my-10 z-10" ref={ref}>
       {mounted && (
         <Chart
           options={{
-            data,
+            data: [
+              {
+                label: "Members",
+                data: [
+                  ...dataPoints,
+                  {
+                    date: new Date(),
+                    members: dataPoints[dataPoints.length - 1].members,
+                  },
+                ],
+              },
+            ],
 
             primaryAxis,
             primaryCursor: {

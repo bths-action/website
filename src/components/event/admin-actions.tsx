@@ -10,6 +10,7 @@ import { ColorButton } from "../ui/buttons";
 import { RequestError } from "../ui/error";
 import { confirm } from "../ui/confirm";
 import { PropsWrite } from "./event-page";
+import { MdDoNotDisturbOn } from "react-icons/md";
 
 export const AdminActions: FC<PropsWrite> = ({ event, setEvent }) => {
   const account = useAccount();
@@ -17,7 +18,11 @@ export const AdminActions: FC<PropsWrite> = ({ event, setEvent }) => {
   if (!(position == "ADMIN" || position == "EXEC")) return null;
   const [formOpen, setFormOpen] = useState(false);
   const deleteEvent = trpc.deleteEvent.useMutation();
+  const editEvent = trpc.editEvent.useMutation();
   const router = useRouter();
+
+  const [deleting, setDeleting] = useState(false);
+  const [closing, setClosing] = useState(false);
 
   return (
     <>
@@ -48,6 +53,7 @@ export const AdminActions: FC<PropsWrite> = ({ event, setEvent }) => {
         </Link>
       </ColorButton>
       <ColorButton
+        disabled={deleting}
         color="red-500"
         innerClass="text-white text-xl p-2"
         className="rounded-xl shadowed"
@@ -58,6 +64,7 @@ export const AdminActions: FC<PropsWrite> = ({ event, setEvent }) => {
               children: "Are you sure you want to delete this event?",
             })
           ) {
+            setDeleting(true);
             await deleteEvent.mutateAsync(
               {
                 id: event.id,
@@ -71,6 +78,7 @@ export const AdminActions: FC<PropsWrite> = ({ event, setEvent }) => {
                     title: "Error Deleting Event",
                     children: <RequestError error={err} />,
                   });
+                  setDeleting(false);
                 },
               }
             );
@@ -79,6 +87,53 @@ export const AdminActions: FC<PropsWrite> = ({ event, setEvent }) => {
       >
         <FaRegTrashAlt className="inline mr-1 w-6 h-6" />
         Delete Event
+      </ColorButton>
+      <ColorButton
+        color="red-500"
+        innerClass="text-white text-xl p-2"
+        className="rounded-xl shadowed"
+        disabled={closing}
+        onClick={async () => {
+          if (
+            await confirm({
+              title: `Event ${event.closed ? "Reopening" : "Closing"}`,
+              children: `Are you sure you want to ${
+                event.closed ? "reopen" : "close"
+              } this event?`,
+            })
+          ) {
+            setClosing(true);
+            await editEvent.mutateAsync(
+              {
+                id: event.id,
+                closed: !event.closed,
+              },
+              {
+                onSuccess: () => {
+                  setEvent((prev) => ({
+                    ...prev,
+                    closed: !prev.closed,
+                  }));
+                },
+                onError: (err) => {
+                  confirm({
+                    title: `Error ${
+                      event.closed ? "Reopening" : "Closing"
+                    } Event`,
+                    children: <RequestError error={err} />,
+                  });
+                },
+                onSettled: () => {
+                  setClosing(false);
+                },
+              }
+            );
+          }
+        }}
+      >
+        <MdDoNotDisturbOn className="inline mr-1 w-6 h-6" />
+        {event.closed ? "Reopen" : closing ? "Clos" : "Close"}
+        {closing && "ing"} Event
       </ColorButton>
     </>
   );

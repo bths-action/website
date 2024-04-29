@@ -144,3 +144,13 @@ model GiveawayEntry {
   @@index([userEmail])
   @@index([giveawayId])
 }
+
+// add a new model here
+// u can just use DeletedUsers, and read the vote proposal for what u should include and NOT; especially the not part
+model DeletedUsers {
+  // i'll add the id for you its just gonna be a random id we wont look at
+  id String @id @default(cuid())
+
+  registeredAt DateTime
+  leftAt       DateTime
+}

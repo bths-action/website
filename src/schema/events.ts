@@ -155,6 +155,7 @@ export const createEventSchema = baseEventSchema
 
 export const updateEventSchema = baseEventSchema.partial().extend({
   id: z.string(),
+  closed: z.boolean().optional(),
 });
 
 export const deleteEventSchema = z.object({

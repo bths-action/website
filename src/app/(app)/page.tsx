@@ -11,7 +11,7 @@ import { MemberChart } from "@/components/home/charts";
 export const revalidate = 600;
 
 const Home: FC = async () => {
-  const [joins, events, serviceHours] = await Promise.all([
+  const [joins, events, serviceHours, leaves] = await Promise.all([
     prisma.user
       .findMany({
         where: {
@@ -40,6 +40,17 @@ const Home: FC = async () => {
         },
       })
       .then((e) => e.reduce((a, b) => a + b.earnedHours, 0)),
+    // now infering from what we did, what should we add here?
+    //we should find all the deletedusers, correct, now this should be a simple query, write a query to find ALL the deletd users
+    prisma.deletedUsers.findMany({
+      select: {
+        registeredAt: true,
+        leftAt: true,
+      },
+      orderBy: {
+        leftAt: "asc",
+      },
+    }),
   ]);
 
   return (
@@ -49,7 +60,13 @@ const Home: FC = async () => {
         <br />
         <About />
         <h2>Membership</h2>
-        <MemberChart joins={joins} />
+        <MemberChart
+          joins={[
+            ...joins,
+            ...leaves.map(({ registeredAt }) => registeredAt),
+          ].sort((a, b) => a.getTime() - b.getTime())}
+          leaves={leaves.map(({ leftAt }) => leftAt)}
+        />
       </LimitedContainer>
 
       <StickyDown />
