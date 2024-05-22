@@ -78,9 +78,12 @@ export const registerSchema = z.object({
     ),
 
   phone: z
-    .number()
-    .max(9999999999, {
-      message: "Make sure to provide a valid phone number. ",
+    .string()
+    .min(10, {
+      message: "Phone number is too short. ",
+    })
+    .max(10, {
+      message: "Phone number is too long. ",
     })
     .nullish()
     .optional(),

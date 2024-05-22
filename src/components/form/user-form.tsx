@@ -40,7 +40,7 @@ const FormContent: FC<Props> = ({ mode, setOpen }) => {
     referredBy: mode == "edit" ? account.data!.referredBy : null,
     eventAlerts: mode == "edit" ? account.data!.eventAlerts : true,
     instagram: mode == "edit" ? account.data!.instagram : "",
-    phone: mode == "edit" ? Number(account.data!.phone) : null,
+    phone: mode == "edit" ? account.data!.phone : '',
   };
 
   type FormValues = typeof initialValues;
@@ -250,10 +250,6 @@ const FormContent: FC<Props> = ({ mode, setOpen }) => {
                 name="phone"
                 type="text"
                 placeholder="1234567890"
-                onChange={(e: ChangeEvent<HTMLSelectElement>) => {
-                  const value = e.target.value;
-                  setFieldValue("phone", value === "" || value === "0" ? null : Number(value));
-                }}
               />
               <FormError name="phone" />
             </FormQuestion>

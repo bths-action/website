@@ -55,7 +55,7 @@ model User {
 
   discordID String? @unique
   instagram String?
-  phone Int?
+  phone String?
 
   eventAlerts Boolean
   lastUpdated DateTime @default(now())
