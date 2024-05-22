@@ -39,6 +39,8 @@ const FormContent: FC<Props> = ({ mode, setOpen }) => {
     sgoSticker: mode == "edit" ? account.data!.sgoSticker : false,
     referredBy: mode == "edit" ? account.data!.referredBy : null,
     eventAlerts: mode == "edit" ? account.data!.eventAlerts : true,
+    instagram: mode == "edit" ? account.data!.instagram : "",
+    phone: mode == "edit" ? Number(account.data!.phone) : null,
   };
 
   type FormValues = typeof initialValues;
@@ -238,6 +240,34 @@ const FormContent: FC<Props> = ({ mode, setOpen }) => {
               </label>
 
               <FormError name="eventAlerts" />
+            </FormQuestion>
+            <br />
+
+            <FormQuestion errored={Boolean(errors.phone)}>
+              <label htmlFor="phone">Phone Number:</label>
+              <Field
+                id="phone"
+                name="phone"
+                type="text"
+                placeholder="1234567890"
+                onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+                  const value = e.target.value;
+                  setFieldValue("phone", value === "" || value === "0" ? null : Number(value));
+                }}
+              />
+              <FormError name="phone" />
+            </FormQuestion>
+            <br />
+
+            <FormQuestion errored={Boolean(errors.phone)}>
+              <label htmlFor="instagram">Instagram Handle:</label>
+              <Field
+                id="instagram"
+                name="instagram"
+                type="text"
+                placeholder=""
+              />
+              <FormError name="instagram" />
             </FormQuestion>
             <br />
 

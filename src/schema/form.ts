@@ -77,6 +77,19 @@ export const registerSchema = z.object({
       }
     ),
 
+  phone: z
+    .number()
+    .max(9999999999, {
+      message: "Make sure to provide a valid phone number. ",
+    })
+    .nullish()
+    .optional(),
+
+  instagram: z
+    .string()
+    .nullish()
+    .optional(),
+
   referredBy: z
     .string()
     .max(190, {

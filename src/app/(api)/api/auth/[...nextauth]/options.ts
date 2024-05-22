@@ -20,7 +20,7 @@ export const AUTH_OPTIONS: AuthOptions = {
       if (
         user.email?.endsWith("@nycstudents.net") ||
         user.email?.endsWith("@schools.nyc.gov") ||
-        user.email === "coder2195mail@gmail.com"
+        user.email === "doogypanda@gmail.com"
       )
         return true;
 

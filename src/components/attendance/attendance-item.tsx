@@ -41,7 +41,9 @@ export const AttendanceItem: FC<ItemProps> = ({ attendee, attendance, id }) => {
       <hr className="my-2" />
       {attendee.user.preferredName} ({attendee.user.name}) -{" "}
       {attendee.userEmail}
-      <br />
+      {attendee.user.discordID && <p>Discord Id: {attendee.user.discordID}</p>}
+      {attendee.user.instagram && <p>Instagram: {attendee.user.instagram}</p>}
+      {attendee.user.phone && <p>Phone: {attendee.user.phone}</p>}
       {attendee.attendedAt && (
         <div className="my-2">
           <label htmlFor="hours">Hours: </label>

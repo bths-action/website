@@ -75,6 +75,9 @@ export const joinEventProcedure = async (
         select: {
           name: true,
           preferredName: true,
+          discordID: true,
+          instagram: true,
+          phone: true,
         },
       },
     },

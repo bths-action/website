@@ -34,6 +34,7 @@ import { editEntryBalance } from "./procedures/edit-entry-balance";
 import { getGiveawayEntry } from "./procedures/get-giveaway-entry";
 import { endGiveawayProcedure } from "./procedures/end-giveaway";
 import { getGiveawayClaims } from "./procedures/get-giveaway-claims";
+import { deleteAccount } from "./procedures/delete-account";
 
 export const appRouter = router({
   //generate smth random
@@ -67,6 +68,7 @@ export const appRouter = router({
 
   editSubscription,
   disconnectDiscord,
+  deleteAccount,
 
   getGiveaways,
   createGiveaway,

@@ -31,6 +31,7 @@ import {
   BiSearch,
   BiSpreadsheet,
   BiXCircle,
+  BiTrash,
 } from "react-icons/bi";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { BsDiscord, BsGift, BsQuestionCircle } from "react-icons/bs";
@@ -176,6 +177,7 @@ const ProfileButton: FC<{
   const [queryOpen, setQueryOpen] = useState(false);
   const [connecting, setConnecting] = useState(false);
   const disconnectDiscord = trpc.disconnectDiscord.useMutation();
+  const deleteAccount = trpc.deleteAccount.useMutation();
   const utils = trpc.useUtils();
   const { status: accountStatus, data: accountData } = useAccount();
   const notDone = status == "loading" || accountStatus == "loading";
@@ -301,6 +303,61 @@ const ProfileButton: FC<{
             </NavButton>
           </>
         )}
+        <ColorButton
+          color="red-500"
+          className="w-full rounded-none py-2"
+          innerClass=" p-2 text-white"
+          onClick={() => {
+            confirm({
+              title: "Confirm Deletion",
+              children: (
+                <>
+                  Please enter your email to confirm deletion.
+                  <input
+                    type="email"
+                    className="w-full border-2 border-black"
+                    placeholder="Email"
+                  />
+                </>
+              ),
+            }).then((result) => {
+              if (!result) return;
+              setConnecting(true);
+              if (accountData?.email) {
+                deleteAccount.mutate(undefined, {
+                  onSuccess: () => {
+                    utils.getForm.setData(undefined, {
+                      ...accountData,
+                      discordID: "",
+                      name: "",
+                      email: "",
+                      eventAlerts: false,
+                      didOsis: false,
+                    });
+                    signOut();
+                  },
+                  onSettled: () => {
+                    setConnecting(false);
+                  },
+                  onError: (e) => {
+                    confirm({
+                      title: "Error Deleting Account",
+                      children: (
+                        <>
+                          An error occurred while deleting your account.
+                          <br />
+                          <RequestError error={e as TRPCError} />
+                        </>
+                      ),
+                    });
+                  },
+                });
+              }
+            });
+          }}
+        >
+          <BiTrash className="inline w-6 h-6 mr-1 " /> DELETE ACCOUNT
+        </ColorButton>
         <ColorButton
           color="red-500"
           className="w-full rounded-none"

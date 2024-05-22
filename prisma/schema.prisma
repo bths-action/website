@@ -21,10 +21,8 @@ enum ExecPosition {
   TREASURER
 }
 
-// ur discord went offline
-
 model ExecDetails {
-  user  User   @relation(fields: [email], references: [email])
+  user  User   @relation(fields: [email], references: [email], onDelete: Cascade)
   email String @id
 
   position    ExecPosition
@@ -56,6 +54,8 @@ model User {
   didOsis      Boolean      @default(false)
 
   discordID String? @unique
+  instagram String?
+  phone Int?
 
   eventAlerts Boolean
   lastUpdated DateTime @default(now())
@@ -87,7 +87,7 @@ model Event {
 }
 
 model EventAttendance {
-  user          User      @relation("EventAttendee", fields: [userEmail], references: [email])
+  user          User      @relation("EventAttendee", fields: [userEmail], references: [email], onDelete: Cascade)
   userEmail     String
   event         Event     @relation(fields: [eventId], references: [id])
   eventId       String
@@ -129,7 +129,7 @@ model Giveaway {
 }
 
 model GiveawayEntry {
-  user       User     @relation("GiveawayEntry", fields: [userEmail], references: [email])
+  user       User     @relation("GiveawayEntry", fields: [userEmail], references: [email], onDelete: Cascade)
   userEmail  String
   giveaway   Giveaway @relation(fields: [giveawayId], references: [id])
   giveawayId String
@@ -145,10 +145,7 @@ model GiveawayEntry {
   @@index([giveawayId])
 }
 
-// add a new model here
-// u can just use DeletedUsers, and read the vote proposal for what u should include and NOT; especially the not part
 model DeletedUsers {
-  // i'll add the id for you its just gonna be a random id we wont look at
   id String @id @default(cuid())
 
   registeredAt DateTime

@@ -238,39 +238,52 @@ export const UserAttendance: FC<Props> = ({ event }) => {
               disabled={isSubmitting}
               onClick={async () => {
                 setIsSubmitting(true);
-
-                joinEvent.mutate(
-                  {
-                    id: event.id,
-                    socketId: pusher.client?.connection.socket_id,
-                  },
-                  {
-                    onSuccess: (data) => {
-                      utils.getAttendance.setData(
-                        {
-                          id: event.id,
-                        },
-                        data
-                      );
-                      joinSpace();
-                      setIsSubmitting(false);
+                if (account.data?.discordID !== null || account.data?.phone !== null || account.data?.instagram !== "") {
+                  joinEvent.mutate(
+                    {
+                      id: event.id,
+                      socketId: pusher.client?.connection.socket_id,
                     },
-                    onError: (error) => {
-                      setIsSubmitting(false);
-                      confirm({
-                        title: "Error Joining Event",
-                        children: (
-                          <>
-                            We have encountered an error while joining the
-                            event.
-                            <br />
-                            <RequestError error={error} />
-                          </>
-                        ),
-                      });
-                    },
-                  }
-                );
+                    {
+                      onSuccess: (data) => {
+                        utils.getAttendance.setData(
+                          {
+                            id: event.id,
+                          },
+                          data
+                        );
+                        joinSpace();
+                        setIsSubmitting(false);
+                      },
+                      onError: (error) => {
+                        setIsSubmitting(false);
+                        confirm({
+                          title: "Error Joining Event",
+                          children: (
+                            <>
+                              We have encountered an error while joining the
+                              event.
+                              <br />
+                              <RequestError error={error} />
+                            </>
+                          ),
+                        });
+                      },
+                    }
+                  );
+                } else {
+                  setIsSubmitting(false);
+                  confirm({
+                    title: "Connect Account",
+                    children: (
+                      <>
+                        You must link either a discord, instagram or your number
+                        to join this event. Please link one by editing your
+                        profile.
+                      </>
+                    ),
+                  });
+                }
               }}
             >
               <FaUserPlus className="inline w-6 h-6 mr-1" /> Join

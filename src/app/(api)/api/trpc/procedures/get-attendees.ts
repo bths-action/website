@@ -22,6 +22,9 @@ export const getAttendees = adminProcedure
               select: {
                 name: true,
                 preferredName: true,
+                discordID: true,
+                instagram: true,
+                phone: true,
               },
             },
           },
