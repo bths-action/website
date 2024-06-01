@@ -211,39 +211,6 @@ export const About: FC = () => {
           </span>
         </AboutGroup>
         <AboutGroup>
-          <Title>Non Pay to Win</Title>
-
-          <Description>
-            We strive to make our club as accessible as possible, and we do not
-            engage in such usury. We are a club, not a business. We give away
-            stuff instead.
-          </Description>
-        </AboutGroup>
-        <AboutGroup>
-          <motion.div
-            variants={{
-              hidden: {
-                opacity: 0,
-                translateX: "200%",
-              },
-              visible: {
-                opacity: 1,
-                translateX: 0,
-              },
-            }}
-            transition={{ duration: 1 }}
-            className=" w-full h-full overflow-hidden flex items-center justify-center"
-          >
-            <Image
-              src="/images/giveaway-1.png"
-              alt=""
-              width={400}
-              height={200}
-              className="rounded-xl border-2 shadowed mx-auto"
-            />
-          </motion.div>
-        </AboutGroup>
-        <AboutGroup>
           <Title>Community</Title>
           <Description>
             You are one of us. You get to express criticism and dissent regardng

@@ -41,32 +41,34 @@ export const JoinButton: FC = () => {
           status == "unauthenticated" && mounted ? "animate-bounce" : ""
         }`}
       >
-        <ColorButton
-          id="join-button"
-          color="default"
-          className="shadowed"
-          innerClass="p-4 text-xl text-white pointer-events-auto"
-          disabled={status !== "unauthenticated"}
-          onClick={() => {
-            signIn("auth0");
-          }}
-        >
-          <FaFistRaised className="inline w-6 h-6 mr-2" />{" "}
-          {status === "loading"
-            ? "Loading Invite..."
-            : status === "unauthenticated"
-            ? "Take Action."
-            : "Welcome to the Family!"}
-        </ColorButton>
+        {status !== "authenticated" && (
+          <ColorButton
+            id="join-button"
+            color="default"
+            className="shadowed"
+            innerClass="p-4 text-xl text-white pointer-events-auto"
+            disabled={status !== "unauthenticated"}
+            onClick={() => {
+              signIn("auth0");
+            }}
+          >
+            <FaFistRaised className="inline w-6 h-6 mr-2" />{" "}
+            {status === "loading"
+              ? "Loading Invite..."
+              : status === "unauthenticated"
+              ? "Take Action."
+              : "Welcome to the Family!"}
+          </ColorButton>
+        )}
       </span>
 
       {status === "authenticated" && (
         <div className="pointer-events-auto">
-          You can check out our{" "}
+          Check out our{" "}
           <Link href="/events" className="default">
-            events
+            events!
           </Link>{" "}
-          and start earning. Welcome!
+          Welcome!
         </div>
       )}
     </motion.div>

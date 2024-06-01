@@ -60,7 +60,7 @@ export const Stats: FC<{
 }> = ({ members, serviceHours, events }) => {
   return (
     <motion.div
-      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-2"
+      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 p-2"
       initial="hidden"
       whileInView="visible"
       viewport={{
@@ -79,12 +79,6 @@ export const Stats: FC<{
       </StatsCard>
       <StatsCard title="Service Hours Contributed" icon={BiTime} index={4}>
         {serviceHours}
-      </StatsCard>
-      <StatsCard title="Pay to Win?" icon={MdOutlineMoneyOff} index={5}>
-        Illegal and bullshit.
-      </StatsCard>
-      <StatsCard title="Giveaways" icon={FaTrophy} index={6}>
-        $170+ in prizes.
       </StatsCard>
     </motion.div>
   );
