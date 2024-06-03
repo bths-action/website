@@ -16,7 +16,6 @@ import {
 import Link from "next/link";
 import { IconType } from "react-icons";
 import {
-  MdChatBubbleOutline,
   MdContentCopy,
   MdEventAvailable,
   MdHomeFilled,
@@ -41,7 +40,6 @@ import { ExecForm } from "../form/exec-form";
 import { twMerge } from "tailwind-merge";
 import { EmailQueryForm } from "../form/email-query-form";
 import { DISCORD_INVITE_LINK } from "@/utils/constants";
-import { PopupUI } from "./popup";
 import { TRPCError, trpc } from "@/app/(api)/api/trpc/client";
 import { confirm } from "./confirm";
 import { RequestError } from "./error";
@@ -418,8 +416,7 @@ const ProfileButton: FC<{
 };
 
 const Socials: FC<{
-  setChatOpen: (open: boolean) => void;
-}> = ({ setChatOpen }) => {
+}> = () => {
   return (
     <>
       <TransparentButton
@@ -440,48 +437,23 @@ const Socials: FC<{
       >
         <BiMailSend className="w-7 h-7" />
       </TransparentButton>
-      <TransparentButton className="p-1.5" onClick={() => setChatOpen(true)}>
-        <MdChatBubbleOutline className="w-7 h-7" />
-      </TransparentButton>
     </>
   );
 };
 
-export const Navbar: FC<PropsWithChildren> = ({ children }) => {
+export const Navbar: FC<PropsWithChildren> = () => {
   const [mounted, setMounted] = useState(false);
   const [sideContent, setSideContent] = useState<ReactNode>();
   const [sideId, setSideId] = useState("");
-  const [chatOpen, setChatOpen] = useState(false);
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  const socials = <Socials setChatOpen={setChatOpen} />;
+  const socials = <Socials  />;
 
   // vertical navbar
   return (
     <>
-      {chatOpen && (
-        <PopupUI setOpen={setChatOpen} title="Guest Chat">
-          <WidgetBot
-            server="1124144876112584727"
-            channel="1200510746962956338"
-            className="w-full h-full"
-            onAPI={(api) => {
-              let loggedIn = false;
-              api.on("signIn", async (u) => {
-                await new Promise((r) => setTimeout(r, 5000));
-                if (loggedIn) return;
-                loggedIn = true;
-                api.emit("sendMessage", {
-                  channel: "1200510746962956338",
-                  message: `_**${u.username}**_ has joined the <:robux:1182796686687473785> chat! Say hi! 🎉`,
-                });
-              });
-            }}
-          />
-        </PopupUI>
-      )}
       <nav className="flex items-center justify-around md:justify-start md:flex-col bg-zinc-100 dark:bg-zinc-900 md:h-[100dvh] w-screen md:w-20 lg:w-60 bottom-0 py-1 md:relative absolute flex-row z-30 border-r-0 md:border-r-2 border-t-2 md:border-t-0 ">
         <Link
           href="/"
@@ -504,7 +476,7 @@ export const Navbar: FC<PropsWithChildren> = ({ children }) => {
         <div className="overflow-y-auto w-full flex-1">
           <div className="flex-row md:flex-col flex items-center justify-around md:justify-start">
             {Object.entries(NAV_LINKS).map(
-              ([location, { href, icon, text }]) => (
+              ([, { href, icon, text }]) => (
                 <NavButton
                   key={href}
                   icon={icon}
@@ -540,7 +512,7 @@ export const Navbar: FC<PropsWithChildren> = ({ children }) => {
                 setSideContent(
                   <>
                     {Object.entries(RESOURCE_LINKS).map(
-                      ([location, { href, icon, text }]) => (
+                      ([, { href, icon, text }]) => (
                         <NavButton
                           key={href}
                           icon={icon}
