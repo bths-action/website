@@ -26,7 +26,6 @@ export const SummaryCard: FC<{ title: ReactNode; value: ReactNode }> = ({
 export type EventSummaryProps = {
   name: string;
   points: number;
-  entries: number;
   hours: number;
   link?: string;
   index: number;
@@ -36,7 +35,6 @@ export type EventSummaryProps = {
 export const EventSummary: FC<EventSummaryProps> = ({
   name,
   points,
-  entries,
   hours,
   link,
   index,
@@ -69,7 +67,7 @@ export const EventSummary: FC<EventSummaryProps> = ({
         )}
       </span>
       <span className="text-right">
-        {points == 0 && hours == 0 && entries == 0 && <>---</>}
+        {points == 0 && hours == 0 && <>---</>}
         {points != 0 && (
           <div>
             <BsTriangleFill
@@ -91,18 +89,6 @@ export const EventSummary: FC<EventSummaryProps> = ({
             />
             {hours} Hour
             {hours != 1 && "s"}
-          </div>
-        )}
-
-        {entries != 0 && (
-          <div>
-            <BsTriangleFill
-              className={`${
-                entries > 0 ? "text-green-500" : "text-red-500 rotate-180"
-              } inline mr-2 w-3 h-3`}
-            />
-            {entries} Entr
-            {entries != 1 ? "ies" : "y"}
           </div>
         )}
       </span>

@@ -31,8 +31,8 @@ export type GiveawayPrize = {
 };
 
 export const DISCORD_INVITE_LINK = "https://discord.gg/TepH9vuqn4";
-
-export const MAX_CREDITS = 12;
+// our club can give out 6 credits per semester
+export const MAX_CREDITS = 6;
 export const BASE_URL = process.env.VERCEL_URL
   ? `https://bthsaction.org`
   : `http://localhost:3000`;
@@ -43,7 +43,7 @@ export const GIVEAWAY_TYPE_MAP: Record<GiveawayType, string> = {
   ORDERED_CLAIM: "Ordered Claim",
 } as const;
 
-export const BANNED_USERS = ["junchaol2@nycstudents.net"];
+export const BANNED_USERS = [];
 
 export const REFERRAL_POINTS = 5;
 export const REFERRAL_ENTRIES = 0.5;
