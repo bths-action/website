@@ -25,11 +25,8 @@ export const PointsStats: FC<{
   );
   const totalPoints = refPoints + eventPoints + (account.miscPoints || 0);
   // bths is 32 credits; 25 points per credit
-  const credits = Math.max(
-    Math.ceil(totalPoints / CREDIT_RATE ),
-    0
-  );
-  const awarded =
+
+  let awarded =
     account.position === "EXEC"
       ? MAX_CREDITS
       : account.didOsis
@@ -41,7 +38,9 @@ export const PointsStats: FC<{
           0
         )
       : 0;
-
+  let credits = awarded;
+  if (account.givenCredits !== 0 && awarded !== 0)
+    credits = account.givenCredits + awarded;
   const eventSummary: EventSummaryProps[] = [
     {
       name: "Referrals",
