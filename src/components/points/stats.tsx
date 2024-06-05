@@ -39,7 +39,7 @@ export const PointsStats: FC<{
         )
       : 0;
   let credits = awarded;
-  if (account.givenCredits !== 0 && awarded !== 0)
+  if (account.givenCredits !== 0 && awarded !== account.givenCredits)
     credits = account.givenCredits + awarded;
   const eventSummary: EventSummaryProps[] = [
     {
