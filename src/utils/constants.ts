@@ -43,7 +43,7 @@ export const GIVEAWAY_TYPE_MAP: Record<GiveawayType, string> = {
   ORDERED_CLAIM: "Ordered Claim",
 } as const;
 
-export const BANNED_USERS = [];
+export const BANNED_USERS = [""];
 
 export const REFERRAL_POINTS = 5;
 export const REFERRAL_ENTRIES = 0.5;
