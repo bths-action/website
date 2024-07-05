@@ -19,10 +19,10 @@ export const registerSchema = z.object({
     }),
   gradYear: z
     .number()
-    .min(2024, {
-      message: "Graduation year must be at least 2024. ",
+    .min(2025, {
+      message: "Graduation year must be at least 2025. ",
     })
-    .max(2027, {
+    .max(2028, {
       message: "Graduation year must be at most 2027. ",
     }),
   preferredName: z

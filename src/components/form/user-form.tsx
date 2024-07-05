@@ -34,7 +34,7 @@ const FormContent: FC<Props> = ({ mode, setOpen }) => {
     preferredName: mode == "edit" ? account.data!.preferredName : "",
     prefect: mode == "edit" ? account.data!.prefect : "",
     pronouns: mode == "edit" ? account.data!.pronouns : "",
-    gradYear: mode == "edit" ? Number(account.data!.gradYear) : 2027,
+    gradYear: mode == "edit" ? Number(account.data!.gradYear) : 2028,
     birthday: mode == "edit" ? account.data!.birthday : "",
     sgoSticker: mode == "edit" ? account.data!.sgoSticker : false,
     referredBy: mode == "edit" ? account.data!.referredBy : null,
