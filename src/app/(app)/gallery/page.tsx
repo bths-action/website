@@ -17,7 +17,7 @@ const Page: FC = () => {
             loading="lazy"
             allowTransparency
             className="absolute w-full h-full top-0 left-0 border-none p-0 m-0"
-            src="https://www.canva.com/design/DAFs35PNYB4/view?embed"
+            src="https://www.canva.com/design/DAGB-rSHQmc/_kOncHPgLCvEYUx03gZRUg/view?embed"
             allowFullScreen
             allow="fullscreen"
           ></iframe>
