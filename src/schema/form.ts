@@ -79,11 +79,8 @@ export const registerSchema = z.object({
 
   phone: z
     .string()
-    .min(10, {
-      message: "Phone number is too short. ",
-    })
-    .max(10, {
-      message: "Phone number is too long. ",
+    .regex(/^(\d{1})?$/, {
+      message: "Phone number must be a number.",
     })
     .nullish()
     .optional(),

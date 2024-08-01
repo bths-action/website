@@ -238,7 +238,7 @@ export const UserAttendance: FC<Props> = ({ event }) => {
               disabled={isSubmitting}
               onClick={async () => {
                 setIsSubmitting(true);
-                if (account.data?.discordID !== null || account.data?.phone !== "" || account.data?.instagram !== "") {
+                if ((account.data?.discordID !== null && account.data?.discordID !== "") || (account.data?.instagram !== "" && account.data?.instagram !== null) || (account.data?.phone !== null && account.data?.phone !== "")) {
                   joinEvent.mutate(
                     {
                       id: event.id,

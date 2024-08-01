@@ -242,7 +242,8 @@ const FormContent: FC<Props> = ({ mode, setOpen }) => {
               <FormError name="eventAlerts" />
             </FormQuestion>
             <br />
-
+              Contact Information (provide at least one) 
+            <br />
             <FormQuestion errored={Boolean(errors.phone)}>
               <label htmlFor="phone">Phone Number:</label>
               <Field
@@ -255,7 +256,7 @@ const FormContent: FC<Props> = ({ mode, setOpen }) => {
             </FormQuestion>
             <br />
 
-            <FormQuestion errored={Boolean(errors.phone)}>
+            <FormQuestion errored={Boolean(errors.instagram)}>
               <label htmlFor="instagram">Instagram Handle:</label>
               <Field
                 id="instagram"
