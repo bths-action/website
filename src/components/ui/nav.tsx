@@ -63,11 +63,6 @@ const NAV_LINKS: Links = {
     icon: MdEventAvailable,
     text: "Events",
   },
-  giveaways: {
-    href: "/giveaways",
-    icon: BsGift,
-    text: "Giveaways",
-  },
   gallery: {
     href: "/gallery",
     icon: BiPhotoAlbum,

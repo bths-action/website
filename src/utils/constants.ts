@@ -1,4 +1,4 @@
-import { ExecPosition, GiveawayType } from "@prisma/client";
+import { ExecPosition } from "@prisma/client";
 import { ReactNode } from "react";
 
 export const OLDEST_GRAD_YEAR = 2025;
@@ -25,10 +25,6 @@ export type Status = "loading" | "unauthorized" | "success" | "error";
 export type NodeMap<T extends string | number | symbol> = {
   [key in T]: ReactNode;
 };
-export type GiveawayPrize = {
-  name: string;
-  details: string;
-};
 
 export const DISCORD_INVITE_LINK = "https://discord.gg/TepH9vuqn4";
 // our club can give out 6 credits per semester
@@ -36,12 +32,6 @@ export const MAX_CREDITS = 6;
 export const BASE_URL = process.env.VERCEL_URL
   ? `https://bthsaction.org`
   : `http://localhost:3000`;
-
-export const GIVEAWAY_TYPE_MAP: Record<GiveawayType, string> = {
-  RANDOM: "Random",
-  FIRST_CLAIM: "First Claim",
-  ORDERED_CLAIM: "Ordered Claim",
-} as const;
 
 export const BANNED_USERS = [""];
 

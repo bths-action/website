@@ -11,7 +11,12 @@ import { MemberChart } from "@/components/home/charts";
 export const revalidate = 600;
 
 const Home: FC = async () => {
-  const [joins, events, serviceHours, leaves] = await Promise.all([
+  const [credits, joins, events, serviceHours, leaves] = await Promise.all([
+    prisma.user
+      .findMany({
+        select: { givenCredits: true },
+      })
+      .then((users) => users.reduce((sum, user) => sum + user.givenCredits, 0)),
     prisma.user
       .findMany({
         where: {
@@ -76,6 +81,7 @@ const Home: FC = async () => {
 
         <Stats
           members={joins.length}
+          credits={credits}
           serviceHours={serviceHours}
           events={events}
         />

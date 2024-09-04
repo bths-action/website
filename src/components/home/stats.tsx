@@ -55,9 +55,10 @@ export const StatsCard: FC<
 
 export const Stats: FC<{
   members: number;
+  credits: number;
   serviceHours: number;
   events: number;
-}> = ({ members, serviceHours, events }) => {
+}> = ({ members, credits, serviceHours, events }) => {
   return (
     <motion.div
       className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 p-2"
@@ -75,7 +76,7 @@ export const Stats: FC<{
         {events}
       </StatsCard>
       <StatsCard title="Club Credits" icon={BsAward} index={3}>
-        {MAX_CREDITS}
+        {credits}
       </StatsCard>
       <StatsCard title="Service Hours Contributed" icon={BiTime} index={4}>
         {serviceHours}

@@ -6,8 +6,6 @@ import {
   RESTPatchAPIWebhookWithTokenMessageJSONBody,
   RESTPostAPIWebhookWithTokenJSONBody,
 } from "discord-api-types/v10";
-import { GIVEAWAY_TYPE_MAP } from "./constants";
-import { createGiveawaySchema } from "@/schema/giveaways";
 import { z } from "zod";
 
 export function generateEvent(event: CreateEventInput, id: string): APIEmbed {
@@ -60,12 +58,6 @@ export function generateEvent(event: CreateEventInput, id: string): APIEmbed {
     });
   }
 
-  if (event.maxGiveawayEntries) {
-    fields.push({
-      name: "**Giveaway Entries:**",
-      value: event.maxGiveawayEntries.toString(),
-    });
-  }
 
   fields.push({
     name: "**Location:**",
@@ -86,81 +78,7 @@ export function generateEvent(event: CreateEventInput, id: string): APIEmbed {
   };
 }
 
-export function generateGiveawayMessage(
-  id: string,
-  winners: { preferredName: string; discordID: string | null }[]
-) {
-  return `[GIVEAWAY](https://bthsaction.org/giveaways/${id})\nCongratulations to the following winners: ${winners
-    .map(({ preferredName, discordID }) =>
-      discordID ? `<@${discordID}>` : preferredName
-    )
-    .join(", ")}`;
-}
 
-export function generateGiveaway(
-  giveaway: z.infer<typeof createGiveawaySchema>,
-
-  id: string,
-  winners?: {
-    discordID: string | null;
-    rewardID: number;
-    preferredName: string;
-  }[]
-): APIEmbed[] {
-  const fields: APIEmbedField[] = [
-    {
-      name: "**Giveaway End Date:**",
-      value: giveaway.endsAt.toLocaleString("en-US", {
-        timeZone: "America/New_York",
-        month: "long",
-        day: "numeric",
-        year: "numeric",
-        hour: "numeric",
-        minute: "2-digit",
-      }),
-    },
-    {
-      name: "**Winners:**",
-      value: giveaway.maxWinners.toString(),
-    },
-    {
-      name: "Giveaway Type:",
-      value: GIVEAWAY_TYPE_MAP[giveaway.type],
-    },
-  ];
-
-  return [
-    {
-      title: "New Giveaway: " + giveaway.name,
-      description: giveaway.description,
-      image: {
-        url: giveaway.imageURL || "https://bthsaction.org/icon.png",
-      },
-      timestamp: new Date().toISOString(),
-      url: `https://bthsaction.org/giveaways/${id}`,
-      fields,
-    },
-    {
-      title: "Prizes:",
-      timestamp: new Date().toISOString(),
-      fields: giveaway.prizes.map((prize, index) => {
-        const winner = winners?.find((winner) => winner.rewardID === index);
-        return {
-          name: prize.name,
-          value: `${prize.details}${
-            winner
-              ? `\n(Claimed by ${
-                  winner.discordID
-                    ? `<@${winner.discordID}>`
-                    : winner.preferredName
-                })`
-              : ""
-          }`,
-        };
-      }),
-    },
-  ];
-}
 
 export async function sendMessage(
   options: string | RESTPostAPIWebhookWithTokenJSONBody,

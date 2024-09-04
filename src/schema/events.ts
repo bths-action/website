@@ -55,13 +55,6 @@ const baseEventSchema = z.object({
     .min(0, {
       message: "Max hours must be greater than or equal to 0. ",
     }),
-  maxGiveawayEntries: z
-    .number({
-      invalid_type_error: "Max giveaway entries must be a number. ",
-    })
-    .min(0, {
-      message: "Max giveaway entries must be greater than or equal to 0. ",
-    }),
   eventTime: z.date({
     invalid_type_error: "Event time must be a valid date. ",
   }),
@@ -106,8 +99,7 @@ export const createEventSchema = baseEventSchema
     (data) => {
       return !(
         data.maxHours == 0 &&
-        data.maxPoints == 0 &&
-        data.maxGiveawayEntries == 0
+        data.maxPoints == 0
       );
     },
     {
@@ -119,26 +111,12 @@ export const createEventSchema = baseEventSchema
     (data) => {
       return !(
         data.maxHours == 0 &&
-        data.maxPoints == 0 &&
-        data.maxGiveawayEntries == 0
+        data.maxPoints == 0
       );
     },
     {
       message: "Some reward must be specified. ",
       path: ["maxPoints"],
-    }
-  )
-  .refine(
-    (data) => {
-      return !(
-        data.maxHours == 0 &&
-        data.maxPoints == 0 &&
-        data.maxGiveawayEntries == 0
-      );
-    },
-    {
-      message: "Some reward must be specified. ",
-      path: ["maxGiveawayEntries"],
     }
   )
   .refine(

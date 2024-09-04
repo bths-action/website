@@ -43,12 +43,6 @@ export const EventDetails: FC<Props> = ({ event }) => {
           <BsAward className="inline" /> Total Points : {event.maxPoints}
         </div>
       )}
-      {event.maxGiveawayEntries != 0 && (
-        <div className="text-pink-600 dark:text-pink-500 mr-2">
-          <BsTicketPerforated className="inline" /> Total Entries:{" "}
-          {event.maxGiveawayEntries}
-        </div>
-      )}
       <h4>Event Time:</h4>
       {event.eventTime.toLocaleString("en-US", {
         timeZone: "America/New_York",

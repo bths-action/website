@@ -43,7 +43,6 @@ model User {
   registeredAt  DateTime     @default(now())
 
   events    EventAttendance[] @relation("EventAttendee")
-  giveaways GiveawayEntry[]   @relation("GiveawayEntry")
 
   birthday     String
   referredBy   String?
@@ -68,7 +67,6 @@ model Event {
 
   maxPoints          Float
   maxHours           Float
-  maxGiveawayEntries Float
 
   eventTime      DateTime
   finishTime     DateTime
@@ -101,48 +99,6 @@ model EventAttendance {
   @@index([userEmail])
   @@index([eventId])
   @@map("EventAttendee")
-}
-
-enum GiveawayType {
-  FIRST_CLAIM
-  ORDERED_CLAIM
-  RANDOM
-}
-
-model Giveaway {
-  id          String   @id @default(cuid())
-  name        String
-  description String   @db.VarChar(4000)
-  imageURL    String?
-  endsAt      DateTime
-  ended       Boolean  @default(false)
-
-  maxWinners Int
-  prizes     Json
-  entries    GiveawayEntry[]
-  type       GiveawayType
-
-  messageID   String  @unique
-  winnerMsgID String? @unique
-
-  createdAt DateTime @default(now())
-}
-
-model GiveawayEntry {
-  user       User     @relation("GiveawayEntry", fields: [userEmail], references: [email], onDelete: Cascade)
-  userEmail  String
-  giveaway   Giveaway @relation(fields: [giveawayId], references: [id])
-  giveawayId String
-  won        Boolean  @default(false)
-  order      Int?
-  rewardId   Int?
-  entries    Int      @default(0)
-
-  createdAt DateTime @default(now())
-
-  @@id([userEmail, giveawayId])
-  @@index([userEmail])
-  @@index([giveawayId])
 }
 
 model DeletedUsers {

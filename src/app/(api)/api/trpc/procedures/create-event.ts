@@ -169,10 +169,6 @@ function emailGenerator(input: CreateEventInput, id: string) {
           </h2>
           <h2 style="font-size: 24px; ">
             Points: ${input.maxPoints} | Hours: ${input.maxHours}
-            <br />
-            Please note the event started with ${input.maxGiveawayEntries}
-            giveaway entries, but this is subject to change according to
-            volunteer supply and demand.
           </h2>
           <h2 style="font-size: 24px; ">Description:</h2>
           <div class="description">

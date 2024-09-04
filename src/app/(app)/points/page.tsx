@@ -6,7 +6,7 @@ import { Points } from "@/components/points/";
 export const metadata: Metadata = {
   title: "Points & Hours",
   description:
-    "View your club activity, points, hours, and giveaway entries! All calculated automatically, free of hassle.",
+    "View your club activity, points, and hours! All calculated automatically, free of hassle.",
 };
 
 const Page: FC = () => {

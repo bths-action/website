@@ -22,18 +22,7 @@ import { getStats } from "./procedures/get-stats";
 import { getSpreadsheet } from "./procedures/get-spreadsheet";
 import { editCredits } from "./procedures/edit-credits";
 import { editSubscription } from "./procedures/edit-subscription";
-import { getGiveaways } from "./procedures/get-giveaways";
 import { disconnectDiscord } from "./procedures/disconnect-discord";
-import { createGiveaway } from "./procedures/create-giveaway";
-import { editGiveaway } from "./procedures/edit-giveaway";
-import { deleteGiveaway } from "./procedures/delete-giveaway";
-import { enterGiveaway } from "./procedures/enter-giveaway";
-import { getEntryBalance } from "./procedures/get-balance";
-import { leaveGiveaway } from "./procedures/leave-giveaway";
-import { editEntryBalance } from "./procedures/edit-entry-balance";
-import { getGiveawayEntry } from "./procedures/get-giveaway-entry";
-import { endGiveawayProcedure } from "./procedures/end-giveaway";
-import { getGiveawayClaims } from "./procedures/get-giveaway-claims";
 import { deleteAccount } from "./procedures/delete-account";
 
 export const appRouter = router({
@@ -70,18 +59,6 @@ export const appRouter = router({
   disconnectDiscord,
   deleteAccount,
 
-  getGiveaways,
-  createGiveaway,
-  editGiveaway,
-  deleteGiveaway,
-  endGiveaway: endGiveawayProcedure,
-
-  enterGiveaway,
-  getEntryBalance,
-  leaveGiveaway,
-  editEntryBalance,
-  getGiveawayEntry,
-  getGiveawayClaims,
 });
 
 export const createContext = async () => {

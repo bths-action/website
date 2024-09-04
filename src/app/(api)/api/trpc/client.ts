@@ -83,12 +83,6 @@ export type EditSubscriptionOutput = RouterOutput["editSubscription"];
 export type DisconnectDiscordInput = RouterInput["disconnectDiscord"];
 export type DisconnectDiscordOutput = RouterOutput["disconnectDiscord"];
 
-export type GetGiveawaysInput = RouterInput["getGiveaways"];
-export type GetGiveawaysOutput = RouterOutput["getGiveaways"];
-
-export type CreateGiveawayInput = RouterInput["createGiveaway"];
-export type CreateGiveawayOutput = RouterOutput["createGiveaway"];
-
 export type TRPCError = TRPCClientErrorLike<RouterErrors>;
 
 export const trpc = createTRPCReact<AppRouter>({});

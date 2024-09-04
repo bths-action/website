@@ -21,7 +21,7 @@ import {
 
 const Title: FC<PropsWithChildren> = ({ children }) => (
   <motion.h2
-    className="mb-16"
+    className="mb-10"
     variants={{
       hidden: {
         y: "-100%",
@@ -126,10 +126,7 @@ const ORGANIZATIONS = [
 
 export const About: FC = () => {
   return (
-    <div className="text-xl my-4">
-      <h3 className="py-20">
-        "Action speaks louder than words." - Emma Katz, 2024
-      </h3>
+    <div className="text-lg my-4">
       <motion.h2
         initial={{
           opacity: 0,
@@ -151,74 +148,29 @@ export const About: FC = () => {
         }}
         className="my-14"
       >
-        What We Are:
+        ABOUT US:
       </motion.h2>
-      <div className="text-center grid grid-cols-1 lg:grid-cols-2 items-stretch  mb-40 gap-x-2 my-14">
+      <div className="text-center grid grid-cols-1 lg:grid-cols-2 items-stretch mb-40 gap-x-2 my-14">
         <AboutGroup>
-          <Title>Modern</Title>
+          <Title>What is Action?</Title>
 
           <Description>
-            We use the latest technologies to make our club functions more
-            efficent, and to make our members' lives easier.
+            Action is a volunteer club at Brooklyn Technical High School focused
+            on making a positive difference in the community while creating a
+            positive memories and friendships. We provide volunteer
+            opportunities and events to our members so they can gain club
+            credits and service hours while benefiting communities in need.
           </Description>
         </AboutGroup>
-        <AboutGroup>
-          <span className="flex flex-wrap gap-3 justify-center">
-            {[
-              BiLogoTailwindCss,
-              SiNextdotjs,
-              BiLogoTypescript,
-              FaReact,
-              SiTrpc,
-              FaCloudflare,
-              SiAuth0,
-              SiFramer,
-              SiPusher,
-              SiDiscord,
-            ].map((Icon: IconType, i) => (
-              <motion.span
-                key={i}
-                variants={{
-                  hidden: {
-                    rotate: Math.pow(-1, i) * 360,
-                    scale: 0,
-                    opacity: 0,
-                    x: "300%",
-                  },
-                  visible: {
-                    rotate: 0,
-                    scale: 1,
-                    opacity: 1,
-                    x: 0,
-                  },
-                }}
-                transition={{
-                  duration: 1,
-                  delay: i * 0.1,
-                  type: "spring",
-                  bounce: 0.25,
-                }}
-              >
-                <Icon
-                  style={{
-                    transitionDelay: `${i * 75 + 300}ms`,
-                    transitionDuration: "300ms",
-                  }}
-                  className="w-16 h-16"
-                />
-              </motion.span>
-            ))}
-          </span>
-        </AboutGroup>
+          
         <AboutGroup>
           <Title>Community</Title>
           <Description>
-            You are one of us. You get to express criticism and dissent regardng
-            non hate speech content, and contribute towards a more inclusive and
-            diverse community.
+            Aside from providing volunteer opportunities, we aim to build a
+            community were everyone feels welcome. We hope to create a
+            environment for students to make friend and positive memories.
           </Description>
         </AboutGroup>
-        <AboutGroup></AboutGroup>
       </div>
       <motion.div
         initial="hidden"

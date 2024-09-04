@@ -56,7 +56,6 @@ export const AttendanceList: FC<ListProps> = ({ attendance, id }) => {
                   user: attendee.userEmail,
                   earnedHours: attendance.maxHours,
                   earnedPoints: attendance.maxPoints,
-                  earnedEntries: attendance.maxGiveawayEntries,
                 });
 
                 oldData = {
