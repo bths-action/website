@@ -1,4 +1,5 @@
 import { AiOutlineQuestionCircle } from 'react-icons/ai'
+import { clubAge } from "@/utils/helpers";
 
 # FAQ <AiOutlineQuestionCircle className="inline w-12 h-12" />
 
@@ -22,18 +23,13 @@ We do not have any merch, but we are planning to make some in the future.
 
     <br />
 
-### Do we get travel paid for on the weekends?
-No, there is no actual way to allocate money for these trips, but if you really are in need of money, one of our executives knows a OMNY glitch. If we have weekday events, you can use your student Metrocard.
-
-    <br />
-
 ### How many points do we need for a credit?
-The conversion rate is 25 points per credit, to a max of 8. If you exceed this, we will move it to the next year.
+The conversion rate is 20 points per credit, to a max of 12. If you exceed this, we will move it to the next year.
 
     <br />
 
 ### Will there be events outside Brooklyn?
-Yes, we try to promote equality and help out in other boroughs, although our parent organization is based in Brooklyn.
+Yes, we will try to have events spread throughout the boroughs.
 
     <br />
 
@@ -53,12 +49,7 @@ It depends on the event duration, short events get 10 points (.4 credits) and lo
     <br />
 
 ### Do we have meetings?
-Yes, but they are only once a month, and not weighted heavily. They are usually just to discuss events and other things, and the volunteer events are really the most important things.
-
-    <br />
-
-### Who made this advanced website?
-Justin, the founder of the club made this website. It was just annoying to use Google Sheets and Forms, so he built the club a piece of valuable infrastructure that will be maintained after graduation.
+Yes, twice a month, and not mandatory. They are usually just to discuss events and other things, and the volunteer events are really the most important things.
 
     <br />
 
@@ -68,17 +59,7 @@ Very likely, if you attend most of the events. If you do max it out, come back n
     <br />
 
 ### How long has this club been running?
-This club has been running for {
-      Math.floor(
-        (new Date().getTime() - new Date('2023-09-07').getTime()) /
-        (1000 * 60 * 60 * 24 * 365)
-      )
-    } years and {
-          Math.floor(
-            (new Date().getTime() - new Date('2023-09-07').getTime()) /
-            (1000 * 60 * 60 * 24 * 30)
-          ) % 12
-        } months. (Auto-calcuated from 09-07-2023)
+{clubAge(new Date('2023-09-07'), new Date())} (Auto-calcuated from 09-07-2023)
 
     <br />
 

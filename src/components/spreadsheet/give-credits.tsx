@@ -6,7 +6,7 @@ import {
 } from "@/app/(api)/api/trpc/client";
 import { FC, RefObject, useState } from "react";
 import { ColorButton } from "../ui/buttons";
-import { MAX_CREDITS } from "@/utils/constants";
+import { CREDIT_RATE, MAX_CREDITS } from "@/utils/constants";
 import { BsAward } from "react-icons/bs";
 import { confirm } from "../ui/confirm";
 import { RequestError } from "../ui/error";
@@ -61,7 +61,7 @@ export const GiveCreditsButton: FC<{
               ? credits
               : user.didOsis
               ? Math.max(
-                  Math.min(credits, Math.ceil(total / 25 - user.givenCredits)),
+                  Math.min(credits, Math.ceil(total / CREDIT_RATE - user.givenCredits)),
                   0
                 )
               : 0;

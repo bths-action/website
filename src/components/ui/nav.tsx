@@ -464,9 +464,6 @@ export const Navbar: FC<PropsWithChildren> = () => {
             height={40}
             className=" w-12 h-12 rounded-full"
           />
-          <div className="inline-block absolute bottom-0.5 -translate-x-1/2 left-1/2 translate-y-1/2 font-poppins bold px-0.5 bg-default text-white text-sm rounded-b-lg">
-            100
-          </div>
         </Link>
         <div className="overflow-y-auto w-full flex-1">
           <div className="flex-row md:flex-col flex items-center justify-around md:justify-start">

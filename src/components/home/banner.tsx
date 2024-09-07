@@ -17,13 +17,6 @@ export const Banner: FC = () => {
   }, [account, status]);
   return (
     <div className="relative w-full h-[100dvh] rounded-xl mb-4">
-      <div
-        className={`-rotate-3 transition-all duration-1000 ${
-          animated ? "top-6" : "-top-full"
-        } z-10 absolute left-1/2 -translate-x-1/2 h-20 w-[105%] text-white bg-gradient-to-r flex items-center text-3xl justify-center from-default-lighter to-default-darker`}
-      >
-        🎊🎈 100 Members! 🥳🎉
-      </div>
       <div className="absolute w-full top-1/2 -translate-y-1/2 text-center banner z-10">
         <span
           className={`inline-block backdrop-blur-sm bg-black bg-opacity-50 rounded-3xl p-6 transition-all duration-1000 ${
