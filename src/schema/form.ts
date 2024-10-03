@@ -79,7 +79,7 @@ export const registerSchema = z.object({
 
   phone: z
     .string()
-    .regex(/^(\d{1})?$/, {
+    .regex(/^\d*?$/, {
       message: "Phone number must be a number.",
     })
     .nullish()
