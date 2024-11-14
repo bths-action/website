@@ -15,7 +15,6 @@ export async function sendEmail(
       from: "BTHS Action <bthsaction@gmail.com>",
 
       to: [
-        process.env.ADVISOR_EMAIL!,
         ...(
           await prisma.user.findMany({
             where: { position: "EXEC", gradYear: { gt: 2024 } },

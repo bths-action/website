@@ -262,7 +262,7 @@ const ProfileButton: FC<{
           className="relative"
           onClick={() => {
             open(
-              "https://docs.google.com/forms/d/e/1FAIpQLSd7yl28S0IVjgkKO2q-OUEwMxu963KK79HJd0Tqnoc-gl_xeQ/viewform?usp=sf_link"
+              "https://docs.google.com/forms/d/e/1FAIpQLSeqOhN_UBIYfigkRdu8LI6S7sE8uOVBKTBpynIIIcLdtpNrMA/viewform"
             );
           }}
         >

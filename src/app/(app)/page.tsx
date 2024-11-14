@@ -19,11 +19,6 @@ const Home: FC = async () => {
       .then((users) => users.reduce((sum, user) => sum + user.givenCredits, 0)),
     prisma.user
       .findMany({
-        where: {
-          email: {
-            not: process.env.ADVISOR_EMAIL,
-          },
-        },
         select: { registeredAt: true },
 
         orderBy: {
