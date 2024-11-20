@@ -16,8 +16,8 @@ const Page: FC = async () => {
     <main>
       <LimitedContainer>
         <h1>Invalid Email</h1>
-        You must use an NYC Schools email (@nycstudents.net or @schools.nyc.gov)
-        to access this site, or an Discord account connected to such an account.
+        You should use an NYC Schools email (@nycstudents.net or @schools.nyc.gov)
+        to access this site, or an Discord account connected to such an account. (Only use gmail as a last resort) 
       </LimitedContainer>
     </main>
   );

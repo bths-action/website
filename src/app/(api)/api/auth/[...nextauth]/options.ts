@@ -19,8 +19,8 @@ export const AUTH_OPTIONS: AuthOptions = {
       }
       if (
         user.email?.endsWith("@nycstudents.net") ||
-        user.email?.endsWith("@schools.nyc.gov") ||
-        user.email === "doogypanda@gmail.com"
+        user.email?.endsWith("@gmail.com") ||
+        user.email?.endsWith("@schools.nyc.gov")
       )
         return true;
 
