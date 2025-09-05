@@ -1,8 +1,8 @@
 import { ExecPosition } from "@prisma/client";
 import { ReactNode } from "react";
 
-export const OLDEST_GRAD_YEAR = 2025;
-export const YOUNGEST_GRAD_YEAR = 2028;
+export const OLDEST_GRAD_YEAR = 2026;
+export const YOUNGEST_GRAD_YEAR = 2029;
 export const GRAD_YEARS = Array.from(
   { length: YOUNGEST_GRAD_YEAR - OLDEST_GRAD_YEAR + 1 },
   (_, i) => OLDEST_GRAD_YEAR + i
