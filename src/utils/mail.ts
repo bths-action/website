@@ -18,13 +18,13 @@ export async function sendEmail(
 
   const recipients = (
     await prisma.user.findMany({
-      where: { position: "EXEC", gradYear: { gt: 2024 } },
+      where: { position: "EXEC", gradYear: { gt: 2025 } },
     })
   ).map((user) => user.email);
 
   try {
     const response = await mg.messages.create(process.env.MAILGUN_DOMAIN!, {
-      from: "BTHS Action <bthsaction@gmail.com>",
+      from: "BTHS Action <events@bthsaction.org>",
       to: recipients,
       subject: data.subject,
       html: data.html,
