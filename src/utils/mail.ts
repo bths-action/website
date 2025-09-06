@@ -1,32 +1,39 @@
-import sg, { MailDataRequired } from "@sendgrid/mail";
+
+import formData from "form-data";
+import Mailgun from "mailgun.js";
 import { convert } from "html-to-text";
 import { prisma } from "./prisma";
 
 export async function sendEmail(
-  data: Omit<MailDataRequired, "from" | "text"> & {
+  data: {
+    subject: string;
     html: string;
   }
 ) {
-  sg.setApiKey(process.env.SENDGRID_API_KEY!);
+  const mailgun = new Mailgun(formData);
+  const mg = mailgun.client({
+    username: "api",
+    key: process.env.MAILGUN_API_KEY!,
+  });
 
-  return sg
-    .send({
-      ...data,
+  const recipients = (
+    await prisma.user.findMany({
+      where: { position: "EXEC", gradYear: { gt: 2024 } },
+    })
+  ).map((user) => user.email);
+
+  try {
+    const response = await mg.messages.create(process.env.MAILGUN_DOMAIN!, {
       from: "BTHS Action <bthsaction@gmail.com>",
-
-      to: [
-        ...(
-          await prisma.user.findMany({
-            where: { position: "EXEC", gradYear: { gt: 2024 } },
-          })
-        ).map((user) => user.email),
-      ],
+      to: recipients,
+      subject: data.subject,
+      html: data.html,
       text: convert(data.html),
-    })
-    .then((response) => {
-      console.log(response);
-    })
-    .catch((error) => {
-      console.log(JSON.stringify(error));
     });
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.log(JSON.stringify(error));
+    throw error;
+  }
 }
