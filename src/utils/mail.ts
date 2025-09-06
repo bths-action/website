@@ -8,7 +8,6 @@ export async function sendEmail(
   data: {
     subject: string;
     html: string;
-    replyTo: string;
   }
 ) {
   const mailgun = new Mailgun(formData);
@@ -30,7 +29,6 @@ export async function sendEmail(
       subject: data.subject,
       html: data.html,
       text: convert(data.html),
-      'h:Reply-To': data.replyTo
     });
     console.log(response);
     return response;

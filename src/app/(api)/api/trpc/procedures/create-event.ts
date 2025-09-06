@@ -39,7 +39,6 @@ export const createEvent = adminProcedure
       sendEmail({
         subject: "New Action Event: " + input.name,
         html: emailBody,
-        replyTo: "BTHS Action <bthsaction@gmail.com>"
       }),
     ]);
 
