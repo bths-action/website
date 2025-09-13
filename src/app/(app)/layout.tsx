@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${figtree.variable} ${poppins.variable} ${spaceMono.variable} bg-white font-anybody dark:bg-black w-full overflow-y-hidden flex h-[calc(100dvh-70px)] md:h-[100dvh]`}
+        className={`${figtree.variable} ${poppins.variable} ${spaceMono.variable} bg-white font-anybody dark:bg-black w-full overflow-y-hidden flex h-[calc(100dvh-70px)] md:h-dvh`}
       >
         <AppProviders>
           <SplashScreen>

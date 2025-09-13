@@ -10,7 +10,7 @@ export const SplashScreen: FC<PropsWithChildren> = ({ children }) => {
   return (
     <>
       <div
-        className={`w-[100dvw] h-[100dvh] z-[10000] transition-all  duration-300 fixed ${
+        className={`w-dvw h-dvh z-10000 transition-all  duration-300 fixed ${
           status == "loading" || account.status == "loading"
             ? "top-0 opacity-100"
             : "-top-full opacity-0"

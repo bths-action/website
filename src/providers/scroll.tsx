@@ -20,7 +20,7 @@ export const ScrollRefProvider: FC<PropsWithChildren> = ({ children }) => {
   return (
     <div
       ref={scrollRef}
-      className="h-[calc(100dvh-56px)] md:h-[100dvh]  relative overflow-auto w-full break-words"
+      className="h-[calc(100dvh-56px)] md:h-dvh  relative overflow-auto w-full break-words"
       id="content"
     >
       <ScrollContext.Provider value={scrollRef}>

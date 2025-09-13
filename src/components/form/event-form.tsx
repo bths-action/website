@@ -189,7 +189,7 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
               </FormQuestion>
               <br />
               {values.description && (
-                <div className="mx-2 bg-gray-500 bg-opacity-20 overflow-auto break-words p-1 rounded-md">
+                <div className="mx-2 bg-gray-500/20 overflow-auto break-words p-1 rounded-md">
                   <MarkDownView>{values.description}</MarkDownView>
                 </div>
               )}
@@ -374,7 +374,7 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
                       />
                       <button
                         type="button"
-                        className="absolute top-0 right-0 p-0 bg-black bg-opacity-20 rounded-full"
+                        className="absolute top-0 right-0 p-0 bg-black/20 rounded-full"
                         onClick={() => {
                           setFieldValue("imageURL", null);
                         }}
