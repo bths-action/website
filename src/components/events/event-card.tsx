@@ -56,7 +56,7 @@ export const EventCard: FC<{
           },
           hidden: { x: "100dvw", opacity: 0 },
         }}
-        className="shadowed bordered h-full bg-zinc-100 dark:bg-zinc-900 bg-opacity-0 dark:bg-opacity-0 rounded-lg overflow-hidden hover:bg-opacity-100 hover:dark:bg-opacity-100 p-3 transition-opacity duration-200 ease-in-out "
+        className="shadowed bordered h-full bg-zinc-100/0 dark:bg-zinc-900/0 rounded-lg overflow-hidden hover:bg-zinc-100/100 hover:dark:bg-zinc-900/100 p-3 transition-opacity duration-200 ease-in-out "
       >
         <Link key={id} href={`/events/${id}`} className="text-left">
           <div className="flex flex-col items-stretch w-full font-semibold flex-wrap h-full">

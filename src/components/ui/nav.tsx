@@ -449,7 +449,7 @@ export const Navbar: FC<PropsWithChildren> = () => {
   // vertical navbar
   return (
     <>
-      <nav className="flex items-center justify-around md:justify-start md:flex-col bg-zinc-100 dark:bg-zinc-900 md:h-[100dvh] w-screen md:w-20 lg:w-60 bottom-0 py-1 md:relative absolute flex-row z-30 border-r-0 md:border-r-2 border-t-2 md:border-t-0 ">
+      <nav className="flex items-center justify-around md:justify-start md:flex-col bg-zinc-100 dark:bg-zinc-900 md:h-dvh w-screen md:w-20 lg:w-60 bottom-0 py-1 md:relative absolute flex-row z-30 border-r-0 md:border-r-2 border-t-2 md:border-t-0 ">
         <Link
           href="/"
           style={{
@@ -561,11 +561,11 @@ export const Navbar: FC<PropsWithChildren> = () => {
           sideId={sideId}
         />
         <div
-          className={`absolute md:h-[100dvh]  ${
+          className={`absolute md:h-dvh  ${
             sideId
-              ? "h-60 w-[100dvw]  md:w-60 overflow-y-auto"
+              ? "h-60 w-dvw  md:w-60 overflow-y-auto"
               : "h-0 w-0 overflow-y-hidden"
-          } bg-gray-50 z-50 md:border-0 md:border-r-2 border-t-2  dark:bg-zinc-900 bg-opacity-90 dark:bg-opacity-90 md:translate-x-full  right-0 top-0 translate-x-0 -translate-y-full md:translate-y-0 transition-[height,width] duration-300 ease-in-out md:overflow-hidden`}
+          } bg-gray-50/90 z-50 md:border-0 md:border-r-2 border-t-2  dark:bg-zinc-900/90 md:translate-x-full  right-0 top-0 translate-x-0 -translate-y-full md:translate-y-0 transition-[height,width] duration-300 ease-in-out md:overflow-hidden`}
         >
           <div className="md:w-60 w-full ">
             <NavButton
@@ -583,7 +583,7 @@ export const Navbar: FC<PropsWithChildren> = () => {
       </nav>
       {sideId && (
         <div
-          className="z-20 w-[100dvw] h-[100dvh] fixed left-0 top-0 bg-black bg-opacity-50"
+          className="z-20 w-dvw h-dvh fixed left-0 top-0 bg-black/50"
           onClick={() => {
             setSideId("");
           }}

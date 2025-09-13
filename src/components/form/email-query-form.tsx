@@ -118,7 +118,7 @@ const EmailQueryContent: FC = () => {
           >
             Submit
           </ColorButton>
-          <div className="h-64 bg-gray-400 bg-opacity-30 m-2 rounded-lg overflow-auto relative">
+          <div className="h-64 bg-gray-400/30 m-2 rounded-lg overflow-auto relative">
             <code>
               {query.status == "loading"
                 ? "Loading..."
