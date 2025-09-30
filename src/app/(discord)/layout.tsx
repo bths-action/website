@@ -26,7 +26,7 @@ export default function RootLayout({
       >
         <AppProviders>
           <div
-            className="h-[100dvh] overflow-auto w-[100dvw] break-words flex items-center justify-center flex-col"
+            className="h-dvh overflow-auto w-dvw break-words flex items-center justify-center flex-col"
             id="content"
           >
             {children}

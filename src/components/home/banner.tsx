@@ -16,10 +16,10 @@ export const Banner: FC = () => {
     return () => clearTimeout(timer);
   }, [account, status]);
   return (
-    <div className="relative w-full h-[100dvh] rounded-xl mb-4">
+    <div className="relative w-full h-dvh rounded-xl mb-4">
       <div className="absolute w-full top-1/2 -translate-y-1/2 text-center banner z-10">
         <span
-          className={`inline-block backdrop-blur-sm bg-black bg-opacity-50 rounded-3xl p-6 transition-all duration-1000 ${
+          className={`inline-block backdrop-blur-sm bg-black/50 rounded-3xl p-6 transition-all duration-1000 ${
             mounted ? "opacity-100 scale-100" : "opacity-0 scale-50"
           } `}
         >
