@@ -9,12 +9,14 @@ export const dynamicParams = true;
 export const revalidate = 15;
 
 export type Params = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
-export async function generateMetadata({
-  params: { id },
-}: Params): Promise<Metadata> {
+export async function generateMetadata(props: Params): Promise<Metadata> {
+  const params = await props.params;
+
+  const { id } = params;
+
   const event = await prisma.event.findUnique({
     where: { id },
     select: { name: true, description: true, imageURL: true },
@@ -85,7 +87,11 @@ function fetchEvent(id: string) {
   });
 }
 
-const Page: FC<Params> = async ({ params: { id } }) => {
+const Page: FC<Params> = async (props) => {
+  const params = await props.params;
+
+  const { id } = params;
+
   const event = await fetchEvent(id);
   if (!event) {
     notFound();

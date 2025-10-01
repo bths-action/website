@@ -3,7 +3,7 @@ import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-  const headersList = headers();
+  const headersList = await headers();
   const auth = headersList.get("Authorization");
   if (auth !== process.env.BOT_SYNC_API_KEY) {
     return NextResponse.json(

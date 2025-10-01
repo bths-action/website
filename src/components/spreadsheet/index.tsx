@@ -25,8 +25,8 @@ export const Spreadsheet: FC = () => {
   const query = trpc.getSpreadsheet.useQuery();
 
   const fetchStatus: Status =
-    query.status === "loading" ||
-    account.status === "loading" ||
+    query.status === "pending" ||
+    account.status === "pending" ||
     status === "loading"
       ? "loading"
       : status == "unauthenticated" ||
@@ -77,9 +77,6 @@ export const Spreadsheet: FC = () => {
               <BackupButton data={query.data} />
               <GiveCreditsButton data={query.data} inputRef={inputRef} />
             </div>{" "}
-            <MdWarning className="inline-block mr-2" /> indicates that the user
-            has not done the OSIS form, therefore unable to receive credits.
-            <br />
             <FaRegIdCard className="inline-block ml-4 mr-2" /> indicates that
             the user is an executive, therefore able to recieve in full every
             time.
@@ -95,7 +92,7 @@ export const Spreadsheet: FC = () => {
                   <th>Misc Points</th>
                   <th>Referral Points</th>
                   {query.data.events.map((event) => {
-                    return <th>{event.name}</th>;
+                    return <th key={event.id}>{event.name}</th>;
                   })}
                 </tr>
               </thead>
@@ -109,7 +106,10 @@ export const Spreadsheet: FC = () => {
                       0
                     );
                   return (
-                    <tr className="hover:bg-gray-100 hover:dark:bg-zinc-900 border-t-2 ">
+                    <tr
+                      key={user.email}
+                      className="hover:bg-gray-100 hover:dark:bg-zinc-900 border-t-2 "
+                    >
                       <td className="px-4 whitespace-nowrap py-1">
                         <input
                           className="w-16"
@@ -167,9 +167,6 @@ export const Spreadsheet: FC = () => {
                         />
                       </td>
                       <td className="px-4 whitespace-nowrap">
-                        {user.didOsis || (
-                          <MdWarning className="inline-block mr-2" />
-                        )}
                         {user.position == "EXEC" && (
                           <FaRegIdCard className="inline-block mr-2" />
                         )}
@@ -186,7 +183,7 @@ export const Spreadsheet: FC = () => {
                       </td>
                       {query.data.events.map((event) => {
                         return (
-                          <td className="px-24">
+                          <td key={event.id} className="px-24">
                             {user.events[event.id] || 0}
                           </td>
                         );

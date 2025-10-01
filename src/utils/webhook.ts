@@ -6,9 +6,24 @@ import {
   RESTPatchAPIWebhookWithTokenMessageJSONBody,
   RESTPostAPIWebhookWithTokenJSONBody,
 } from "discord-api-types/v10";
-import { z } from "zod";
 
-export function generateEvent(event: CreateEventInput, id: string): APIEmbed {
+type EventData = Pick<
+  CreateEventInput,
+  | "name"
+  | "description"
+  | "maxPoints"
+  | "maxHours"
+  | "eventTime"
+  | "finishTime"
+  | "address"
+> & {
+  registerBefore?: boolean;
+  limit?: number | null;
+  imageURL?: string | null;
+  serviceLetters?: string | null;
+};
+
+export function generateEvent(event: EventData, id: string): APIEmbed {
   const fields: APIEmbedField[] = [
     {
       name: `**Event ${event.finishTime ? "Start " : ""}Time:**`,
@@ -58,7 +73,6 @@ export function generateEvent(event: CreateEventInput, id: string): APIEmbed {
     });
   }
 
-
   fields.push({
     name: "**Location:**",
     value: `[${event.address}](${encodeURI(
@@ -77,8 +91,6 @@ export function generateEvent(event: CreateEventInput, id: string): APIEmbed {
     fields,
   };
 }
-
-
 
 export async function sendMessage(
   options: string | RESTPostAPIWebhookWithTokenJSONBody,

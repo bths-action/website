@@ -8,12 +8,12 @@ export function* shuffle<T>(arr: T[]): Generator<T> {
 }
 
 export function clubAge(startDate: Date, currentDate: Date) {
-  let startYear = startDate.getFullYear();
-  let startMonth = startDate.getMonth(); // 0-indexed
-  let startDay = startDate.getDate();
-  let currentYear = currentDate.getFullYear();
-  let currentMonth = currentDate.getMonth();
-  let currentDay = currentDate.getDate();
+  const startYear = startDate.getFullYear();
+  const startMonth = startDate.getMonth(); // 0-indexed
+  const startDay = startDate.getDate();
+  const currentYear = currentDate.getFullYear();
+  const currentMonth = currentDate.getMonth();
+  const currentDay = currentDate.getDate();
 
   // Calculate the difference in years and months
   let totalYears = currentYear - startYear;
@@ -27,7 +27,7 @@ export function clubAge(startDate: Date, currentDate: Date) {
     if (prevMonth < 0) {
       prevMonth = 11;
     }
-    let daysInPrevMonth = new Date(currentYear, prevMonth + 1, 0).getDate();
+    const daysInPrevMonth = new Date(currentYear, prevMonth + 1, 0).getDate();
     totalDays += daysInPrevMonth;
   }
 
@@ -37,5 +37,5 @@ export function clubAge(startDate: Date, currentDate: Date) {
     totalMonths += 12;
   }
 
-  return `This club has been running for ${totalYears} years, ${totalMonths} months and ${totalDays} days.` 
+  return `This club has been running for ${totalYears} years, ${totalMonths} months and ${totalDays} days.`;
 }

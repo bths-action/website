@@ -1,5 +1,5 @@
 "use client";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
 import { FC, PropsWithChildren } from "react";
@@ -162,7 +162,7 @@ export const About: FC = () => {
             credits and service hours while benefiting communities in need.
           </Description>
         </AboutGroup>
-          
+
         <AboutGroup>
           <Title>Community</Title>
           <Description>

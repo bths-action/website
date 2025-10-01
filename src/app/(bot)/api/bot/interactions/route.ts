@@ -28,7 +28,7 @@ function capitalizeFirstLetter(s: string) {
  *
  * @see https://discord.com/developers/docs/interactions/receiving-and-responding#receiving-an-interaction
  */
-export async function POST(request: Request): Promise<NextResponse<any>> {
+export async function POST(request: Request): Promise<NextResponse<unknown>> {
   const unknown = new NextResponse("Unknown command", { status: 400 });
   const verifyResult = await verifyInteractionRequest(
     request,

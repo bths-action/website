@@ -14,15 +14,15 @@ import { MdDoNotDisturbOn } from "react-icons/md";
 
 export const AdminActions: FC<PropsWrite> = ({ event, setEvent }) => {
   const account = useAccount();
-  const position = account.data?.position;
-  if (!(position == "ADMIN" || position == "EXEC")) return null;
   const [formOpen, setFormOpen] = useState(false);
   const deleteEvent = trpc.deleteEvent.useMutation();
   const editEvent = trpc.editEvent.useMutation();
   const router = useRouter();
-
   const [deleting, setDeleting] = useState(false);
   const [closing, setClosing] = useState(false);
+
+  const position = account.data?.position;
+  if (!(position == "ADMIN" || position == "EXEC")) return null;
 
   return (
     <>

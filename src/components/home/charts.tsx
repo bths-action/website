@@ -1,6 +1,6 @@
 "use client";
 import { PRIMARY_COLOR } from "@/utils/constants";
-import { useInView } from "framer-motion";
+import { useInView } from "motion/react";
 import { useTheme } from "next-themes";
 import { FC, useEffect, useMemo, useRef, useState } from "react";
 import { AxisOptions, Chart } from "react-charts";
@@ -138,7 +138,7 @@ export const MemberChart: FC<Props> = ({ joins, leaves }) => {
                     </p>
                     <hr />
                     <p className="p-2">
-                      <p className="h-3.5 w-3.5 rounded-full bg-default inline-block" />{" "}
+                      <span className="h-3.5 w-3.5 rounded-full bg-default inline-block" />{" "}
                       {focusedDatum?.originalDatum.members} Members
                     </p>
                   </div>

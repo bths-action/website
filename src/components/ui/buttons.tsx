@@ -5,7 +5,7 @@ import {
   Target,
   TargetAndTransition,
   motion,
-} from "framer-motion";
+} from "motion/react";
 import { twMerge } from "tailwind-merge";
 import { MdContentCopy } from "react-icons/md";
 import { FaCheck } from "react-icons/fa6";

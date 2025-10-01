@@ -4,16 +4,16 @@ export const queryEventsSchema = z.object({
   startRange: z.date().optional(),
   endRange: z.date().optional(),
   search: z.string().optional(),
-  cursor: z.number().int().min(0).default(0),
-  orderBy: z.enum(["eventTime", "createdAt"]).default("eventTime"),
-  order: z.enum(["asc", "desc"]).default("desc"),
+  cursor: z.int().min(0).prefault(0),
+  orderBy: z.enum(["eventTime", "createdAt"]).prefault("eventTime"),
+  order: z.enum(["asc", "desc"]).prefault("desc"),
   includeStatus: z
     .object({
       unavailable: z.boolean(),
       available: z.boolean(),
       upcoming: z.boolean(),
     })
-    .default({
+    .prefault({
       unavailable: true,
       available: true,
       upcoming: true,
@@ -28,58 +28,66 @@ const baseEventSchema = z.object({
   name: z
     .string()
     .min(1, {
-      message: "Event name is required. ",
+      error: "Event name is required. ",
     })
     .max(190, {
-      message: "Event name too long. ",
+      error: "Event name too long. ",
     }),
   description: z
     .string()
     .min(1, {
-      message: "Event description is required. ",
+      error: "Event description is required. ",
     })
     .max(4000, {
-      message: "Event description too long. ",
+      error: "Event description too long. ",
     }),
   maxPoints: z
     .number({
-      invalid_type_error: "Max points must be a number. ",
+      error: (issue) =>
+        issue.input === undefined ? undefined : "Max points must be a number. ",
     })
     .min(0, {
-      message: "Max points must be greater than or equal to 0. ",
+      error: "Max points must be greater than or equal to 0. ",
     }),
   maxHours: z
     .number({
-      invalid_type_error: "Max points must be a number. ",
+      error: (issue) =>
+        issue.input === undefined ? undefined : "Max points must be a number. ",
     })
     .min(0, {
-      message: "Max hours must be greater than or equal to 0. ",
+      error: "Max hours must be greater than or equal to 0. ",
     }),
   eventTime: z.date({
-    invalid_type_error: "Event time must be a valid date. ",
+    error: (issue) =>
+      issue.input === undefined
+        ? undefined
+        : "Event time must be a valid date. ",
   }),
   finishTime: z.date({
-    invalid_type_error: "Event time must be a valid date. ",
+    error: (issue) =>
+      issue.input === undefined
+        ? undefined
+        : "Event time must be a valid date. ",
   }),
-  registerBefore: z.boolean().default(true),
+  registerBefore: z.boolean().prefault(true),
   limit: z
     .number({
-      invalid_type_error: "Max points must be a number. ",
+      error: (issue) =>
+        issue.input === undefined ? undefined : "Max points must be a number. ",
     })
     .min(0, {
-      message: "Limit must be greater than or equal to 0. ",
+      error: "Limit must be greater than or equal to 0. ",
     })
     .nullish()
     .optional(),
-  imageURL: z.string().url().optional().nullish(),
+  imageURL: z.url().optional().nullish(),
   // gdrive url
   serviceLetters: z
-    .string()
     .url({
-      message: "Service letter must be a URL. ",
+      error: "Service letter must be a URL. ",
     })
     .regex(/^https:\/\/drive\.google\.com\/[^\s]*/, {
-      message: "Service letter must be a valid Google Drive URL. ",
+      error: "Service letter must be a valid Google Drive URL. ",
     })
     .optional()
     .nullish(),
@@ -87,36 +95,30 @@ const baseEventSchema = z.object({
   address: z
     .string()
     .min(1, {
-      message: "Address is required. ",
+      error: "Address is required. ",
     })
     .max(1000, {
-      message: "Address is too long. ",
+      error: "Address is too long. ",
     }),
 });
 
 export const createEventSchema = baseEventSchema
   .refine(
     (data) => {
-      return !(
-        data.maxHours == 0 &&
-        data.maxPoints == 0
-      );
+      return !(data.maxHours == 0 && data.maxPoints == 0);
     },
     {
-      message: "Some reward must be specified. ",
       path: ["maxHours"],
+      error: "Some reward must be specified. ",
     }
   )
   .refine(
     (data) => {
-      return !(
-        data.maxHours == 0 &&
-        data.maxPoints == 0
-      );
+      return !(data.maxHours == 0 && data.maxPoints == 0);
     },
     {
-      message: "Some reward must be specified. ",
       path: ["maxPoints"],
+      error: "Some reward must be specified. ",
     }
   )
   .refine(
@@ -125,8 +127,8 @@ export const createEventSchema = baseEventSchema
       return data.eventTime.valueOf() < data.finishTime?.valueOf();
     },
     {
-      message: "Finish time must be after event time. ",
       path: ["finishTime"],
+      error: "Finish time must be after event time. ",
     }
   )
   .and(z.object({}));

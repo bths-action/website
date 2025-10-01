@@ -11,7 +11,7 @@ import { QueryForm } from "./query-form";
 import { Loading } from "../ui/loading";
 import { RequestError } from "../ui/error";
 import { CreateEvent } from "./create-event";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 export type EventPreview = GetEventsOutput["events"][number];
 
@@ -39,8 +39,9 @@ export const Events: FC = () => {
       <div className="flex flex-col gap-3 mb-2 overflow-visible pt-3">
         {events.data?.pages
           .map((page) => page.events)
-          .map((events) => (
+          .map((events, pageIndex) => (
             <motion.div
+              key={pageIndex}
               variants={{
                 hidden: { opacity: 0 },
                 show: {

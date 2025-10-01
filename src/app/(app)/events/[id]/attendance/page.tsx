@@ -10,7 +10,11 @@ export const metadata = {
   description: "Event attendance for BTHS Action. (EXEC ONLY)",
 };
 
-const Page: FC<Params> = ({ params: { id } }) => {
+const Page: FC<Params> = async (props) => {
+  const params = await props.params;
+
+  const { id } = params;
+
   return (
     <main>
       <LimitedContainer>

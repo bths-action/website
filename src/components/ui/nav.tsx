@@ -173,7 +173,7 @@ const ProfileButton: FC<{
   const deleteAccount = trpc.deleteAccount.useMutation();
   const utils = trpc.useUtils();
   const { status: accountStatus, data: accountData } = useAccount();
-  const notDone = status == "loading" || accountStatus == "loading";
+  const notDone = status == "loading" || accountStatus == "pending";
 
   useEffect(() => {
     if (sideId != "profile") return;
@@ -256,29 +256,6 @@ const ProfileButton: FC<{
             </span>
           )}
         </NavButton>
-        <NavButton
-          disabled={accountData?.didOsis}
-          icon={accountData?.didOsis ? FaClipboardCheck : FaClipboard}
-          className="relative"
-          onClick={() => {
-            open(
-              "https://docs.google.com/forms/d/e/1FAIpQLSeqOhN_UBIYfigkRdu8LI6S7sE8uOVBKTBpynIIIcLdtpNrMA/viewform"
-            );
-          }}
-        >
-          OSIS Form{" "}
-          {accountData?.didOsis ? (
-            "(Completed)"
-          ) : (
-            <span>
-              (MUST DO)
-              <span className=" absolute right-6 top-2">
-                <div className=" w-4 h-4 absolute bg-yellow-500 rounded-full animate-ping" />
-                <div className=" w-4 h-4 absolute bg-yellow-500 rounded-full" />
-              </span>
-            </span>
-          )}
-        </NavButton>
 
         {accountStatus == "success" && accountData?.position == "EXEC" && (
           <>
@@ -310,6 +287,7 @@ const ProfileButton: FC<{
                     type="email"
                     className="w-full border-2 border-black"
                     placeholder="Email"
+                    defaultValue=""
                   />
                 </>
               ),
@@ -325,7 +303,6 @@ const ProfileButton: FC<{
                       name: "",
                       email: "",
                       eventAlerts: false,
-                      didOsis: false,
                     });
                     signOut();
                   },
@@ -398,8 +375,7 @@ const ProfileButton: FC<{
           }
           className="rounded-full min-w-8 min-h-8 bg-black bordered"
         />
-        {accountStatus == "success" &&
-          (accountData?.didOsis == false || accountData?.discordID == null) && (
+        {accountStatus == "success" && accountData?.discordID == null && (
             <span className=" absolute right-2 top-0">
               <div className=" w-4 h-4 absolute bg-yellow-500 rounded-full animate-ping" />
               <div className=" w-4 h-4 absolute bg-yellow-500 rounded-full" />
@@ -410,8 +386,7 @@ const ProfileButton: FC<{
   );
 };
 
-const Socials: FC<{
-}> = () => {
+const Socials: FC<Record<string, never>> = () => {
   return (
     <>
       <TransparentButton
@@ -444,7 +419,7 @@ export const Navbar: FC<PropsWithChildren> = () => {
     setMounted(true);
   }, []);
 
-  const socials = <Socials  />;
+  const socials = <Socials />;
 
   // vertical navbar
   return (
@@ -467,22 +442,20 @@ export const Navbar: FC<PropsWithChildren> = () => {
         </Link>
         <div className="overflow-y-auto w-full flex-1">
           <div className="flex-row md:flex-col flex items-center justify-around md:justify-start">
-            {Object.entries(NAV_LINKS).map(
-              ([, { href, icon, text }]) => (
-                <NavButton
-                  key={href}
-                  icon={icon}
-                  href={href}
-                  hideSmall
-                  className="lg:text-left "
-                  onClick={() => {
-                    setSideId("");
-                  }}
-                >
-                  {text}
-                </NavButton>
-              )
-            )}
+            {Object.entries(NAV_LINKS).map(([, { href, icon, text }]) => (
+              <NavButton
+                key={href}
+                icon={icon}
+                href={href}
+                hideSmall
+                className="lg:text-left "
+                onClick={() => {
+                  setSideId("");
+                }}
+              >
+                {text}
+              </NavButton>
+            ))}
 
             <NavButton
               icon={FaRegIdCard}

@@ -80,10 +80,10 @@ export const UserAttendance: FC<Props> = ({ event }) => {
       );
   });
 
-  useEvent(channel, "delete", (raw: any) => {
+  useEvent(channel, "delete", (raw: unknown) => {
     const data: {
       email: string;
-    } = raw;
+    } = raw as { email: string };
 
     if (account.status == "success" && account.data?.email == data.email) {
       utils.getAttendance.setData(
@@ -112,10 +112,10 @@ export const UserAttendance: FC<Props> = ({ event }) => {
   return (
     <>
       <h4>Event Attendance:</h4>
-      {space.status === "loading" ||
-      attendance.status === "loading" ||
+      {space.status === "pending" ||
+      attendance.status === "pending" ||
       status === "loading" ||
-      account.status === "loading" ? (
+      account.status === "pending" ? (
         <Loading
           loadingType="bar"
           spinnerProps={{
@@ -237,7 +237,13 @@ export const UserAttendance: FC<Props> = ({ event }) => {
               disabled={isSubmitting}
               onClick={async () => {
                 setIsSubmitting(true);
-                if ((account.data?.discordID !== null && account.data?.discordID !== "") || (account.data?.instagram !== "" && account.data?.instagram !== null) || (account.data?.phone !== null && account.data?.phone !== "")) {
+                if (
+                  (account.data?.discordID !== null &&
+                    account.data?.discordID !== "") ||
+                  (account.data?.instagram !== "" &&
+                    account.data?.instagram !== null) ||
+                  (account.data?.phone !== null && account.data?.phone !== "")
+                ) {
                   joinEvent.mutate(
                     {
                       id: event.id,

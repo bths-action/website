@@ -12,7 +12,7 @@ import { FormQuestion } from "../ui/container";
 import { Event } from "@prisma/client";
 import { MarkDownView } from "../ui/md-view";
 import { createEventSchema } from "@/schema/events";
-import { ZodError } from "zod";
+import { z, ZodError } from "zod";
 import { BiXCircle } from "react-icons/bi";
 import { useRouter } from "next/navigation";
 
@@ -25,10 +25,10 @@ type Props = (
   | {
       mode: "edit";
       event: Event;
-      setEvent: (event: Event) => any;
+      setEvent: (event: Event) => void;
     }
 ) & {
-  setOpen: (open: boolean) => any;
+  setOpen: (open: boolean) => void;
 };
 
 const TEMPLATES: { name: string; image: string; content: string }[] = [
@@ -58,7 +58,7 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
     registerBefore: mode == "edit" ? event.registerBefore : true,
     address: mode == "edit" ? event.address : "",
     limit: mode == "edit" ? event.limit || 0 : (0 as number | null),
-    serviceLetters: mode == "edit" ? event.serviceLetters : null,
+    serviceLetters: mode == "edit" ? event.serviceLetters : undefined,
     imageURL: mode == "edit" ? event.imageURL : null,
   };
 
@@ -69,7 +69,7 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
       initialValues={initialValues}
       validate={(data) => {
         setError(null);
-        let values = { ...data };
+        const values = { ...data };
         if (!values.limit) values.limit = null;
         if (!values.serviceLetters) values.serviceLetters = null;
 
@@ -77,7 +77,7 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
           createEventSchema.parse(values);
         } catch (err) {
           if (err instanceof ZodError) {
-            return err.formErrors.fieldErrors;
+            return z.flattenError(err).fieldErrors;
           }
         }
       }}
@@ -101,29 +101,32 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
           return;
         }
 
-        await (mode == "edit" ? editEvent : createEvent)
-          .mutateAsync(
-            {
-              ...values,
-              id: (mode == "edit" ? event.id : undefined)!,
-              eventTime: values.eventTime!,
-              finishTime: values.finishTime!,
-            },
-            {
-              onSuccess: (data) => {
-                setEvent?.({
-                  ...event,
-                  ...data,
-                });
-                router.push(`/events/${data.id}`);
-                setOpen(false);
-              },
-              onError: (err) => {
-                setError(err);
-              },
-            }
-          )
-          .catch();
+        const basePayload = {
+          ...values,
+          eventTime: values.eventTime!,
+          finishTime: values.finishTime!,
+        };
+
+        await (mode == "edit"
+          ? editEvent.mutateAsync({
+              ...basePayload,
+              id: event.id,
+            } as Parameters<typeof editEvent.mutateAsync>[0])
+          : createEvent.mutateAsync(
+              basePayload as Parameters<typeof createEvent.mutateAsync>[0]
+            )
+        )
+          .then((data) => {
+            setEvent?.({
+              ...event,
+              ...data,
+            });
+            router.push(`/events/${data.id}`);
+            setOpen(false);
+          })
+          .catch((err) => {
+            setError(err);
+          });
       }}
     >
       {({
@@ -418,14 +421,14 @@ export const EventForm: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
       }}
       title={mode == "edit" ? "Edit Event" : "Create Event"}
     >
-      {account.status == "loading" ? (
+      {account.status == "pending" ? (
         <Loading loadingType="bar">Loading...</Loading>
       ) : account.status == "error" ? (
         <RequestError error={account.error} className="rounded-none" />
       ) : (account.data?.position || "MEMBER") == "MEMBER" ? (
         "You are not an exec."
       ) : (
-        // @ts-ignore
+        // @ts-expect-error - Props union type issue with mode
         <FormContent
           mode={mode}
           setOpen={setOpen}

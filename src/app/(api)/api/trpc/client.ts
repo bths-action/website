@@ -1,15 +1,10 @@
 import { TRPCClientErrorLike, createTRPCReact } from "@trpc/react-query";
 import type { AppRouter } from ".";
 
-import type {
-  inferRouterError,
-  inferRouterInputs,
-  inferRouterOutputs,
-} from "@trpc/server";
+import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
 
 type RouterInput = inferRouterInputs<AppRouter>;
 type RouterOutput = inferRouterOutputs<AppRouter>;
-export type RouterErrors = inferRouterError<AppRouter>;
 
 export type GetEventsInput = RouterInput["getEvents"];
 export type GetEventsOutput = RouterOutput["getEvents"];
@@ -83,6 +78,6 @@ export type EditSubscriptionOutput = RouterOutput["editSubscription"];
 export type DisconnectDiscordInput = RouterInput["disconnectDiscord"];
 export type DisconnectDiscordOutput = RouterOutput["disconnectDiscord"];
 
-export type TRPCError = TRPCClientErrorLike<RouterErrors>;
+export type TRPCError = TRPCClientErrorLike<AppRouter>;
 
 export const trpc = createTRPCReact<AppRouter>({});

@@ -1,7 +1,7 @@
 "use client";
 
 import { FC, PropsWithChildren } from "react";
-import { HTMLMotionProps, Variants, motion } from "framer-motion";
+import { HTMLMotionProps, Variants, motion } from "motion/react";
 
 export const Collapse: FC<
   PropsWithChildren<

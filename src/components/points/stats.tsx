@@ -26,18 +26,16 @@ export const PointsStats: FC<{
   const totalPoints = refPoints + eventPoints + (account.miscPoints || 0);
   // bths is 32 credits; 25 points per credit
 
-  let awarded =
+  const awarded =
     account.position === "EXEC"
       ? MAX_CREDITS
-      : account.didOsis
-      ? Math.max(
+      : Math.max(
           Math.min(
             MAX_CREDITS,
             Math.ceil(totalPoints / CREDIT_RATE - account.givenCredits)
           ),
           0
-        )
-      : 0;
+        );
   let credits = awarded;
   if (account.givenCredits !== 0 && awarded !== account.givenCredits)
     credits = account.givenCredits + awarded;

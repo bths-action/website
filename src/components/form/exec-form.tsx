@@ -5,7 +5,7 @@ import { useAccount } from "@/providers/account";
 import { ExecPosition } from "@prisma/client";
 import { Field, Form, Formik } from "formik";
 import { FC, useState } from "react";
-import { ZodError } from "zod";
+import { z, ZodError } from "zod";
 import { FormQuestion } from "../ui/container";
 import { POSITIONS_MAP } from "@/utils/constants";
 import { FormError, RequestError } from "../ui/error";
@@ -18,7 +18,7 @@ import { MarkDownView } from "../ui/md-view";
 
 interface Props {
   mode: "edit" | "create";
-  setOpen: (open: boolean) => any;
+  setOpen: (open: boolean) => void;
 }
 
 const FormContent: FC<Props> = ({ mode, setOpen }) => {
@@ -48,7 +48,7 @@ const FormContent: FC<Props> = ({ mode, setOpen }) => {
           createExecSchema.parse(data);
         } catch (err) {
           if (err instanceof ZodError) {
-            return err.formErrors.fieldErrors;
+            return z.flattenError(err).fieldErrors;
           }
         }
       }}
@@ -226,7 +226,7 @@ export const ExecForm: FC<Props> = ({ mode, setOpen }) => {
       disabledExit={mode == "create"}
       title={mode == "edit" ? "Edit Profile" : "Create Profile"}
     >
-      {mode == "edit" && account.status == "loading" ? (
+      {mode == "edit" && account.status == "pending" ? (
         <Loading loadingType="bar">Loading...</Loading>
       ) : mode == "edit" && account.status == "success" && !account.data ? (
         "Your form is not available. You have to register."

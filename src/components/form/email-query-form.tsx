@@ -8,7 +8,7 @@ import { confirm } from "../ui/confirm";
 import { RequestError } from "../ui/error";
 
 interface Props {
-  setOpen: (open: boolean) => any;
+  setOpen: (open: boolean) => void;
 }
 
 const EmailQueryContent: FC = () => {
@@ -120,7 +120,7 @@ const EmailQueryContent: FC = () => {
           </ColorButton>
           <div className="h-64 bg-gray-400/30 m-2 rounded-lg overflow-auto relative">
             <code>
-              {query.status == "loading"
+              {query.status == "pending"
                 ? "Loading..."
                 : query.status == "error"
                 ? "Error!"

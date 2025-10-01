@@ -22,7 +22,7 @@ export const Points: FC = () => {
         : status === "unauthenticated"
         ? "unauthorized"
         : "loading"
-      : account.status === "loading" || data.status === "loading"
+      : account.status === "pending" || data.status === "pending"
       ? "loading"
       : "success";
 

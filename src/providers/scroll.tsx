@@ -9,8 +9,8 @@ import {
   useRef,
 } from "react";
 
-type ScrollRef = RefObject<HTMLDivElement>;
-const ScrollContext = createContext<ScrollRef>({} as any);
+type ScrollRef = RefObject<HTMLDivElement | null>;
+const ScrollContext = createContext<ScrollRef>(null as unknown as ScrollRef);
 
 export const ScrollRefProvider: FC<PropsWithChildren> = ({ children }) => {
   const scrollRef = useRef<HTMLDivElement>(null);

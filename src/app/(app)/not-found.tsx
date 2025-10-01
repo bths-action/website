@@ -7,7 +7,9 @@ export default function NotFound() {
     <main>
       <h1>Not Found</h1>
       <NotFoundWidget />
-      <h5>Emma's Action Frog couldn't find what you were looking for.</h5>
+      <h5>
+        Emma&apos;s Action Frog couldn&apos;t find what you were looking for.
+      </h5>
       <RoundButton>
         <Link href="/">Return Home</Link>
       </RoundButton>

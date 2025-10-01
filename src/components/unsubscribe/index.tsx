@@ -14,7 +14,7 @@ export const Unsubscribe: FC = () => {
   const account = useAccount();
 
   const fetchStatus: Status =
-    status === "loading" || account.status === "loading"
+    status === "loading" || account.status === "pending"
       ? "loading"
       : status == "unauthenticated" || account.data == null
       ? "unauthorized"

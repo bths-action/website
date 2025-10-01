@@ -10,7 +10,7 @@ export const StickyDown: FC = () => {
   const account = useAccount();
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
-    if (account.status == "loading" || status == "loading") return;
+    if (account.status == "pending" || status == "loading") return;
     setMounted(true);
   }, [account, status]);
   return (

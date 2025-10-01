@@ -65,7 +65,6 @@ export const getSpreadsheet = adminProcedure.query(async () => {
         select: {
           name: true,
           email: true,
-          didOsis: true,
           gradYear: true,
           prefect: true,
           events: {
@@ -89,12 +88,6 @@ export const getSpreadsheet = adminProcedure.query(async () => {
             refCount: refMap[user.email] || 0,
           }))
           .sort((a, b) => {
-            // put those who didnt do osis at top
-            if (a.didOsis && !b.didOsis) {
-              return 1;
-            } else if (!a.didOsis && b.didOsis) {
-              return -1;
-            }
             // sort by email
             return a.email.localeCompare(b.email);
           })

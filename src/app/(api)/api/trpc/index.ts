@@ -58,7 +58,6 @@ export const appRouter = router({
   editSubscription,
   disconnectDiscord,
   deleteAccount,
-
 });
 
 export const createContext = async () => {

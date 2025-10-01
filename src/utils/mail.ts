@@ -1,15 +1,9 @@
-
 import formData from "form-data";
 import Mailgun from "mailgun.js";
 import { convert } from "html-to-text";
 import { prisma } from "./prisma";
 
-export async function sendEmail(
-  data: {
-    subject: string;
-    html: string;
-  }
-) {
+export async function sendEmail(data: { subject: string; html: string }) {
   const mailgun = new Mailgun(formData);
   const mg = mailgun.client({
     username: "api",

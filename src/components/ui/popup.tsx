@@ -6,7 +6,7 @@ import { BiX } from "react-icons/bi";
 export const PopupUI: FC<
   PropsWithChildren<{
     disabledExit?: boolean;
-    setOpen: ((a: boolean) => any) | undefined;
+    setOpen: ((a: boolean) => void) | undefined;
     title?: ReactNode;
     size?: "large" | "small";
   }>

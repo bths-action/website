@@ -42,7 +42,7 @@ export const getStats = authedProcedure.query(async ({ ctx }) => {
           miscPoints: true,
         },
       })
-      .then((users) => users.length)
+      .then((users) => users.length),
   ]);
 
   return {

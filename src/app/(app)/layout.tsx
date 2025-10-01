@@ -25,7 +25,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${figtree.variable} ${poppins.variable} ${spaceMono.variable} bg-white font-anybody dark:bg-black w-full overflow-y-hidden flex h-[calc(100dvh-70px)] md:h-dvh`}
       >

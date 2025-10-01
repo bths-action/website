@@ -2,31 +2,30 @@ import { ExecPosition } from "@prisma/client";
 import { z } from "zod";
 
 export const createExecSchema = z.object({
-  position: z.nativeEnum(ExecPosition, {
-    errorMap: (error) => {
-      if (error.code === "invalid_enum_value" && error.received == "") {
-        return { message: "Please specify a position. " };
+  position: z.enum(ExecPosition, {
+    error: (error) => {
+      if (error.code === "invalid_value" && error.received == "") {
+        return "Please specify a position. ";
       }
-      return { message: "Unknown error. " };
+      return "Unknown error. ";
     },
   }),
   selfieURL: z
-    .string()
     .url({
-      message: "Invalid URL. ",
+      error: "Invalid URL. ",
     })
     .max(190, {
-      message: "URL too long. ",
+      error: "URL too long. ",
     })
     .nullish()
     .optional(),
   description: z
     .string()
     .min(1, {
-      message: "Description can't be empty. ",
+      error: "Description can't be empty. ",
     })
     .max(5000, {
-      message: "Description too long. ",
+      error: "Description too long. ",
     }),
 });
 

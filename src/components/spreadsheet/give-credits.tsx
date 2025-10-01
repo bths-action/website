@@ -59,12 +59,13 @@ export const GiveCreditsButton: FC<{
           const awarded =
             user.position === "EXEC"
               ? credits
-              : user.didOsis
-              ? Math.max(
-                  Math.min(credits, Math.ceil(total / CREDIT_RATE - user.givenCredits)),
+              : Math.max(
+                  Math.min(
+                    credits,
+                    Math.ceil(total / CREDIT_RATE - user.givenCredits)
+                  ),
                   0
-                )
-              : 0;
+                );
           if (awarded !== 0) {
             try {
               await editCredits.mutateAsync({

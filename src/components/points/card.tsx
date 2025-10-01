@@ -1,6 +1,6 @@
 "use client";
 import { FC, ReactNode } from "react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import Link from "next/link";
 import { BsTriangleFill } from "react-icons/bs";
 

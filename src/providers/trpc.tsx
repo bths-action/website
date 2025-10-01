@@ -21,10 +21,10 @@ export const TRPCProvider: FC<PropsWithChildren> = ({ children }) => {
   );
   const [trpcClient] = useState(() => {
     return trpc.createClient({
-      transformer: superjson,
       links: [
         httpBatchLink({
           url: "/api/trpc",
+          transformer: superjson,
         }),
       ],
     });

@@ -6,7 +6,7 @@ import { FormError, RequestError } from "../ui/error";
 import { signOut } from "next-auth/react";
 import { Field, Form, Formik } from "formik";
 import { Loading } from "../ui/loading";
-import { ZodError } from "zod";
+import { z, ZodError } from "zod";
 import { registerSchema } from "@/schema/form";
 import { FormQuestion } from "../ui/container";
 import { GRAD_YEARS, OLDEST_GRAD_YEAR } from "@/utils/constants";
@@ -18,7 +18,7 @@ import { isAlumni } from "@/utils/helpers";
 
 interface Props {
   mode: "edit" | "create";
-  setOpen: (open: boolean) => any;
+  setOpen: (open: boolean) => void;
 }
 
 const FormContent: FC<Props> = ({ mode, setOpen }) => {
@@ -31,16 +31,16 @@ const FormContent: FC<Props> = ({ mode, setOpen }) => {
 
   const initialValues = {
     name: mode == "edit" ? account.data!.name : "",
-    preferredName: mode == "edit" ? account.data!.preferredName : "",
-    prefect: mode == "edit" ? account.data!.prefect : "",
-    pronouns: mode == "edit" ? account.data!.pronouns : "",
+    preferredName: mode == "edit" ? (account.data!.preferredName ?? "") : "",
+    prefect: mode == "edit" ? (account.data!.prefect ?? "") : "",
+    pronouns: mode == "edit" ? (account.data!.pronouns ?? "") : "",
     gradYear: mode == "edit" ? Number(account.data!.gradYear) : 2029,
-    birthday: mode == "edit" ? account.data!.birthday : "",
+    birthday: mode == "edit" ? (account.data!.birthday ?? "") : "",
     sgoSticker: mode == "edit" ? account.data!.sgoSticker : false,
-    referredBy: mode == "edit" ? account.data!.referredBy : null,
+    referredBy: mode == "edit" ? account.data!.referredBy : undefined,
     eventAlerts: mode == "edit" ? account.data!.eventAlerts : true,
-    instagram: mode == "edit" ? account.data!.instagram : "",
-    phone: mode == "edit" ? account.data!.phone : '',
+    instagram: mode == "edit" ? (account.data!.instagram ?? "") : "",
+    phone: mode == "edit" ? (account.data!.phone ?? "") : "",
   };
 
   type FormValues = typeof initialValues;
@@ -50,7 +50,7 @@ const FormContent: FC<Props> = ({ mode, setOpen }) => {
       initialValues={{ ...initialValues }}
       validate={(data) => {
         setError(null);
-        let values = { ...data };
+        const values = { ...data };
         if (values.gradYear < OLDEST_GRAD_YEAR) {
           values.gradYear = OLDEST_GRAD_YEAR;
         }
@@ -66,7 +66,7 @@ const FormContent: FC<Props> = ({ mode, setOpen }) => {
           registerSchema.parse(values);
         } catch (err) {
           if (err instanceof ZodError) {
-            return err.formErrors.fieldErrors;
+            return z.flattenError(err).fieldErrors;
           }
         }
       }}
@@ -133,7 +133,6 @@ const FormContent: FC<Props> = ({ mode, setOpen }) => {
                 <br />
               </>
             )}
-
             <FormQuestion errored={Boolean(errors.name)}>
               <label htmlFor="name">Full (Legal) Name:</label>
               <Field
@@ -197,7 +196,6 @@ const FormContent: FC<Props> = ({ mode, setOpen }) => {
               <FormError name="birthday" />
             </FormQuestion>
             <br />
-
             <FormQuestion errored={Boolean(errors.prefect)}>
               <label htmlFor="prefect">Prefect:</label>
               <Field
@@ -208,7 +206,6 @@ const FormContent: FC<Props> = ({ mode, setOpen }) => {
               />
               <FormError name="prefect" />
             </FormQuestion>
-
             <br />
             <RoundButton
               onClick={() => setPrefectHelp(!prefectHelp)}
@@ -217,12 +214,13 @@ const FormContent: FC<Props> = ({ mode, setOpen }) => {
               How to get prefect? (Click to {prefectHelp ? "hide" : "show"})
             </RoundButton>
             <Collapse collapsed={!prefectHelp} className="p-1">
-              This is basically BTHS equalivalent of your "homeroom" number.
+              This is basically BTHS equalivalent of your &quot;homeroom&quot;
+              number.
               <br />
               Go get your schedule via teachhub, and look for something that
-              says "Offical Class", input the 3 digit code, that looks like this
-              "A1B". If it does not look like so, please put in A1A as a
-              temporary prefect and let your counselor know!
+              says &quot;Offical Class&quot;, input the 3 digit code, that looks
+              like this &quot;A1B&quot;. If it does not look like so, please put
+              in A1A as a temporary prefect and let your counselor know!
             </Collapse>
             <FormQuestion>
               <label className="flex items-center flex-wrap gap-1">
@@ -242,7 +240,7 @@ const FormContent: FC<Props> = ({ mode, setOpen }) => {
               <FormError name="eventAlerts" />
             </FormQuestion>
             <br />
-              Contact Information (provide at least one) 
+            Contact Information (provide at least one)
             <br />
             <FormQuestion errored={Boolean(errors.phone)}>
               <label htmlFor="phone">Phone Number:</label>
@@ -255,7 +253,6 @@ const FormContent: FC<Props> = ({ mode, setOpen }) => {
               <FormError name="phone" />
             </FormQuestion>
             <br />
-
             <FormQuestion errored={Boolean(errors.instagram)}>
               <label htmlFor="instagram">Instagram Handle:</label>
               <Field
@@ -267,7 +264,6 @@ const FormContent: FC<Props> = ({ mode, setOpen }) => {
               <FormError name="instagram" />
             </FormQuestion>
             <br />
-
             <FormQuestion errored={Boolean(errors.referredBy)}>
               <label htmlFor="referredBy">Referrer Email:</label>
               <Field
@@ -275,13 +271,12 @@ const FormContent: FC<Props> = ({ mode, setOpen }) => {
                 name="referredBy"
                 type="text"
                 placeholder="johndoe1@nycstudents.net"
+                value=""
               />
               <FormError name="referredBy" />
             </FormQuestion>
             <br />
-
             {error && <RequestError error={error} />}
-
             <RoundButton type="submit">
               Submit{isSubmitting && "ting"}
             </RoundButton>
@@ -311,7 +306,7 @@ export const UserForm: FC<Props> = ({ mode, setOpen }) => {
       disabledExit={mode == "create"}
       title={mode == "edit" ? "Edit Profile" : "Create Profile"}
     >
-      {mode == "edit" && account.status == "loading" ? (
+      {mode == "edit" && account.status == "pending" ? (
         <Loading loadingType="bar">Loading...</Loading>
       ) : mode == "edit" && account.status == "success" && !account.data ? (
         "Your form is not available. You have to register."

@@ -4,7 +4,6 @@ import { prisma } from "@/utils/prisma";
 
 export const deleteAccount = memberProcedure.mutation(
   async ({ ctx: { user } }) => {
-
     const id = createId();
 
     // Fetch the user's registeredAt

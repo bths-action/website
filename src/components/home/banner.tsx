@@ -10,7 +10,7 @@ export const Banner: FC = () => {
   const account = useAccount();
   const { status } = useSession();
   useEffect(() => {
-    if (account.status == "loading" || status == "loading") return;
+    if (account.status == "pending" || status == "loading") return;
     setMounted(true);
     const timer = setTimeout(() => setAnimated(true), 750);
     return () => clearTimeout(timer);

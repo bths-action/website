@@ -11,7 +11,7 @@ export const SplashScreen: FC<PropsWithChildren> = ({ children }) => {
     <>
       <div
         className={`w-dvw h-dvh z-10000 transition-all  duration-300 fixed ${
-          status == "loading" || account.status == "loading"
+          status == "loading" || account.status == "pending"
             ? "top-0 opacity-100"
             : "-top-full opacity-0"
         } bg-white dark:bg-black flex flex-col items-center justify-center p-10`}

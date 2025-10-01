@@ -14,7 +14,7 @@ export const CreateEvent: FC = () => {
   if (position == "ADMIN" || position == "EXEC")
     return (
       <>
-        <div className="sticky bottom-4 mt-2 w-full text-right pointer-events-none">
+        <div className="sticky bottom-4 mt-2 w-full text-right pointer-events-none z-50">
           <ColorButton
             className="mr-8 w-16 h-16 rounded-full pointer-events-auto shadowed"
             color="default"

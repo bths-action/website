@@ -29,9 +29,9 @@ export const POST = async (req: NextRequest) => {
 
   if (!req.body)
     return NextResponse.json({ error: "Missing body" }, { status: 400 });
-  const body: { [key: string]: any } = {};
+  const body: { [key: string]: string } = {};
   (await req.formData()).forEach((value, key) => {
-    body[key] = value;
+    body[key] = value.toString();
   });
 
   let parsedBody: z.infer<typeof schema>;

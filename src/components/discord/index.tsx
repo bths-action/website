@@ -14,7 +14,7 @@ export const ConnectedBanner: FC = () => (
     />
 
     <MdOutlineLink className="w-16 h-16 xxs:block hidden absolute left-1/2 -translate-x-1/2" />
-    <span className="w-32 h-32 block rounded-full bordered bg-[#5865f2] text-white mr-0  absolute right-1 bordered">
+    <span className="w-32 h-32 block rounded-full bg-[#5865f2] text-white mr-0  absolute right-1 bordered">
       <BsDiscord className=" w-32 h-32 p-8  " />
     </span>
   </div>
@@ -31,7 +31,7 @@ export const DisconnectedBanner: FC = () => (
     />
 
     <MdOutlineLinkOff className="w-16 h-16 xxs:block hidden absolute left-1/2 -translate-x-1/2" />
-    <span className="w-32 h-32 block rounded-full bordered bg-[#5865f2] text-white mr-0  absolute right-1 bordered">
+    <span className="w-32 h-32 block rounded-full bg-[#5865f2] text-white mr-0  absolute right-1 bordered">
       <BsDiscord className=" w-32 h-32 p-8  " />
     </span>
   </div>

@@ -4,7 +4,7 @@ import { FC, useEffect, useState } from "react";
 import { FaFistRaised } from "react-icons/fa";
 import { ColorButton } from "../ui/buttons";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 export const JoinButton: FC = () => {
   const [mounted, setMounted] = useState(false);

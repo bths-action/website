@@ -23,7 +23,24 @@ export const editEvent = adminProcedure
     });
 
     await editMessage(event.messageID, {
-      embeds: [generateEvent(event, event.id)],
+      embeds: [
+        generateEvent(
+          {
+            name: event.name,
+            description: event.description,
+            maxPoints: event.maxPoints,
+            maxHours: event.maxHours,
+            eventTime: event.eventTime,
+            finishTime: event.finishTime,
+            address: event.address,
+            registerBefore: event.registerBefore,
+            limit: event.limit,
+            imageURL: event.imageURL,
+            serviceLetters: event.serviceLetters,
+          },
+          event.id
+        ),
+      ],
     }).catch(() => {});
 
     return event;

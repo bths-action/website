@@ -5,7 +5,7 @@ import {
   trpc,
 } from "@/app/(api)/api/trpc/client";
 import { FC, useState } from "react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { AttendanceItem } from "./attendance-item";
 import { ColorButton, TransparentButton } from "../ui/buttons";
 import { confirm } from "../ui/confirm";
@@ -129,7 +129,7 @@ export const AttendanceList: FC<ListProps> = ({ attendance, id }) => {
           }}
           validate={(data) => {
             try {
-              if (z.string().email().min(1).parse(data.email)) return {};
+              if (z.email().min(1).parse(data.email)) return {};
             } catch (error) {
               return { email: "Invalid email" };
             }

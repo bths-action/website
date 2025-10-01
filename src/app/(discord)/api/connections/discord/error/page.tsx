@@ -16,8 +16,9 @@ const spaceMono = Space_Mono({
 });
 
 const AuthError: FC<{
-  searchParams: { [key: string]: string | string[] | undefined };
-}> = ({ searchParams }) => {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}> = async (props) => {
+  const searchParams = await props.searchParams;
   return (
     <>
       <ConnectedBanner />

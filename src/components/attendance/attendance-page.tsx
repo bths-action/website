@@ -25,8 +25,8 @@ export const AttendancePage: FC<{
   });
 
   const fetchStatus: Status =
-    attendance.status === "loading" ||
-    account.status === "loading" ||
+    attendance.status === "pending" ||
+    account.status === "pending" ||
     status === "loading"
       ? "loading"
       : status == "unauthenticated" ||
@@ -45,9 +45,9 @@ export const AttendancePage: FC<{
   };
 
   const channel = useChannel(`private-${id}`);
-  useEvent(channel, "update", (rawData: any) => {
+  useEvent(channel, "update", (rawData: unknown) => {
     if (attendance.status !== "success") return;
-    const data: EditAttendanceOutput = rawData;
+    const data: EditAttendanceOutput = rawData as EditAttendanceOutput;
     data.registeredAt = data.registeredAt && new Date(data.registeredAt);
     data.attendedAt = data.attendedAt && new Date(data.attendedAt);
     utils.getAttendees.setData(
@@ -69,11 +69,11 @@ export const AttendancePage: FC<{
     );
   });
 
-  useEvent(channel, "delete", (raw: any) => {
+  useEvent(channel, "delete", (raw: unknown) => {
     if (attendance.status !== "success") return;
     const data: {
       email: string;
-    } = raw;
+    } = raw as { email: string };
     utils.getAttendees.setData(
       {
         id,
@@ -87,9 +87,9 @@ export const AttendancePage: FC<{
     );
   });
 
-  useEvent(channel, "join", (raw: any) => {
+  useEvent(channel, "join", (raw: unknown) => {
     if (attendance.status !== "success") return;
-    const data: JoinEventOutput = raw;
+    const data: JoinEventOutput = raw as JoinEventOutput;
     data.registeredAt = data.registeredAt && new Date(data.registeredAt);
     data.attendedAt = data.attendedAt && new Date(data.attendedAt);
     utils.getAttendees.setData(

@@ -33,6 +33,7 @@ export function Loading<T extends LoadingType>({
       {children}
       <br />
       <Spinner
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         {...(spinnerProps as any)}
         className={"mx-auto max-w-full" + (spinnerProps?.className || "")}
         color={spinnerProps?.color || "#19b1a0"}

@@ -1,7 +1,7 @@
 "use client";
 import { GetExecsOutput } from "@/app/(api)/api/trpc/client";
 import { FC } from "react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { POSITIONS_MAP } from "@/utils/constants";
 import Image from "next/image";
 import { MarkDownView } from "../ui/md-view";

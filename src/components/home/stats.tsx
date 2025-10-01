@@ -1,7 +1,7 @@
 "use client";
 import { FC, PropsWithChildren } from "react";
 import { IconType } from "react-icons";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { BiCalendarAlt, BiTime, BiUser } from "react-icons/bi";
 import { MAX_CREDITS } from "@/utils/constants";
 import { BsAward } from "react-icons/bs";

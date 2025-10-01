@@ -4,7 +4,7 @@ import { FaUserCheck, FaUserSlash } from "react-icons/fa";
 import { confirm } from "../ui/confirm";
 import { RequestError } from "../ui/error";
 import { GetAttendeesOutput, trpc } from "@/app/(api)/api/trpc/client";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { FC, useEffect, useRef, useState } from "react";
 import { ListProps } from "./attendance-list";
 import { usePusher } from "@harelpls/use-pusher";

@@ -9,7 +9,7 @@ export const attendanceWriteSchema = attendanceSchema.extend({
 });
 
 export const forceAttendanceSchema = attendanceWriteSchema.extend({
-  user: z.string().email(),
+  user: z.email(),
 });
 
 export const attendanceEditSchema = forceAttendanceSchema.extend({
