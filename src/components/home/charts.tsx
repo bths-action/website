@@ -43,7 +43,6 @@ function calcMembers(joins: Date[], leaves: Date[]) {
     j++;
   }
 
-  console.log(dataPoints);
 
   return dataPoints;
 }

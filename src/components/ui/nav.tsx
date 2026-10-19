@@ -371,7 +371,7 @@ const ProfileButton: FC<{
             notDone
               ? "https://i.gifer.com/origin/b4/b4d657e7ef262b88eb5f7ac021edda87.gif"
               : data?.user?.image ||
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/340px-Default_pfp.svg.png?20220226140232"
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/330px-Default_pfp.svg.png"
           }
           className="rounded-full min-w-8 min-h-8 bg-black bordered"
         />

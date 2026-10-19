@@ -4,6 +4,9 @@ import removeMarkdown from "remove-markdown";
 import { BsAward, BsClock } from "react-icons/bs";
 import { MdLocationOn, MdOutlineAccessTime } from "react-icons/md";
 import { prisma } from "@/utils/prisma";
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://bthsaction.org";
+
 // App router includes @vercel/og.
 // No need to install it.
 
@@ -54,7 +57,7 @@ export async function GET(
           style={{
             border: "5px solid white",
           }}
-          src="https://bthsaction.org/icon.png"
+          src={`${siteUrl}/icon.png`}
         />
         <h1
           style={{
@@ -92,8 +95,8 @@ export async function GET(
             Interested? View this on BTHS Action website!
             <img
               src={
-                "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://bthsaction.org/events/" +
-                data.id
+                "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" +
+                `${siteUrl}/events/${data.id}`
               }
               tw="w-48 pt-2"
             />

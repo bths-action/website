@@ -11,7 +11,7 @@ import { confirm } from "../ui/confirm";
 import { BiLogIn } from "react-icons/bi";
 import { signIn, useSession } from "next-auth/react";
 import { FaUserMinus, FaUserPlus } from "react-icons/fa";
-import { useChannel, useEvent, usePusher } from "@harelpls/use-pusher";
+import { useChannel, useEvent, usePusher } from "@/providers/pusher";
 import { EventAttendance } from "@prisma/client";
 
 export const UserAttendance: FC<Props> = ({ event }) => {

@@ -7,7 +7,7 @@ import { GetAttendeesOutput, trpc } from "@/app/(api)/api/trpc/client";
 import { motion } from "motion/react";
 import { FC, useEffect, useRef, useState } from "react";
 import { ListProps } from "./attendance-list";
-import { usePusher } from "@harelpls/use-pusher";
+import { usePusher } from "@/providers/pusher";
 
 interface ItemProps extends ListProps {
   attendee: GetAttendeesOutput["attendees"][number];

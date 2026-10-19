@@ -10,9 +10,12 @@ export async function sendEmail(data: { subject: string; html: string }) {
     key: process.env.MAILGUN_API_KEY!,
   });
 
+  // Keep current graduating class and above.
+  const gradYearCutoff = new Date().getFullYear() - 1;
+
   const recipients = (
     await prisma.user.findMany({
-      where: { position: "EXEC", gradYear: { gt: 2025 } },
+      where: { position: "EXEC", gradYear: { gt: gradYearCutoff } },
     })
   ).map((user) => user.email);
 
@@ -24,10 +27,8 @@ export async function sendEmail(data: { subject: string; html: string }) {
       html: data.html,
       text: convert(data.html),
     });
-    console.log(response);
     return response;
   } catch (error) {
-    console.log(JSON.stringify(error));
     throw error;
   }
 }

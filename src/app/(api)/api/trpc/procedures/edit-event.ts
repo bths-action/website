@@ -3,17 +3,18 @@ import { updateEventSchema } from "@/schema/events";
 import { prisma } from "@/utils/prisma";
 import { editMessage, generateEvent } from "@/utils/webhook";
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://bthsaction.org";
+
 export const editEvent = adminProcedure
   .input(updateEventSchema)
   .mutation(async ({ input, ctx }) => {
     if (input.description) {
       input.description = input.description.replaceAll(
         "{@link}",
-        `https://bthsaction.org/events/${input.id}`
+        `${siteUrl}/events/${input.id}`
       );
     }
 
-    console.log(input);
 
     const event = await prisma.event.update({
       where: {

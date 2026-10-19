@@ -1,8 +1,5 @@
 "use client";
-import {
-  PusherProvider as $PusherProvider,
-  type PusherProviderProps,
-} from "@harelpls/use-pusher";
+import { PusherProvider } from "./pusher";
 import { SessionProvider } from "next-auth/react";
 import { FC, PropsWithChildren, Suspense } from "react";
 import { MDXProvider } from "@mdx-js/react";
@@ -11,10 +8,6 @@ import NextTopLoader from "nextjs-toploader";
 import { ThemeProvider } from "next-themes";
 import { TRPCProvider } from "./trpc";
 import { AccountProvider } from "./account";
-
-const PusherProvider = $PusherProvider as FC<
-  PropsWithChildren<PusherProviderProps>
->;
 
 const components: MDXComponents = {
   a: (props) => (

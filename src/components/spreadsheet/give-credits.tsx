@@ -103,7 +103,6 @@ export const GiveCreditsButton: FC<{
           string += "\n";
         }
 
-        console.log(string);
 
         const blob = new Blob([string], {
           type: "text/csv",

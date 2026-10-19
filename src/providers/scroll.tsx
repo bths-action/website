@@ -5,7 +5,6 @@ import {
   RefObject,
   createContext,
   useContext,
-  useEffect,
   useRef,
 } from "react";
 
@@ -14,9 +13,6 @@ const ScrollContext = createContext<ScrollRef>(null as unknown as ScrollRef);
 
 export const ScrollRefProvider: FC<PropsWithChildren> = ({ children }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    console.log(scrollRef.current);
-  }, [scrollRef]);
   return (
     <div
       ref={scrollRef}

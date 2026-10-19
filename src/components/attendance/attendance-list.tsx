@@ -67,7 +67,6 @@ export const AttendanceList: FC<ListProps> = ({ attendance, id }) => {
                   ),
                 };
 
-                console.log(oldData);
 
                 utils.getAttendees.setData(
                   {

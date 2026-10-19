@@ -8,6 +8,8 @@ import { generateEvent, sendMessage } from "@/utils/webhook";
 import { sendEmail } from "@/utils/mail";
 import { Event } from "@prisma/client";
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://bthsaction.org";
+
 export const createEvent = adminProcedure
   .input(createEventSchema)
   .mutation(async function ({ input, ctx }): Promise<Event> {
@@ -15,7 +17,7 @@ export const createEvent = adminProcedure
 
     input.description = input.description.replaceAll(
       "{@link}",
-      `https://bthsaction.org/events/${id}`
+      `${siteUrl}/events/${id}`
     );
 
     const message = await sendMessage({
@@ -120,7 +122,7 @@ function emailGenerator(input: CreateEventInput, id: string) {
         <div style="max-width:800px;margin:0 auto;padding:8px;">
           <div style="width:100%;text-align:center;">
             <img
-              src="https://bthsaction.org/icon-rounded.png"
+              src="${siteUrl}/icon-rounded.png"
               style="border:0;margin:0 auto;outline:none;text-decoration:none;height:auto;width:144px"
             />
             <hr />
@@ -176,7 +178,7 @@ function emailGenerator(input: CreateEventInput, id: string) {
           </div>
           <div style="width:100%;text-align:center;">
             <a
-              href="https://bthsaction.org/events/${id}"
+              href="${siteUrl}/events/${id}"
               style="display: inline-block; background: #4299e1; color: #ffffff; font-size: 32px; font-style: normal; font-weight: normal; line-height: 40px; margin: 0; text-decoration: none; text-transform: none; padding: 10px 20px 10px 20px; mso-padding-alt: 0px; border-radius: 8px;"
               target="_blank"
             >
@@ -186,7 +188,7 @@ function emailGenerator(input: CreateEventInput, id: string) {
           <br />
           <span style="font-family: Cabin, sans-serif; font-size: 18px;">
             <a
-              href="https://bthsaction.org/unsubscribe"
+              href="${siteUrl}/unsubscribe"
               target="_blank"
               rel="noopener"
               style="color: #0000EE;"

@@ -11,7 +11,7 @@ import { Loading } from "../ui/loading";
 import { useAccount } from "@/providers/account";
 import { RequestError } from "../ui/error";
 import { AttendanceList } from "./attendance-list";
-import { useChannel, useEvent } from "@harelpls/use-pusher";
+import { useChannel, useEvent } from "@/providers/pusher";
 import { NodeMap, Status } from "@/utils/constants";
 
 export const AttendancePage: FC<{
