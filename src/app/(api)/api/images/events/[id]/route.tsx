@@ -15,13 +15,16 @@ export async function GET(
   props: { params: Promise<{ id: string }> }
 ) {
   const params = await props.params;
-  const anybody = await fetch(
-    "https://github.com/webfontworld/Poppins/raw/main/Poppins-Regular.ttf"
+  const font = await fetch(
+    "https://raw.githubusercontent.com/google/fonts/main/ofl/poppins/Poppins-Regular.ttf"
   ).then((res) => res.arrayBuffer());
 
-  const figtree = await fetch(
-    "https://fonts.bunny.net/figtree/files/figtree-latin-400-normal.woff"
-  ).then((res) => res.arrayBuffer());
+  if (font.byteLength < 1000) {
+    return NextResponse.json({ error: "Font load failed" }, { status: 502 });
+  }
+
+  const anybody = font;
+  const figtree = font;
 
   const data = await prisma.event.findUnique({
     where: {
