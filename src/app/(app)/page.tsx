@@ -20,13 +20,11 @@ const Home: FC = async () => {
     prisma.user
       .findMany({
         select: { registeredAt: true },
-
         orderBy: {
           registeredAt: "asc",
         },
       })
-      .then((users) => users.map((user) => user.registeredAt)), // now lets try to examine react chart
-    // https://react-charts.tanstack.com/ feel free to examine the docs (cuz I have too as well)
+      .then((users) => users.map((user) => user.registeredAt)),
     prisma.event.count(),
     prisma.eventAttendance
       .findMany({
@@ -40,8 +38,6 @@ const Home: FC = async () => {
         },
       })
       .then((e) => e.reduce((a, b) => a + b.earnedHours, 0)),
-    // now infering from what we did, what should we add here?
-    //we should find all the deletedusers, correct, now this should be a simple query, write a query to find ALL the deletd users
     prisma.deletedUsers.findMany({
       select: {
         registeredAt: true,

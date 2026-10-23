@@ -9,7 +9,6 @@ type DailyMembers = {
   date: Date;
   members: number;
 };
-// complete
 
 interface Props {
   leaves: Date[];
@@ -43,6 +42,15 @@ function calcMembers(joins: Date[], leaves: Date[]) {
     j++;
   }
 
+  // NEW: Extend the line to "now" so it doesn't stop at the last event
+  const now = new Date();
+  if (dataPoints.length > 0) {
+    const lastDate = dataPoints[dataPoints.length - 1].date;
+    // Only add if the last event wasn't exactly now (to avoid duplicate points)
+    if (now.getTime() > lastDate.getTime()) {
+      dataPoints.push({ date: now, members });
+    }
+  }
 
   return dataPoints;
 }
@@ -59,13 +67,15 @@ export const MemberChart: FC<Props> = ({ joins, leaves }) => {
   }, []);
 
   const { resolvedTheme } = useTheme();
+  
   const primaryAxis = useMemo(
     (): AxisOptions<DailyMembers> => ({
       getValue: (datum) => datum.date,
       hardMin: joins[0],
-      hardMax: new Date(),
+      // REMOVED: hardMax: new Date(), 
+      // (Letting it auto-scale to the data is safer now that we inject "now" into the data)
     }),
-    []
+    [joins]
   );
 
   const dataPoints = useMemo(() => calcMembers(joins, leaves), [joins, leaves]);
@@ -79,8 +89,6 @@ export const MemberChart: FC<Props> = ({ joins, leaves }) => {
     []
   );
 
-  // btw since each member increments one, we can use map index to get the number of members
-
   return (
     <div className="w-full h-[50dvh] my-10 z-10" ref={ref}>
       {mounted && (
@@ -89,13 +97,8 @@ export const MemberChart: FC<Props> = ({ joins, leaves }) => {
             data: [
               {
                 label: "Members",
-                data: [
-                  ...dataPoints,
-                  {
-                    date: new Date(),
-                    members: dataPoints[dataPoints.length - 1].members,
-                  },
-                ],
+                // UPDATED: Just use dataPoints directly, no manual spread needed
+                data: dataPoints,
               },
             ],
 
