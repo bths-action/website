@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError, z } from "zod";
 import { prisma } from "@/utils/prisma";
+import { YOUNGEST_GRAD_YEAR } from "@/utils/constants";
 
 export const POST = async (
   req: NextRequest,
@@ -36,7 +37,7 @@ export const POST = async (
       email,
       birthday: `${new Date().getFullYear() - 14}-01-01`,
       eventAlerts: true,
-      gradYear: new Date().getFullYear() + 3,
+      gradYear: YOUNGEST_GRAD_YEAR,
       name: "New User",
       prefect: "A1A",
       preferredName: "New User",

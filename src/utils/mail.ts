@@ -1,6 +1,7 @@
 import formData from "form-data";
 import Mailgun from "mailgun.js";
 import { convert } from "html-to-text";
+import { OLDEST_GRAD_YEAR, YOUNGEST_GRAD_YEAR } from "./constants";
 import { prisma } from "./prisma";
 
 export async function sendEmail(data: { subject: string; html: string }) {
@@ -10,12 +11,16 @@ export async function sendEmail(data: { subject: string; html: string }) {
     key: process.env.MAILGUN_API_KEY!,
   });
 
-  // Keep current graduating class and above.
-  const gradYearCutoff = new Date().getFullYear() - 1;
-
+  // Keep recipients within the current graduating classes.
   const recipients = (
     await prisma.user.findMany({
-      where: { position: "EXEC", gradYear: { gt: gradYearCutoff } },
+      where: {
+        position: "EXEC",
+        gradYear: {
+          gte: OLDEST_GRAD_YEAR,
+          lte: YOUNGEST_GRAD_YEAR,
+        },
+      },
     })
   ).map((user) => user.email);
 
