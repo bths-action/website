@@ -115,9 +115,9 @@ export const MemberChart: FC<Props> = ({ joins, leaves }) => {
             showDebugAxes: false,
             defaultColors: [PRIMARY_COLOR],
             getSeriesStyle: () => ({
-              strokeDashoffset: isInView ? 0 : "160%",
+              strokeDashoffset: isInView ? 0 : "200%",
               transition: "stroke-dashoffset 5s ease-in-out",
-              strokeDasharray: "160%",
+              strokeDasharray: "200%",
             }),
 
             tooltip: {
