@@ -7,6 +7,7 @@ import { prisma } from "@/utils/prisma";
 import { generateEvent, getEventWebhook, sendMessage } from "@/utils/webhook";
 import { sendEmail } from "@/utils/mail";
 import { Event } from "@prisma/client";
+import { OLDEST_GRAD_YEAR, YOUNGEST_GRAD_YEAR } from "@/utils/constants";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://bthsaction.org";
 
@@ -23,8 +24,14 @@ export const createEvent = adminProcedure
     const testingEmail = input.testing
       ? process.env.TESTING_EMAIL
       : undefined;
+    const testingBccEmail = input.testing
+      ? process.env.TESTING_BCC_EMAIL
+      : undefined;
     if (input.testing && !testingEmail) {
       throw new Error("TESTING_EMAIL is not configured.");
+    }
+    if (input.testing && !testingBccEmail) {
+      throw new Error("TESTING_BCC_EMAIL is not configured.");
     }
 
     const message = await sendMessage({
@@ -36,6 +43,9 @@ export const createEvent = adminProcedure
     }, getEventWebhook(input.testing));
 
     const emailBody = emailGenerator(input, id);
+    const emailRecipients = input.testing
+      ? { recipient: testingEmail, bcc: [testingBccEmail!] }
+      : await getEventEmailRecipients(input.emailEveryone);
 
     const data = await Promise.all([
       prisma.event.create({
@@ -48,13 +58,41 @@ export const createEvent = adminProcedure
       sendEmail({
         subject: "New Action Event: " + input.name,
         html: emailBody,
-      }, { recipient: testingEmail }),
+      }, emailRecipients),
     ]);
 
     const event = data[0];
 
     return event;
   });
+
+async function getEventEmailRecipients(emailEveryone: boolean) {
+  const users = await prisma.user.findMany({
+    where: {
+      gradYear: {
+        gte: OLDEST_GRAD_YEAR,
+        lte: YOUNGEST_GRAD_YEAR,
+      },
+    },
+    select: {
+      email: true,
+      position: true,
+      eventAlerts: true,
+    },
+  });
+
+  return {
+    recipient: users
+      .filter((user) => user.position === "EXEC")
+      .map((user) => user.email),
+    bcc: users
+      .filter(
+        (user) =>
+          user.position === "MEMBER" && (emailEveryone || user.eventAlerts)
+      )
+      .map((user) => user.email),
+  };
+}
 
 function emailGenerator(input: CreateEventInput, id: string) {
   return /* HTML */ `<!DOCTYPE html>

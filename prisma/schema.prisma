@@ -72,6 +72,7 @@ model Event {
   registerBefore Boolean  @default(true)
   closed         Boolean  @default(false)
   testing        Boolean  @default(false)
+  emailEveryone  Boolean  @default(false)
 
   attendees      EventAttendance[]
   limit          Int?

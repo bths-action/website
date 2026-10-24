@@ -71,6 +71,7 @@ const baseEventSchema = z.object({
   }),
   registerBefore: z.boolean().prefault(true),
   testing: z.boolean().prefault(false),
+  emailEveryone: z.boolean().prefault(false),
   limit: z
     .number({
       error: (issue) =>

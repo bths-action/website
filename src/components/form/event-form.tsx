@@ -58,6 +58,10 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
     registerBefore: mode == "edit" ? event.registerBefore : true,
     testing:
       mode == "edit" && "testing" in event ? event.testing === true : false,
+    emailEveryone:
+      mode == "edit" && "emailEveryone" in event
+        ? event.emailEveryone === true
+        : false,
     address: mode == "edit" ? event.address : "",
     limit: mode == "edit" ? event.limit || 0 : (0 as number | null),
     serviceLetters: mode == "edit" ? event.serviceLetters : undefined,
@@ -296,17 +300,32 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
                 <FormError name="registerBefore" />
               </FormQuestion>
               <br />
-                <FormQuestion>
-                  <label
-                    htmlFor="testing"
-                    className="flex items-center flex-wrap gap-1"
-                  >
-                    <Field id="testing" name="testing" type="checkbox" />
-                    Testing event (sends Discord and email only to configured
-                    testing destinations)
-                  </label>
-                </FormQuestion>
-                <br />
+              <FormQuestion>
+                <label
+                  htmlFor="testing"
+                  className="flex items-center flex-wrap gap-1"
+                >
+                  <Field id="testing" name="testing" type="checkbox" />
+                  Testing event (sends Discord and email only to configured
+                  testing destinations)
+                </label>
+              </FormQuestion>
+              <br />
+              <FormQuestion>
+                <label
+                  htmlFor="emailEveryone"
+                  className="flex items-center flex-wrap gap-1"
+                >
+                  <Field
+                    id="emailEveryone"
+                    name="emailEveryone"
+                    type="checkbox"
+                  />
+                  Send email to all current members, including unsubscribed
+                  members
+                </label>
+              </FormQuestion>
+              <br />
               <FormQuestion errored={Boolean(errors.address)}>
                 <label htmlFor="address">Address:</label>
                 <Field
