@@ -105,6 +105,18 @@ export async function sendMessage(
   }).then((res) => res.json());
 }
 
+export function getEventWebhook(testing = false) {
+  const url = testing ? process.env.TEST_EVENT_WEBHOOK : process.env.EVENT_WEBHOOK;
+  if (!url) {
+    throw new Error(
+      testing
+        ? "TEST_EVENT_WEBHOOK is not configured."
+        : "EVENT_WEBHOOK is not configured."
+    );
+  }
+  return url;
+}
+
 export async function editMessage(
   id: string,
   options: string | RESTPatchAPIWebhookWithTokenMessageJSONBody,

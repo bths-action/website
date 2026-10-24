@@ -56,6 +56,8 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
     eventTime: mode == "edit" ? event.eventTime : null,
     finishTime: mode == "edit" ? event.finishTime : null,
     registerBefore: mode == "edit" ? event.registerBefore : true,
+    testing:
+      mode == "edit" && "testing" in event ? event.testing === true : false,
     address: mode == "edit" ? event.address : "",
     limit: mode == "edit" ? event.limit || 0 : (0 as number | null),
     serviceLetters: mode == "edit" ? event.serviceLetters : undefined,
@@ -294,6 +296,17 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
                 <FormError name="registerBefore" />
               </FormQuestion>
               <br />
+                <FormQuestion>
+                  <label
+                    htmlFor="testing"
+                    className="flex items-center flex-wrap gap-1"
+                  >
+                    <Field id="testing" name="testing" type="checkbox" />
+                    Testing event (sends Discord and email only to configured
+                    testing destinations)
+                  </label>
+                </FormQuestion>
+                <br />
               <FormQuestion errored={Boolean(errors.address)}>
                 <label htmlFor="address">Address:</label>
                 <Field

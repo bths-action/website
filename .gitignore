@@ -5,6 +5,7 @@
 /.pnp
 .pnp.js
 .yarn/install-state.gz
+package-lock.json
 
 # testing
 /coverage
@@ -38,3 +39,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 prisma/migrations
+!prisma/migrations/
+!prisma/migrations/20261024000000_add_event_testing/

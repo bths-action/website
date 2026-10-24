@@ -4,7 +4,7 @@ import { createId } from "@paralleldrive/cuid2";
 import { CreateEventInput } from "../client";
 import { Converter } from "showdown";
 import { prisma } from "@/utils/prisma";
-import { generateEvent, sendMessage } from "@/utils/webhook";
+import { generateEvent, getEventWebhook, sendMessage } from "@/utils/webhook";
 import { sendEmail } from "@/utils/mail";
 import { Event } from "@prisma/client";
 
@@ -20,13 +20,20 @@ export const createEvent = adminProcedure
       `${siteUrl}/events/${id}`
     );
 
+    const testingEmail = input.testing
+      ? process.env.TESTING_EMAIL
+      : undefined;
+    if (input.testing && !testingEmail) {
+      throw new Error("TESTING_EMAIL is not configured.");
+    }
+
     const message = await sendMessage({
       content:
         "Tired of events? Go to <#1134529490740064307> to remove <@&1136780952274735266>.\n# New event posted!",
       username: ctx.user.preferredName,
       avatar_url: ctx.user.execDetails?.selfieURL || undefined,
       embeds: [generateEvent(input, id)],
-    });
+    }, getEventWebhook(input.testing));
 
     const emailBody = emailGenerator(input, id);
 
@@ -41,7 +48,7 @@ export const createEvent = adminProcedure
       sendEmail({
         subject: "New Action Event: " + input.name,
         html: emailBody,
-      }),
+      }, { recipient: testingEmail }),
     ]);
 
     const event = data[0];

@@ -70,6 +70,7 @@ const baseEventSchema = z.object({
         : "Event time must be a valid date. ",
   }),
   registerBefore: z.boolean().prefault(true),
+  testing: z.boolean().prefault(false),
   limit: z
     .number({
       error: (issue) =>

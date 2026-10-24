@@ -71,6 +71,7 @@ model Event {
   finishTime     DateTime
   registerBefore Boolean  @default(true)
   closed         Boolean  @default(false)
+  testing        Boolean  @default(false)
 
   attendees      EventAttendance[]
   limit          Int?

@@ -39,6 +39,7 @@ import { useAccount } from "@/providers/account";
 import { ExecForm } from "../form/exec-form";
 import { twMerge } from "tailwind-merge";
 import { EmailQueryForm } from "../form/email-query-form";
+import { BulkAccountForm } from "../form/bulk-account-form";
 import { DISCORD_INVITE_LINK } from "@/utils/constants";
 import { TRPCError, trpc } from "@/app/(api)/api/trpc/client";
 import { confirm } from "./confirm";
@@ -168,6 +169,7 @@ const ProfileButton: FC<{
   const [formOpen, setFormOpen] = useState(false);
   const [execOpen, setExecOpen] = useState(false);
   const [queryOpen, setQueryOpen] = useState(false);
+  const [bulkAccountsOpen, setBulkAccountsOpen] = useState(false);
   const [connecting, setConnecting] = useState(false);
   const disconnectDiscord = trpc.disconnectDiscord.useMutation();
   const deleteAccount = trpc.deleteAccount.useMutation();
@@ -263,6 +265,12 @@ const ProfileButton: FC<{
               Query Emails
             </NavButton>
             <NavButton
+              icon={FaRegIdCard}
+              onClick={() => setBulkAccountsOpen(true)}
+            >
+              Create Student Accounts
+            </NavButton>
+            <NavButton
               icon={BiAward}
               href="/spreadsheet"
               onClick={() => {
@@ -353,6 +361,9 @@ const ProfileButton: FC<{
       {accountStatus == "success" &&
         accountData?.position == "EXEC" &&
         queryOpen && <EmailQueryForm setOpen={setQueryOpen} />}
+      {accountStatus == "success" &&
+        accountData?.position == "EXEC" &&
+        bulkAccountsOpen && <BulkAccountForm setOpen={setBulkAccountsOpen} />}
       <TransparentButton
         whileHover={{
           scale: 1.1,

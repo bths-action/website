@@ -1,7 +1,7 @@
 import { adminProcedure } from "../trpc";
 import { updateEventSchema } from "@/schema/events";
 import { prisma } from "@/utils/prisma";
-import { editMessage, generateEvent } from "@/utils/webhook";
+import { editMessage, generateEvent, getEventWebhook } from "@/utils/webhook";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://bthsaction.org";
 
@@ -42,7 +42,7 @@ export const editEvent = adminProcedure
           event.id
         ),
       ],
-    }).catch(() => {});
+    }, getEventWebhook("testing" in event && event.testing === true)).catch(() => {});
 
     return event;
   });

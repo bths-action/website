@@ -4,7 +4,10 @@ import { convert } from "html-to-text";
 import { OLDEST_GRAD_YEAR, YOUNGEST_GRAD_YEAR } from "./constants";
 import { prisma } from "./prisma";
 
-export async function sendEmail(data: { subject: string; html: string }) {
+export async function sendEmail(
+  data: { subject: string; html: string },
+  options?: { recipient?: string }
+) {
   const mailgun = new Mailgun(formData);
   const mg = mailgun.client({
     username: "api",
@@ -12,17 +15,19 @@ export async function sendEmail(data: { subject: string; html: string }) {
   });
 
   // Keep recipients within the current graduating classes.
-  const recipients = (
-    await prisma.user.findMany({
-      where: {
-        position: "EXEC",
-        gradYear: {
-          gte: OLDEST_GRAD_YEAR,
-          lte: YOUNGEST_GRAD_YEAR,
-        },
-      },
-    })
-  ).map((user) => user.email);
+  const recipients = options?.recipient
+    ? [options.recipient]
+    : (
+        await prisma.user.findMany({
+          where: {
+            position: "EXEC",
+            gradYear: {
+              gte: OLDEST_GRAD_YEAR,
+              lte: YOUNGEST_GRAD_YEAR,
+            },
+          },
+        })
+      ).map((user) => user.email);
 
   try {
     const response = await mg.messages.create(process.env.MAILGUN_DOMAIN!, {

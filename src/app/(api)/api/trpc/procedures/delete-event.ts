@@ -1,7 +1,7 @@
 import { adminProcedure } from "../trpc";
 import { deleteEventSchema } from "@/schema/events";
 import { prisma } from "@/utils/prisma";
-import { deleteMessage } from "@/utils/webhook";
+import { deleteMessage, getEventWebhook } from "@/utils/webhook";
 
 export const deleteEvent = adminProcedure
   .input(deleteEventSchema)
@@ -18,7 +18,10 @@ export const deleteEvent = adminProcedure
       },
     });
 
-    await deleteMessage(event.messageID).catch(() => {});
+    await deleteMessage(
+      event.messageID,
+      getEventWebhook("testing" in event && event.testing === true)
+    ).catch(() => {});
 
     return event;
   });

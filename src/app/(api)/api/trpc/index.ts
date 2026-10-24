@@ -24,6 +24,7 @@ import { editCredits } from "./procedures/edit-credits";
 import { editSubscription } from "./procedures/edit-subscription";
 import { disconnectDiscord } from "./procedures/disconnect-discord";
 import { deleteAccount } from "./procedures/delete-account";
+import { createBulkAccounts } from "./procedures/create-bulk-accounts";
 
 export const appRouter = router({
   //generate smth random
@@ -35,6 +36,7 @@ export const appRouter = router({
   getForm,
 
   createExec,
+  createBulkAccounts,
   editExec,
 
   getEvent,

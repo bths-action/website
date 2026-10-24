@@ -15,6 +15,9 @@ export type RegisterOutput = RouterOutput["register"];
 export type CreateExecInput = RouterInput["createExec"];
 export type CreateExecOutput = RouterOutput["createExec"];
 
+export type CreateBulkAccountsInput = RouterInput["createBulkAccounts"];
+export type CreateBulkAccountsOutput = RouterOutput["createBulkAccounts"];
+
 export type EditExecInput = RouterInput["editExec"];
 export type EditExecOutput = RouterOutput["editExec"];
 
