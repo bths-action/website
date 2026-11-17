@@ -30,6 +30,9 @@ export type GetFormOutput = RouterOutput["getForm"];
 export type GetMemberInput = RouterInput["getMember"];
 export type GetMemberOutput = RouterOutput["getMember"];
 
+export type SearchMembersInput = RouterInput["searchMembers"];
+export type SearchMembersOutput = RouterOutput["searchMembers"];
+
 export type EditMemberInput = RouterInput["editMember"];
 export type EditMemberOutput = RouterOutput["editMember"];
 

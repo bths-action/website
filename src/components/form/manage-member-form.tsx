@@ -1,5 +1,5 @@
 "use client";
-import { ChangeEvent, FC, useState } from "react";
+import { ChangeEvent, FC, useEffect, useState } from "react";
 import { Field, Form, Formik } from "formik";
 import { z, ZodError } from "zod";
 import {
@@ -248,15 +248,38 @@ const MemberEditor: FC<{ member: Member }> = ({ member }) => {
   );
 };
 
-export const ManageMemberForm: FC<{
+interface Props {
   setOpen: (open: boolean) => void;
-}> = ({ setOpen }) => {
+}
+
+export const ManageMemberForm: FC<Props> = ({ setOpen }) => {
   const [input, setInput] = useState("");
+  const [debounced, setDebounced] = useState("");
   const [email, setEmail] = useState<string | null>(null);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => setDebounced(input.trim()), 250);
+    return () => clearTimeout(timeout);
+  }, [input]);
+
+  const search = trpc.searchMembers.useQuery(
+    { query: debounced },
+    { enabled: debounced.length > 0 }
+  );
   const member = trpc.getMember.useQuery(
     { email: email ?? "" },
     { enabled: Boolean(email) }
   );
+
+  const results = search.data ?? [];
+  const showResults =
+    input.trim().length > 0 &&
+    input.trim().toLowerCase() !== email?.toLowerCase();
+
+  const choose = (memberEmail: string) => {
+    setInput(memberEmail);
+    setEmail(memberEmail);
+  };
 
   return (
     <PopupUI setOpen={setOpen} title="Manage Members">
@@ -265,37 +288,76 @@ export const ManageMemberForm: FC<{
           className="flex flex-wrap gap-2 justify-center items-center"
           onSubmit={(e) => {
             e.preventDefault();
-            const next = input.trim().toLowerCase();
-            if (!next) {
-              setEmail(null);
-              return;
+            const resultsAreCurrent =
+              debounced.toLowerCase() === input.trim().toLowerCase();
+            if (resultsAreCurrent && results.length > 0) {
+              choose(results[0].email);
+            } else if (input.includes("@")) {
+              choose(input.trim().toLowerCase());
             }
-            if (next === email) void member.refetch();
-            else setEmail(next);
           }}
         >
-          <label htmlFor="memberEmail">Member email:</label>
+          <label htmlFor="memberSearch">Search by name or email:</label>
           <input
-            id="memberEmail"
-            type="email"
+            id="memberSearch"
+            type="search"
             className="border-2 border-black dark:border-white rounded-md p-1"
-            placeholder="student@nycstudents.net"
+            placeholder="Name or student@nycstudents.net"
             value={input}
             onChange={(e) => setInput(e.target.value)}
           />
           <RoundButton type="submit">Look Up</RoundButton>
         </form>
 
-        {member.isFetching && <Loading loadingType="bar">Searching...</Loading>}
+        {showResults && (
+          <div className="mt-2 border-2 border-black dark:border-white rounded-md overflow-hidden">
+            {search.isFetching && (
+              <Loading loadingType="bar" className="p-2">
+                Searching...
+              </Loading>
+            )}
+            <div className="max-h-64 overflow-auto divide-y divide-gray-400/30">
+              {results.map((result) => (
+                <button
+                  key={result.email}
+                  type="button"
+                  className="block w-full text-left p-2 hover:bg-gray-400/20"
+                  onClick={() => choose(result.email)}
+                >
+                  <span className="font-bold">
+                    {result.preferredName ?? result.name ?? result.email}
+                  </span>
+                  {result.preferredName &&
+                    result.name &&
+                    result.preferredName !== result.name &&
+                    ` (${result.name})`}
+                  <span className="block text-sm opacity-70">
+                    {result.email} ·{" "}
+                    {result.position === "EXEC" ? "Exec" : "Member"}
+                    {result.gradYear != null && ` · Class of ${result.gradYear}`}
+                  </span>
+                </button>
+              ))}
+              {search.isFetched && results.length === 0 && (
+                <p className="p-2">No members found.</p>
+              )}
+              {results.length === 10 && (
+                <p className="p-2 text-sm opacity-70">
+                  Showing up to 10 matches — keep typing to narrow it down.
+                </p>
+              )}
+            </div>
+          </div>
+        )}
+
+        {member.isFetching && <Loading loadingType="bar">Loading member...</Loading>}
         {member.error ? (
           <RequestError error={member.error} />
         ) : (
           member.isFetched &&
           !member.isFetching &&
           email &&
-          member.data === null && (
-            <p className="mt-3">No member found with that email.</p>
-          )
+          member.data === null && <p className="mt-3">No member found.</p>
         )}
         {member.data && (
           <MemberEditor key={member.data.email} member={member.data} />

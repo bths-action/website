@@ -111,4 +111,8 @@ const memberEmail = z
 
 export const memberLookupSchema = z.object({ email: memberEmail });
 
+export const memberSearchSchema = z.object({
+  query: z.string().trim().min(1).max(190),
+});
+
 export const editMemberSchema = editSchema.extend({ email: memberEmail });

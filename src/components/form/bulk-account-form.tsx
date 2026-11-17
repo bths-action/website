@@ -10,9 +10,11 @@ import { FC, useState } from "react";
 import { bulkAccountSchema } from "@/schema/bulk-accounts";
 import { ZodError, z } from "zod";
 
-export const BulkAccountForm: FC<{ setOpen: (open: boolean) => void }> = ({
-  setOpen,
-}) => {
+interface Props {
+  setOpen: (open: boolean) => void;
+}
+
+export const BulkAccountForm: FC<Props> = ({ setOpen }) => {
   const createAccounts = trpc.createBulkAccounts.useMutation();
   const [error, setError] = useState<TRPCError | null>(null);
   const [result, setResult] = useState<{ created: number; skipped: number }>();
