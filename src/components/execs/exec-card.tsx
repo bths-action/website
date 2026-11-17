@@ -85,7 +85,9 @@ export const ExecCard: FC<{
                 <>({exec.user.name})</>
               )}
           </h6>
-          <p className="text-lg">{POSITIONS_MAP[exec.position]}</p>
+          <p className="text-lg">
+            {exec.position ? POSITIONS_MAP[exec.position] : "Executive"}
+          </p>
           <p className="text-lg">
             Pronouns: {exec.user.pronouns?.toLowerCase() ?? "N/A"} | Class of{" "}
             {exec.user.gradYear ?? "N/A"}

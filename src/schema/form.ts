@@ -104,3 +104,11 @@ export const registerSchema = z.object({
 });
 
 export const editSchema = registerSchema.partial();
+
+const memberEmail = z
+  .email({ error: "Email is invalid. " })
+  .max(190, { error: "Email is too long. " });
+
+export const memberLookupSchema = z.object({ email: memberEmail });
+
+export const editMemberSchema = editSchema.extend({ email: memberEmail });

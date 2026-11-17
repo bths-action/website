@@ -25,8 +25,8 @@ model ExecDetails {
   user  User   @relation(fields: [email], references: [email], onDelete: Cascade)
   email String @id
 
-  position    ExecPosition
-  description String       @db.VarChar(5000)
+  position    ExecPosition?
+  description String        @default("") @db.VarChar(5000)
   selfieURL   String?
 
   @@index([email])

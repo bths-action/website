@@ -30,9 +30,9 @@ const FormContent: FC<Props> = ({ mode, setOpen }) => {
   const [uploading, setUploading] = useState(false);
 
   const initialValues = {
-    position: (mode == "edit" ? account.data!.execDetails!.position : "") as
-      | ExecPosition
-      | "",
+    position: (mode == "edit"
+      ? account.data!.execDetails!.position ?? ""
+      : "") as ExecPosition | "",
     selfieURL: mode == "edit" ? account.data!.execDetails!.selfieURL : null,
     description: mode == "edit" ? account.data!.execDetails!.description : "",
   };

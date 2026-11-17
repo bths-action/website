@@ -12,6 +12,7 @@ import {
   FaRegIdCard,
   FaRegMoon,
   FaUserEdit,
+  FaUsers,
 } from "react-icons/fa";
 import Link from "next/link";
 import { IconType } from "react-icons";
@@ -40,6 +41,7 @@ import { ExecForm } from "../form/exec-form";
 import { twMerge } from "tailwind-merge";
 import { EmailQueryForm } from "../form/email-query-form";
 import { BulkAccountForm } from "../form/bulk-account-form";
+import { ManageMemberForm } from "../form/manage-member-form";
 import { DISCORD_INVITE_LINK } from "@/utils/constants";
 import { TRPCError, trpc } from "@/app/(api)/api/trpc/client";
 import { confirm } from "./confirm";
@@ -170,6 +172,7 @@ const ProfileButton: FC<{
   const [execOpen, setExecOpen] = useState(false);
   const [queryOpen, setQueryOpen] = useState(false);
   const [bulkAccountsOpen, setBulkAccountsOpen] = useState(false);
+  const [manageMembersOpen, setManageMembersOpen] = useState(false);
   const [connecting, setConnecting] = useState(false);
   const disconnectDiscord = trpc.disconnectDiscord.useMutation();
   const deleteAccount = trpc.deleteAccount.useMutation();
@@ -271,6 +274,12 @@ const ProfileButton: FC<{
               Create Student Accounts
             </NavButton>
             <NavButton
+              icon={FaUsers}
+              onClick={() => setManageMembersOpen(true)}
+            >
+              Manage Members
+            </NavButton>
+            <NavButton
               icon={BiAward}
               href="/spreadsheet"
               onClick={() => {
@@ -364,6 +373,11 @@ const ProfileButton: FC<{
       {accountStatus == "success" &&
         accountData?.position == "EXEC" &&
         bulkAccountsOpen && <BulkAccountForm setOpen={setBulkAccountsOpen} />}
+      {accountStatus == "success" &&
+        accountData?.position == "EXEC" &&
+        manageMembersOpen && (
+          <ManageMemberForm setOpen={setManageMembersOpen} />
+        )}
       <TransparentButton
         whileHover={{
           scale: 1.1,

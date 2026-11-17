@@ -27,6 +27,15 @@ export type EditFormOutput = RouterOutput["editForm"];
 export type GetFormInput = RouterInput["getForm"];
 export type GetFormOutput = RouterOutput["getForm"];
 
+export type GetMemberInput = RouterInput["getMember"];
+export type GetMemberOutput = RouterOutput["getMember"];
+
+export type EditMemberInput = RouterInput["editMember"];
+export type EditMemberOutput = RouterOutput["editMember"];
+
+export type SetMemberPositionInput = RouterInput["setMemberPosition"];
+export type SetMemberPositionOutput = RouterOutput["setMemberPosition"];
+
 export type GetEventInput = RouterInput["getEvent"];
 export type GetEventOutput = RouterOutput["getEvent"];
 

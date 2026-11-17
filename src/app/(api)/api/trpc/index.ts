@@ -3,6 +3,9 @@ import { getEvents } from "./procedures/get-events";
 import { register } from "./procedures/register";
 import { editForm } from "./procedures/edit-form";
 import { getForm } from "./procedures/get-form";
+import { getMember } from "./procedures/get-member";
+import { editMember } from "./procedures/edit-member";
+import { setMemberPosition } from "./procedures/set-member-position";
 import { createExec } from "./procedures/create-exec";
 import { editExec } from "./procedures/edit-exec";
 import { getEvent } from "./procedures/get-event";
@@ -34,6 +37,9 @@ export const appRouter = router({
   register,
   editForm,
   getForm,
+  getMember,
+  editMember,
+  setMemberPosition,
 
   createExec,
   createBulkAccounts,
