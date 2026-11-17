@@ -107,7 +107,7 @@ export const AttendanceList: FC<ListProps> = ({ attendance, id }) => {
             let string = "";
             string += "Email,Name,Attended At,Earned Hours,Earned Points\n";
             for (const attendee of attendance.attendees) {
-              string += `${attendee.userEmail},${attendee.user.name},${attendee.attendedAt},${attendee.earnedHours},${attendee.earnedPoints}\n`;
+              string += `${attendee.userEmail},${attendee.user.name ?? ""},${attendee.attendedAt},${attendee.earnedHours},${attendee.earnedPoints}\n`;
             }
 
             const blob = new Blob([string], { type: "text/csv" });

@@ -29,18 +29,24 @@ const FormContent: FC<Props> = ({ mode, setOpen }) => {
   const [error, setError] = useState<TRPCError | null>(null);
   const [prefectHelp, setPrefectHelp] = useState(false);
 
+  // `data` may exist in create mode: bulk-created accounts are completed here.
+  const data = account.data;
+
   const initialValues = {
-    name: mode == "edit" ? account.data!.name : "",
-    preferredName: mode == "edit" ? (account.data!.preferredName ?? "") : "",
-    prefect: mode == "edit" ? (account.data!.prefect ?? "") : "",
-    pronouns: mode == "edit" ? (account.data!.pronouns ?? "") : "",
-    gradYear: mode == "edit" ? Number(account.data!.gradYear) : 2030,
-    birthday: mode == "edit" ? (account.data!.birthday ?? "") : "",
-    sgoSticker: mode == "edit" ? account.data!.sgoSticker : false,
-    referredBy: mode == "edit" ? account.data!.referredBy : undefined,
-    eventAlerts: mode == "edit" ? account.data!.eventAlerts : true,
-    instagram: mode == "edit" ? (account.data!.instagram ?? "") : "",
-    phone: mode == "edit" ? (account.data!.phone ?? "") : "",
+    name: data?.name ?? "",
+    preferredName: data?.preferredName ?? "",
+    prefect: data?.prefect ?? "",
+    pronouns: data?.pronouns ?? "",
+    gradYear: data?.gradYear ?? 2030,
+    birthday: data?.birthday ?? "",
+    sgoSticker: data?.sgoSticker ?? false,
+    referredBy: (data?.referredBy ?? undefined) as
+      | string
+      | null
+      | undefined,
+    eventAlerts: data?.eventAlerts ?? true,
+    instagram: data?.instagram ?? "",
+    phone: data?.phone ?? "",
   };
 
   type FormValues = typeof initialValues;

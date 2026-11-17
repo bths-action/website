@@ -93,8 +93,8 @@ export const GiveCreditsButton: FC<{
           }
           setProgress((prev) => (prev || 0) + 1);
           string += `${awarded},${user.givenCredits},${user.email},${total},${
-            user.name
-          },${user.gradYear},${user.prefect},${user.miscPoints},${
+            user.name ?? ""
+          },${user.gradYear ?? ""},${user.prefect ?? ""},${user.miscPoints},${
             user.refCount * 5
           }`;
           data.events.forEach((event) => {

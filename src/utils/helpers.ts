@@ -1,5 +1,30 @@
-export function isAlumni(gradYear: number) {
+export function isAlumni(gradYear: number | null | undefined) {
+  if (gradYear == null) return false;
   return new Date("July 1," + gradYear) < new Date();
+}
+
+/**
+ * Bulk-created accounts only contain an email until the member completes
+ * their profile on first login.
+ */
+export function isProfileComplete(user: {
+  name: string | null;
+  preferredName: string | null;
+  pronouns: string | null;
+  prefect: string | null;
+  birthday: string | null;
+  gradYear: number | null;
+  sgoSticker: boolean | null;
+}) {
+  return Boolean(
+    user.name &&
+      user.preferredName &&
+      user.pronouns &&
+      user.prefect &&
+      user.birthday &&
+      user.gradYear != null &&
+      user.sgoSticker != null
+  );
 }
 
 export function* shuffle<T>(arr: T[]): Generator<T> {

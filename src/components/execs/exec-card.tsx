@@ -79,15 +79,16 @@ export const ExecCard: FC<{
         </div>
         <div className="m-2 pt-5">
           <h6>
-            {exec.user.preferredName}{" "}
-            {exec.user.name == exec.user.preferredName || (
-              <>({exec.user.name})</>
-            )}
+            {exec.user.preferredName ?? exec.user.name ?? ""}{" "}
+            {exec.user.name &&
+              exec.user.name != exec.user.preferredName && (
+                <>({exec.user.name})</>
+              )}
           </h6>
           <p className="text-lg">{POSITIONS_MAP[exec.position]}</p>
           <p className="text-lg">
-            Pronouns: {exec.user.pronouns.toLowerCase()} | Class of{" "}
-            {exec.user.gradYear}
+            Pronouns: {exec.user.pronouns?.toLowerCase() ?? "N/A"} | Class of{" "}
+            {exec.user.gradYear ?? "N/A"}
           </p>
           <div className="flex justify-center text-5xl">
             “{" "}

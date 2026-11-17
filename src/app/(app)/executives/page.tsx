@@ -55,7 +55,7 @@ const Page: FC = async () => {
     }
 
     // If positions are the same, compare names
-    return a.user.name.localeCompare(b.user.name);
+    return (a.user.name ?? "").localeCompare(b.user.name ?? "");
   });
 
   return (

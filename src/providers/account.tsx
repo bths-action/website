@@ -1,6 +1,7 @@
 "use client";
 import { GetFormOutput, TRPCError, trpc } from "@/app/(api)/api/trpc/client";
 import { UserForm } from "@/components/form/user-form";
+import { isProfileComplete } from "@/utils/helpers";
 import { UseTRPCQueryResult } from "@trpc/react-query/shared";
 import {
   FC,
@@ -20,9 +21,11 @@ export const AccountProvider: FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <AccountContext.Provider value={account}>
-      {account.isSuccess && account.isFetched && account.data == null && (
-        <UserForm mode="create" setOpen={setOpen} />
-      )}
+      {account.isSuccess &&
+        account.isFetched &&
+        (account.data == null || !isProfileComplete(account.data)) && (
+          <UserForm mode="create" setOpen={setOpen} />
+        )}
       {children}
     </AccountContext.Provider>
   );

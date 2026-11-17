@@ -24,9 +24,11 @@ export const BackupButton: FC<{
             user.miscPoints +
             user.refCount * 5 +
             Object.values(user.events).reduce((acc, event) => acc + event, 0);
-          string += `${user.givenCredits},${user.email},${total},${user.name},${
-            user.gradYear
-          },${user.prefect},${user.miscPoints},${user.refCount * 5}`;
+          string += `${user.givenCredits},${user.email},${total},${
+            user.name ?? ""
+          },${user.gradYear ?? ""},${user.prefect ?? ""},${user.miscPoints},${
+            user.refCount * 5
+          }`;
           data.events.forEach((event) => {
             string += `,${user.events[event.id] || 0}`;
           });

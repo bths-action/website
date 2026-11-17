@@ -126,7 +126,7 @@ export const Spreadsheet: FC = () => {
                               (await confirm({
                                 title: "Confirm",
                                 children: `(DO NOT DO THIS IF YOU ARE GIVING CREDITS EVERY SEMESTER. This is only for if the system made some mistake or something, which should not happen.) Are you sure you want to set ${
-                                  user.name
+                                  user.name ?? user.email
                                 }'s credits to ${
                                   inputRef.current[user.email].valueAsNumber
                                 }? `,
@@ -173,9 +173,11 @@ export const Spreadsheet: FC = () => {
                         {user.email}
                       </td>
                       <td className="px-16">{total}</td>
-                      <td className="px-4  whitespace-nowrap">{user.name}</td>
-                      <td className="px-4">{user.gradYear}</td>
-                      <td className="px-4">{user.prefect}</td>
+                      <td className="px-4  whitespace-nowrap">
+                        {user.name ?? user.email}
+                      </td>
+                      <td className="px-4">{user.gradYear ?? ""}</td>
+                      <td className="px-4">{user.prefect ?? ""}</td>
                       <td className="px-8">{user.miscPoints}</td>
                       <td className="px-8">
                         {Math.min(user.refCount, MAX_REFERRALS) *

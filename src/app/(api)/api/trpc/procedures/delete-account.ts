@@ -13,6 +13,7 @@ export const deleteAccount = memberProcedure.mutation(
       },
       select: {
         registeredAt: true,
+        name: true,
       },
     });
 
@@ -23,8 +24,9 @@ export const deleteAccount = memberProcedure.mutation(
       },
     });
 
-    // Create the deletedUsers entry
-    if (existingUser) {
+    // Create the deletedUsers entry. Incomplete (bulk-created) accounts are
+    // never counted as joins, so they must not be counted as leaves either.
+    if (existingUser?.name) {
       await prisma.deletedUsers.create({
         data: {
           id,

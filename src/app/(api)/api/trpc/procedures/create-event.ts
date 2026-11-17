@@ -37,7 +37,7 @@ export const createEvent = adminProcedure
     const message = await sendMessage({
       content:
         "Tired of events? Go to <#1134529490740064307> to remove <@&1136780952274735266>.\n# New event posted!",
-      username: ctx.user.preferredName,
+      username: ctx.user.preferredName ?? undefined,
       avatar_url: ctx.user.execDetails?.selfieURL || undefined,
       embeds: [generateEvent(input, id)],
     }, getEventWebhook(input.testing));
@@ -69,10 +69,17 @@ export const createEvent = adminProcedure
 async function getEventEmailRecipients(emailEveryone: boolean) {
   const users = await prisma.user.findMany({
     where: {
-      gradYear: {
-        gte: OLDEST_GRAD_YEAR,
-        lte: YOUNGEST_GRAD_YEAR,
-      },
+      OR: [
+        {
+          gradYear: {
+            gte: OLDEST_GRAD_YEAR,
+            lte: YOUNGEST_GRAD_YEAR,
+          },
+        },
+        // Bulk-created accounts have not completed their profile yet (no
+        // grad year), but they should still receive event alerts.
+        { name: null },
+      ],
     },
     select: {
       email: true,

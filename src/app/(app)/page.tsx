@@ -14,11 +14,13 @@ const Home: FC = async () => {
   const [credits, joins, events, serviceHours, leaves] = await Promise.all([
     prisma.user
       .findMany({
+        where: { name: { not: null } },
         select: { givenCredits: true },
       })
       .then((users) => users.reduce((sum, user) => sum + user.givenCredits, 0)),
     prisma.user
       .findMany({
+        where: { name: { not: null } },
         select: { registeredAt: true },
         orderBy: {
           registeredAt: "asc",

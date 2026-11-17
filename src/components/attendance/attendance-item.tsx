@@ -39,8 +39,12 @@ export const AttendanceItem: FC<ItemProps> = ({ attendee, attendance, id }) => {
       className="pb-2 rounded-lg"
     >
       <hr className="my-2" />
-      {attendee.user.preferredName} ({attendee.user.name}) -{" "}
-      {attendee.userEmail}
+      {attendee.user.preferredName ?? attendee.user.name ?? attendee.userEmail}
+      {attendee.user.preferredName &&
+        attendee.user.name &&
+        attendee.user.preferredName !== attendee.user.name &&
+        ` (${attendee.user.name})`}{" "}
+      - {attendee.userEmail}
       {attendee.user.discordID && <p>Discord Id: {attendee.user.discordID}</p>}
       {attendee.user.instagram && <p>Instagram: {attendee.user.instagram}</p>}
       {attendee.user.phone && <p>Phone: {attendee.user.phone}</p>}
