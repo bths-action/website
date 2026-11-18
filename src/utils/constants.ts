@@ -13,8 +13,8 @@ export const GRAD_YEARS = Array.from(
  * "send email to all current members" checked. Older accounts belong to
  * people who have moved on, so their opt-out is treated as final.
  */
-export const UNSUBSCRIBED_SIGNUP_CUTOFF = new Date("2024-01-01T00:00:00-05:00");
-export const UNSUBSCRIBED_SIGNUP_CUTOFF_LABEL = "January 1, 2024";
+export const UNSUBSCRIBED_SIGNUP_CUTOFF = new Date("2024-06-01T00:00:00-04:00");
+export const UNSUBSCRIBED_SIGNUP_CUTOFF_LABEL = "June 1, 2024";
 export const POSITIONS = [
   "PRESIDENT",
   "VICE_PRESIDENT",
