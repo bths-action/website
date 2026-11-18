@@ -7,10 +7,17 @@ import {
   emailGenerator,
   eventEmailSubject,
   getEventEmailRecipients,
+  recordEventEmailRecipients,
 } from "@/utils/event-email";
 
 export const resendEventEmail = adminProcedure
-  .input(z.object({ id: z.string() }))
+  .input(
+    z.object({
+      id: z.string(),
+      /** Leave out anyone already recorded as having received this event. */
+      skipAlreadySent: z.boolean().prefault(true),
+    })
+  )
   .mutation(async ({ input }) => {
     const event = await prisma.event.findUnique({
       where: { id: input.id },
@@ -43,27 +50,55 @@ export const resendEventEmail = adminProcedure
       });
     }
 
-    const recipients = event.testing
-      ? { recipient: testingEmail!, bcc: [testingBccEmail!] }
-      : await getEventEmailRecipients(event.emailEveryone);
+    // Testing sends always go to the configured test addresses, and are never
+    // recorded (otherwise a second test resend would be skipped entirely).
+    let recipients: { recipient: string[]; bcc: string[] };
+    let skipped = 0;
+    let onChunkSent: ((emails: string[]) => Promise<void>) | undefined;
 
-    const recipientCount =
-      (Array.isArray(recipients.recipient)
-        ? recipients.recipient.length
-        : recipients.recipient
-          ? 1
-          : 0) + (recipients.bcc?.length ?? 0);
+    if (event.testing) {
+      recipients = {
+        recipient: [testingEmail!],
+        bcc: [testingBccEmail!],
+      };
+    } else {
+      const eligible = await getEventEmailRecipients(event.emailEveryone, {
+        eventId: event.id,
+        skipAlreadySent: input.skipAlreadySent,
+      });
+
+      recipients = { recipient: eligible.recipient, bcc: eligible.bcc };
+      skipped = eligible.skipped;
+      onChunkSent = (emails) => recordEventEmailRecipients(event.id, emails);
+    }
+
+    const recipientCount = recipients.recipient.length + recipients.bcc.length;
+
+    if (recipientCount === 0) {
+      return {
+        messageID: null,
+        recipientCount: 0,
+        skippedCount: skipped,
+        messages: 0,
+      };
+    }
 
     const response = await sendEmail(
       {
         subject: eventEmailSubject(event.name),
         html: emailGenerator(event, event.id),
       },
-      recipients
+      {
+        recipient: recipients.recipient,
+        bcc: recipients.bcc,
+        onChunkSent,
+      }
     );
 
     return {
       messageID: response.id,
-      recipientCount,
+      recipientCount: response.recipientCount,
+      skippedCount: skipped,
+      messages: response.messages,
     };
   });

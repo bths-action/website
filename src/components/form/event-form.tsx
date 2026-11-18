@@ -50,6 +50,7 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
   const [shownTemplates, setShownTemplates] = useState(false);
   const [resending, setResending] = useState(false);
   const [resendStatus, setResendStatus] = useState<string | null>(null);
+  const [skipAlreadySent, setSkipAlreadySent] = useState(true);
 
   const initialValues = {
     name: mode == "edit" ? event.name : "",
@@ -427,6 +428,29 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
                 <FormError name="imageURL" disabled={uploading} />
               </FormQuestion>
               <br />
+              {mode === "edit" && !event.testing && (
+                <FormQuestion>
+                  <label
+                    htmlFor="skipAlreadySent"
+                    className="flex items-center flex-wrap gap-1"
+                  >
+                    <input
+                      id="skipAlreadySent"
+                      type="checkbox"
+                      checked={skipAlreadySent}
+                      onChange={(change) =>
+                        setSkipAlreadySent(change.target.checked)
+                      }
+                    />
+                    Skip people who already received this event
+                  </label>
+                  <p className="text-sm opacity-70">
+                    Emails are sent in small batches, so this can take a few
+                    minutes. If it stops partway, press Resend again to continue
+                    with whoever is left.
+                  </p>
+                </FormQuestion>
+              )}
               <div className="flex flex-wrap gap-2 items-center">
                 <RoundButton disabled={isSubmitting} type="submit">
                   Submit{isSubmitting && "ting"} Event
@@ -454,7 +478,12 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
                               )}
                               <br />
                               <br />
-                              Resend to everyone it originally went to?
+                              {skipAlreadySent
+                                ? "Only people who have not already received this email will get it."
+                                : "Everyone eligible will get it again, including people who already received it."}
+                              <br />
+                              <br />
+                              Resend the email?
                             </>
                           ),
                         }))
@@ -465,14 +494,21 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
                       setResendStatus(null);
                       setResending(true);
                       await resendEmail
-                        .mutateAsync({ id: event.id })
-                        .then(({ recipientCount }) =>
+                        .mutateAsync({ id: event.id, skipAlreadySent })
+                        .then(({ recipientCount, skippedCount }) => {
+                          const recipients = `${recipientCount} recipient${
+                            recipientCount === 1 ? "" : "s"
+                          }`;
+
                           setResendStatus(
-                            `Email sent to ${recipientCount} recipient${
-                              recipientCount === 1 ? "" : "s"
-                            }.`
-                          )
-                        )
+                            recipientCount === 0
+                              ? "Everyone eligible has already received this email."
+                              : `Email sent to ${recipients}.` +
+                                  (skippedCount > 0
+                                    ? ` Skipped ${skippedCount} who already received it.`
+                                    : "")
+                          );
+                        })
                         .catch((err: TRPCError) => setError(err))
                         .finally(() => setResending(false));
                     }}

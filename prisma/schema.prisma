@@ -64,8 +64,8 @@ model Event {
   name        String
   description String @db.VarChar(4000)
 
-  maxPoints          Float
-  maxHours           Float
+  maxPoints Float
+  maxHours  Float
 
   eventTime      DateTime
   finishTime     DateTime
@@ -74,15 +74,29 @@ model Event {
   testing        Boolean  @default(false)
   emailEveryone  Boolean  @default(false)
 
-  attendees      EventAttendance[]
-  limit          Int?
-  imageURL       String?
-  serviceLetters String?
+  attendees       EventAttendance[]
+  emailRecipients EventEmailRecipient[]
+  limit           Int?
+  imageURL        String?
+  serviceLetters  String?
 
   messageID String @unique
 
   address   String   @db.VarChar(1000)
   createdAt DateTime @default(now())
+}
+
+// One row per address that successfully received this event's email. Used so
+// a resend can skip people who already got it (Mailgun limits how many
+// recipients a restricted account can send to per message/window).
+model EventEmailRecipient {
+  eventId String
+  email   String   @db.VarChar(320)
+  sentAt  DateTime @default(now())
+
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@id([eventId, email])
 }
 
 model EventAttendance {

@@ -8,6 +8,7 @@ import {
   emailGenerator,
   eventEmailSubject,
   getEventEmailRecipients,
+  recordEventEmailRecipients,
 } from "@/utils/event-email";
 import { Event } from "@prisma/client";
 
@@ -46,24 +47,32 @@ export const createEvent = adminProcedure
 
     const emailBody = emailGenerator(input, id);
     const emailRecipients = input.testing
-      ? { recipient: testingEmail, bcc: [testingBccEmail!] }
-      : await getEventEmailRecipients(input.emailEveryone);
+      ? { recipient: [testingEmail!], bcc: [testingBccEmail!] }
+      : await getEventEmailRecipients(input.emailEveryone, { eventId: id });
 
-    const data = await Promise.all([
-      prisma.event.create({
-        data: {
-          ...input,
-          messageID: message.id,
-          id,
-        },
-      }),
-      sendEmail({
+    // Create the row first so successful sends can be recorded against it.
+    const event = await prisma.event.create({
+      data: {
+        ...input,
+        messageID: message.id,
+        id,
+      },
+    });
+
+    await sendEmail(
+      {
         subject: eventEmailSubject(input.name),
         html: emailBody,
-      }, emailRecipients),
-    ]);
-
-    const event = data[0];
+      },
+      {
+        recipient: emailRecipients.recipient,
+        bcc: emailRecipients.bcc,
+        // Test sends are not recorded, so repeated testing still delivers.
+        onChunkSent: input.testing
+          ? undefined
+          : (emails) => recordEventEmailRecipients(id, emails),
+      }
+    );
 
     return event;
   });

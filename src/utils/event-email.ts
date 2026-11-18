@@ -19,7 +19,14 @@ export type EventEmailData = {
   maxHours: number;
 };
 
-export async function getEventEmailRecipients(emailEveryone: boolean) {
+export async function getEventEmailRecipients(
+  emailEveryone: boolean,
+  options?: {
+    /** Only skip already-sent addresses when this is set. */
+    eventId?: string;
+    skipAlreadySent?: boolean;
+  }
+) {
   const users = await prisma.user.findMany({
     where: {
       OR: [
@@ -41,17 +48,73 @@ export async function getEventEmailRecipients(emailEveryone: boolean) {
     },
   });
 
-  return {
-    recipient: users
+  const execs = uniqueEmails(
+    users
       .filter((user) => user.position === "EXEC")
-      .map((user) => user.email),
-    bcc: users
+      .map((user) => user.email)
+  );
+
+  const execEmails = new Set(execs.map((email) => email.toLowerCase()));
+  const eligibleMembers = uniqueEmails(
+    users
       .filter(
         (user) =>
           user.position === "MEMBER" && (emailEveryone || user.eventAlerts)
       )
-      .map((user) => user.email),
+      .map((user) => user.email)
+  ).filter((email) => !execEmails.has(email.toLowerCase()));
+
+  let alreadySent: Set<string> | null = null;
+  if (options?.eventId && options.skipAlreadySent) {
+    const rows = await prisma.eventEmailRecipient.findMany({
+      where: { eventId: options.eventId },
+      select: { email: true },
+    });
+    alreadySent = new Set(rows.map((row) => row.email.toLowerCase()));
+  }
+
+  const wasSent = (email: string) =>
+    alreadySent !== null && alreadySent.has(email.toLowerCase());
+
+  return {
+    recipient: execs.filter((email) => !wasSent(email)),
+    bcc: eligibleMembers.filter((email) => !wasSent(email)),
+    skipped: [...execs, ...eligibleMembers].filter(wasSent).length,
   };
+}
+
+/**
+ * Records addresses that have successfully received this event's email.
+ * Safe to call repeatedly: existing (eventId, email) pairs are ignored.
+ */
+export async function recordEventEmailRecipients(
+  eventId: string,
+  emails: string[]
+) {
+  const rows = [...new Set(emails.map((email) => email.trim().toLowerCase()))]
+    .filter(Boolean)
+    .map((email) => ({ eventId, email }));
+
+  if (rows.length === 0) return;
+
+  await prisma.eventEmailRecipient.createMany({
+    data: rows,
+    skipDuplicates: true,
+  });
+}
+
+function uniqueEmails(emails: string[]) {
+  const seen = new Set<string>();
+  const result: string[] = [];
+
+  for (const email of emails) {
+    const key = email.trim().toLowerCase();
+    if (!key || seen.has(key)) continue;
+    seen.add(key);
+    result.push(email.trim());
+  }
+
+  return result;
 }
 
 export function emailGenerator(input: EventEmailData, id: string) {
