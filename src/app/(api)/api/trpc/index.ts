@@ -13,6 +13,7 @@ import { getEvent } from "./procedures/get-event";
 import { createEvent } from "./procedures/create-event";
 import { editEvent } from "./procedures/edit-event";
 import { resendEventEmail } from "./procedures/resend-event-email";
+import { getEventEmailJob } from "./procedures/get-event-email-job";
 import { deleteEvent } from "./procedures/delete-event";
 import { forceJoinEvent } from "./procedures/force-join-event";
 import { joinEvent } from "./procedures/join-event";
@@ -52,6 +53,7 @@ export const appRouter = router({
   createEvent,
   editEvent,
   resendEventEmail,
+  getEventEmailJob,
   deleteEvent,
 
   joinEvent,

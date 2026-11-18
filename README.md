@@ -38,6 +38,13 @@ Each successful batch is recorded in `EventEmailRecipient` for that event. The
 "Skip people who already received this event" toggle in Edit Event uses that
 list, so a repeated or interrupted resend only emails whoever is left.
 
+Sends run as a background job. `EventEmailJob` stores the status, target, and
+how many recipients have gone out, so the edit modal can poll
+`getEventEmailJob` and show progress; closing the modal does not stop the send.
+Creating an event queues the same job, so the form does not sit for minutes
+either. A job that stops making progress for 10 minutes is treated as dead, and
+pressing Resend starts a new one that resumes from the skip list.
+
 Unsubscribed members are only included when "send email to all current members"
 is checked **and** their account was created on or after June 1, 2024
 (`UNSUBSCRIBED_SIGNUP_CUTOFF` in `src/utils/constants.ts`). Older opt-outs

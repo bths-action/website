@@ -3,13 +3,7 @@ import { adminProcedure } from "../trpc";
 import { createId } from "@paralleldrive/cuid2";
 import { prisma } from "@/utils/prisma";
 import { generateEvent, getEventWebhook, sendMessage } from "@/utils/webhook";
-import { sendEmail } from "@/utils/mail";
-import {
-  emailGenerator,
-  eventEmailSubject,
-  getEventEmailRecipients,
-  recordEventEmailRecipients,
-} from "@/utils/event-email";
+import { startEventEmailJob } from "@/utils/event-email-job";
 import { Event } from "@prisma/client";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://bthsaction.org";
@@ -45,12 +39,8 @@ export const createEvent = adminProcedure
       embeds: [generateEvent(input, id)],
     }, getEventWebhook(input.testing));
 
-    const emailBody = emailGenerator(input, id);
-    const emailRecipients = input.testing
-      ? { recipient: [testingEmail!], bcc: [testingBccEmail!] }
-      : await getEventEmailRecipients(input.emailEveryone, { eventId: id });
-
-    // Create the row first so successful sends can be recorded against it.
+    // Create the row first so the email job and the Discord embed can point at
+    // it.
     const event = await prisma.event.create({
       data: {
         ...input,
@@ -59,20 +49,9 @@ export const createEvent = adminProcedure
       },
     });
 
-    await sendEmail(
-      {
-        subject: eventEmailSubject(input.name),
-        html: emailBody,
-      },
-      {
-        recipient: emailRecipients.recipient,
-        bcc: emailRecipients.bcc,
-        // Test sends are not recorded, so repeated testing still delivers.
-        onChunkSent: input.testing
-          ? undefined
-          : (emails) => recordEventEmailRecipients(id, emails),
-      }
-    );
+    // Emails go out in the background: a full send is paced over a few minutes,
+    // so it must not hold the create request (or the form) open.
+    await startEventEmailJob(event.id);
 
     return event;
   });

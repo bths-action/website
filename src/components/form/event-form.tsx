@@ -16,6 +16,7 @@ import { z, ZodError } from "zod";
 import { BiXCircle } from "react-icons/bi";
 import { useRouter } from "next/navigation";
 import { UNSUBSCRIBED_SIGNUP_CUTOFF_LABEL } from "@/utils/constants";
+import type { EventEmailJobView } from "@/utils/event-email-job";
 
 type Props = (
   | {
@@ -40,6 +41,65 @@ const TEMPLATES: { name: string; image: string; content: string }[] = [
   },
 ];
 
+const EmailJobProgress: FC<{ job: EventEmailJobView }> = ({ job }) => {
+  const percent =
+    job.target > 0
+      ? Math.min(100, Math.round((job.sent / job.target) * 100))
+      : 0;
+  const skippedNote =
+    job.skipped > 0
+      ? ` Skipped ${job.skipped} who already received it.`
+      : "";
+
+  if (job.status === "SUCCEEDED") {
+    return (
+      <p className="text-green-500">
+        {job.target === 0
+          ? "Everyone eligible has already received this email."
+          : `Email sent to ${job.target} recipient${
+              job.target === 1 ? "" : "s"
+            }.${skippedNote}`}
+      </p>
+    );
+  }
+
+  if (job.status === "FAILED") {
+    return (
+      <p className="text-red-500">
+        {job.error ?? "The email stopped before finishing."}
+        {job.sent > 0 &&
+          ` ${job.sent} of ${job.target} recipients already received it; press Resend to continue with the rest.`}
+      </p>
+    );
+  }
+
+  return (
+    <div className="mt-2">
+      <div
+        className="h-2 w-full overflow-hidden rounded bg-neutral-300"
+        role="progressbar"
+        aria-valuenow={percent}
+        aria-valuemin={0}
+        aria-valuemax={100}
+      >
+        <div
+          className="h-full bg-green-500 transition-all duration-500"
+          style={{ width: `${percent}%` }}
+        />
+      </div>
+      <p className={`text-sm ${job.stalled ? "text-amber-500" : "opacity-70"}`}>
+        {job.target === 0
+          ? "Preparing recipients…"
+          : `Sending ${job.sent} of ${job.target} recipients (${percent}%).`}
+        {skippedNote}
+        {job.stalled
+          ? " Sending stopped responding — press Resend to continue where it left off."
+          : " You can close this window; it keeps sending in the background."}
+      </p>
+    </div>
+  );
+};
+
 const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
   const router = useRouter();
   const utils = trpc.useUtils();
@@ -49,9 +109,24 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
   const [error, setError] = useState<TRPCError | null>(null);
   const [uploading, setUploading] = useState(false);
   const [shownTemplates, setShownTemplates] = useState(false);
-  const [resending, setResending] = useState(false);
-  const [resendStatus, setResendStatus] = useState<string | null>(null);
   const [skipAlreadySent, setSkipAlreadySent] = useState(true);
+
+  // Sending happens in a background job, so the modal only has to poll it.
+  const eventId = mode === "edit" ? event.id : "";
+  const emailJob = trpc.getEventEmailJob.useQuery(
+    { id: eventId },
+    {
+      enabled: mode === "edit",
+      refetchInterval: (query) =>
+        query.state.data?.status === "RUNNING" && !query.state.data.stalled
+          ? 2500
+          : false,
+    }
+  );
+  const job = emailJob.data ?? null;
+  const sending = job?.status === "RUNNING" && !job.stalled;
+  const jobIsRecent =
+    job !== null && Date.now() - new Date(job.createdAt).getTime() < 3_600_000;
 
   const initialValues = {
     name: mode == "edit" ? event.name : "",
@@ -459,12 +534,18 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
                 {mode === "edit" && (
                   <RoundButton
                     type="button"
-                    disabled={resending || isSubmitting}
+                    disabled={sending || resendEmail.isPending || isSubmitting}
                     onClick={async () => {
                       if (
                         !(await confirm({
-                          title: "Resend Event Email",
-                          children: (
+                          title: sending ? "Already Sending" : "Resend Event Email",
+                          children: sending ? (
+                            <>
+                              This event&apos;s email is still going out. Watch
+                              the progress below, or close this window — it
+                              keeps sending in the background.
+                            </>
+                          ) : (
                             <>
                               This sends the event email again using the saved
                               event details. Save your changes first if you
@@ -484,6 +565,10 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
                                 : "Everyone eligible will get it again, including people who already received it."}
                               <br />
                               <br />
+                              It runs in the background, so you can close this
+                              window while it sends.
+                              <br />
+                              <br />
                               Resend the email?
                             </>
                           ),
@@ -491,35 +576,27 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
                       )
                         return;
 
+                      if (sending) return;
+
                       setError(null);
-                      setResendStatus(null);
-                      setResending(true);
                       await resendEmail
                         .mutateAsync({ id: event.id, skipAlreadySent })
-                        .then(({ recipientCount, skippedCount }) => {
-                          const recipients = `${recipientCount} recipient${
-                            recipientCount === 1 ? "" : "s"
-                          }`;
-
-                          setResendStatus(
-                            recipientCount === 0
-                              ? "Everyone eligible has already received this email."
-                              : `Email sent to ${recipients}.` +
-                                  (skippedCount > 0
-                                    ? ` Skipped ${skippedCount} who already received it.`
-                                    : "")
-                          );
-                        })
-                        .catch((err: TRPCError) => setError(err))
-                        .finally(() => setResending(false));
+                        .then(() => emailJob.refetch())
+                        .catch((err: TRPCError) => setError(err));
                     }}
                   >
-                    Resend Email{resending && "ing"}
+                    {sending
+                      ? "Sending…"
+                      : resendEmail.isPending
+                        ? "Starting…"
+                        : "Resend Email"}
                   </RoundButton>
                 )}
               </div>
               {error && <RequestError error={error} />}
-              {resendStatus && <p className="text-green-500">{resendStatus}</p>}
+              {mode === "edit" && job && (sending || jobIsRecent) && (
+                <EmailJobProgress job={job} />
+              )}
             </Form>
           </>
         );
