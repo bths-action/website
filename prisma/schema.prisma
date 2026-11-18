@@ -112,9 +112,12 @@ model EventEmailJob {
   sent      Int    @default(0)
   /// Addresses left out because they already received this event.
   skipped   Int    @default(0)
-  /// Whether the skip list was applied when this run picked recipients.
+  /** Whether the skip list was applied when this run picked recipients. */
   skipAlreadySent Boolean @default(true)
   error     String? @db.VarChar(1000)
+  /// Equals eventId while the job runs, null once it finishes. Unique, so two
+  /// concurrent starts for the same event cannot both create a job.
+  activeEventId String? @unique
 
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt

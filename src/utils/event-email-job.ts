@@ -1,4 +1,5 @@
 import { prisma } from "@/utils/prisma";
+import { Prisma } from "@prisma/client";
 import { sendEmail } from "@/utils/mail";
 import {
   emailGenerator,
@@ -106,6 +107,8 @@ export async function startEventEmailJob(
     }
   }
 
+  // At most one run per event, enforced by the unique `activeEventId` key so
+  // two quick clicks (or a double submit) cannot send twice.
   const active = await prisma.eventEmailJob.findFirst({
     where: { eventId, status: EMAIL_JOB_RUNNING },
     orderBy: { createdAt: "desc" },
@@ -125,14 +128,30 @@ export async function startEventEmailJob(
       data: {
         status: EMAIL_JOB_FAILED,
         error: "Interrupted before finishing.",
+        activeEventId: null,
         finishedAt: new Date(),
       },
     });
   }
 
-  const job = await prisma.eventEmailJob.create({
-    data: { eventId, skipAlreadySent },
-  });
+  let job;
+  try {
+    job = await prisma.eventEmailJob.create({
+      data: { eventId, skipAlreadySent, activeEventId: eventId },
+    });
+  } catch (error) {
+    // Unique violation on activeEventId: another request won the race.
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2002"
+    ) {
+      throw new EventEmailJobError(
+        "CONFLICT",
+        "This event is already sending an email. Watch the progress below."
+      );
+    }
+    throw error;
+  }
 
   await scheduleEventEmailJob(job.id);
 
@@ -212,6 +231,16 @@ export async function runEventEmailJob(jobId: string) {
             data: { sent: { increment: emails.length } },
           });
         },
+        // Mailgun can ask us to wait minutes; keep the job looking alive so a
+        // second send is not started in the meantime.
+        onRateLimitWait: async () => {
+          await prisma.eventEmailJob
+            .update({
+              where: { id: jobId },
+              data: { updatedAt: new Date() },
+            })
+            .catch(() => {});
+        },
       }
     );
 
@@ -234,6 +263,7 @@ async function finishEventEmailJob(
       data: {
         status,
         error: error?.slice(0, 1000) ?? null,
+        activeEventId: null,
         finishedAt: new Date(),
       },
     })
