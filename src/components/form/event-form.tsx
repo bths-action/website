@@ -16,7 +16,6 @@ import { z, ZodError } from "zod";
 import { BiXCircle } from "react-icons/bi";
 import { useRouter } from "next/navigation";
 import { UNSUBSCRIBED_SIGNUP_CUTOFF_LABEL } from "@/utils/constants";
-import type { EventEmailJobView } from "@/utils/event-email-job";
 
 type Props = (
   | {
@@ -41,66 +40,13 @@ const TEMPLATES: { name: string; image: string; content: string }[] = [
   },
 ];
 
-const EmailJobProgress: FC<{ job: EventEmailJobView }> = ({ job }) => {
-  const percent =
-    job.target > 0
-      ? Math.min(100, Math.round((job.sent / job.target) * 100))
-      : 0;
-  const skippedNote =
-    job.skipped > 0
-      ? ` Skipped ${job.skipped} who already received it.`
-      : "";
-
-  if (job.status === "SUCCEEDED") {
-    return (
-      <p className="text-green-500">
-        {job.target === 0
-          ? "Everyone eligible has already received this email."
-          : `Email sent to ${job.target} recipient${
-              job.target === 1 ? "" : "s"
-            }.${skippedNote}`}
-      </p>
-    );
+const FormContent: FC<
+  Props & {
+    /** True while a resend is in flight; the modal cannot be closed then. */
+    sending: boolean;
+    setSending: (sending: boolean) => void;
   }
-
-  if (job.status === "FAILED") {
-    return (
-      <p className="text-red-500">
-        {job.error ?? "The email stopped before finishing."}
-        {job.sent > 0 &&
-          ` ${job.sent} of ${job.target} recipients already received it; press Resend to continue with the rest.`}
-      </p>
-    );
-  }
-
-  return (
-    <div className="mt-2">
-      <div
-        className="h-2 w-full overflow-hidden rounded bg-neutral-300"
-        role="progressbar"
-        aria-valuenow={percent}
-        aria-valuemin={0}
-        aria-valuemax={100}
-      >
-        <div
-          className="h-full bg-green-500 transition-all duration-500"
-          style={{ width: `${percent}%` }}
-        />
-      </div>
-      <p className={`text-sm ${job.stalled ? "text-amber-500" : "opacity-70"}`}>
-        {job.target === 0
-          ? "Preparing recipients…"
-          : `Sending ${job.sent} of ${job.target} recipients (${percent}%).`}
-        {skippedNote}
-        {job.stalled
-          ? " Sending stopped responding — press Resend to continue where it left off."
-          : " You can close this window; it keeps sending in the background."}
-      </p>
-    </div>
-  );
-};
-
-const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
+> = ({ mode, setOpen, event, setEvent, sending, setSending }) => {
   const router = useRouter();
   const utils = trpc.useUtils();
   const createEvent = trpc.createEvent.useMutation();
@@ -109,24 +55,8 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
   const [error, setError] = useState<TRPCError | null>(null);
   const [uploading, setUploading] = useState(false);
   const [shownTemplates, setShownTemplates] = useState(false);
+  const [resendStatus, setResendStatus] = useState<string | null>(null);
   const [skipAlreadySent, setSkipAlreadySent] = useState(true);
-
-  // Sending happens in a background job, so the modal only has to poll it.
-  const eventId = mode === "edit" ? event.id : "";
-  const emailJob = trpc.getEventEmailJob.useQuery(
-    { id: eventId },
-    {
-      enabled: mode === "edit",
-      refetchInterval: (query) =>
-        query.state.data?.status === "RUNNING" && !query.state.data.stalled
-          ? 2500
-          : false,
-    }
-  );
-  const job = emailJob.data ?? null;
-  const sending = job?.status === "RUNNING" && !job.stalled;
-  const jobIsRecent =
-    job !== null && Date.now() - new Date(job.createdAt).getTime() < 3_600_000;
 
   const initialValues = {
     name: mode == "edit" ? event.name : "",
@@ -528,24 +458,21 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
                 </FormQuestion>
               )}
               <div className="flex flex-wrap gap-2 items-center">
-                <RoundButton disabled={isSubmitting} type="submit">
+                <RoundButton
+                  disabled={sending || isSubmitting}
+                  type="submit"
+                >
                   Submit{isSubmitting && "ting"} Event
                 </RoundButton>
                 {mode === "edit" && (
                   <RoundButton
                     type="button"
-                    disabled={sending || resendEmail.isPending || isSubmitting}
+                    disabled={sending || isSubmitting}
                     onClick={async () => {
                       if (
                         !(await confirm({
-                          title: sending ? "Already Sending" : "Resend Event Email",
-                          children: sending ? (
-                            <>
-                              This event&apos;s email is still going out. Watch
-                              the progress below, or close this window — it
-                              keeps sending in the background.
-                            </>
-                          ) : (
+                          title: "Resend Event Email",
+                          children: (
                             <>
                               This sends the event email again using the saved
                               event details. Save your changes first if you
@@ -565,8 +492,10 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
                                 : "Everyone eligible will get it again, including people who already received it."}
                               <br />
                               <br />
-                              It runs in the background, so you can close this
-                              window while it sends.
+                              Sending takes a few minutes and only happens
+                              while this window stays open — closing it stops
+                              the send partway. You can then press Resend again
+                              to continue with whoever is left.
                               <br />
                               <br />
                               Resend the email?
@@ -576,27 +505,46 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
                       )
                         return;
 
-                      if (sending) return;
-
                       setError(null);
+                      setResendStatus(null);
+                      setSending(true);
                       await resendEmail
                         .mutateAsync({ id: event.id, skipAlreadySent })
-                        .then(() => emailJob.refetch())
-                        .catch((err: TRPCError) => setError(err));
+                        .then(({ recipientCount, skippedCount }) => {
+                          const recipients = `${recipientCount} recipient${
+                            recipientCount === 1 ? "" : "s"
+                          }`;
+
+                          setResendStatus(
+                            recipientCount === 0
+                              ? "Everyone eligible has already received this email."
+                              : `Email sent to ${recipients}.` +
+                                  (skippedCount > 0
+                                    ? ` Skipped ${skippedCount} who already received it.`
+                                    : "")
+                          );
+                        })
+                        .catch((err: TRPCError) => setError(err))
+                        .finally(() => setSending(false));
                     }}
                   >
-                    {sending
-                      ? "Sending…"
-                      : resendEmail.isPending
-                        ? "Starting…"
-                        : "Resend Email"}
+                    Resend Email{sending && "ing"}
                   </RoundButton>
                 )}
               </div>
               {error && <RequestError error={error} />}
-              {mode === "edit" && job && (sending || jobIsRecent) && (
-                <EmailJobProgress job={job} />
+              {sending && (
+                <div className="mt-2">
+                  <div className="h-2 w-full overflow-hidden rounded bg-neutral-300">
+                    <div className="h-full w-1/3 animate-pulse rounded bg-green-500" />
+                  </div>
+                  <p className="text-sm opacity-70">
+                    Sending in batches — this can take a few minutes. Keep this
+                    window open; closing it stops the send.
+                  </p>
+                </div>
               )}
+              {resendStatus && <p className="text-green-500">{resendStatus}</p>}
             </Form>
           </>
         );
@@ -607,9 +555,13 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
 
 export const EventForm: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
   const account = useAccount();
+  // Sending happens inside this request, so the modal must stay open for the
+  // whole (several minute) send.
+  const [sending, setSending] = useState(false);
 
   return (
     <PopupUI
+      disabledExit={sending}
       setOpen={async (open: boolean) => {
         if (
           !open &&
@@ -636,6 +588,8 @@ export const EventForm: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
           setOpen={setOpen}
           event={event}
           setEvent={setEvent}
+          sending={sending}
+          setSending={setSending}
         />
       )}
     </PopupUI>

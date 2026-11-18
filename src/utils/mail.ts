@@ -57,11 +57,6 @@ export type SendEmailOptions = {
    * later resend can skip them.
    */
   onChunkSent?: (emails: string[]) => Promise<void> | void;
-  /**
-   * Called before waiting out a rate limit. Long Mailgun waits must not look
-   * like a dead send to whatever is watching progress.
-   */
-  onRateLimitWait?: (waitMs: number) => Promise<void> | void;
 };
 
 export type SendEmailResult = {
@@ -164,7 +159,6 @@ export async function sendEmail(
             Math.max(retryAt - Date.now() + 500, 1_000),
             MAX_RETRY_WAIT_MS
           );
-          await options?.onRateLimitWait?.(wait);
           await sleep(wait);
           continue;
         }

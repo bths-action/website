@@ -76,7 +76,6 @@ model Event {
 
   attendees       EventAttendance[]
   emailRecipients EventEmailRecipient[]
-  emailJobs       EventEmailJob[]
   limit           Int?
   imageURL        String?
   serviceLetters  String?
@@ -98,35 +97,6 @@ model EventEmailRecipient {
   event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
 
   @@id([eventId, email])
-}
-
-/// One background send of an event email. Progress lives in the database so the
-/// edit modal can show it and so a send survives the browser closing.
-model EventEmailJob {
-  id        String @id @default(cuid())
-  eventId   String
-  /// RUNNING | SUCCEEDED | FAILED
-  status    String @default("RUNNING") @db.VarChar(20)
-  /// Recipients this run intends to reach, filled in once it starts.
-  target    Int    @default(0)
-  sent      Int    @default(0)
-  /// Addresses left out because they already received this event.
-  skipped   Int    @default(0)
-  /** Whether the skip list was applied when this run picked recipients. */
-  skipAlreadySent Boolean @default(true)
-  error     String? @db.VarChar(1000)
-  /// Equals eventId while the job runs, null once it finishes. Unique, so two
-  /// concurrent starts for the same event cannot both create a job.
-  activeEventId String? @unique
-
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  finishedAt DateTime?
-
-  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
-
-  @@index([eventId, createdAt])
-  @@index([status])
 }
 
 model EventAttendance {

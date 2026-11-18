@@ -51,9 +51,6 @@ export type EditEventOutput = RouterOutput["editEvent"];
 export type ResendEventEmailInput = RouterInput["resendEventEmail"];
 export type ResendEventEmailOutput = RouterOutput["resendEventEmail"];
 
-export type GetEventEmailJobInput = RouterInput["getEventEmailJob"];
-export type GetEventEmailJobOutput = RouterOutput["getEventEmailJob"];
-
 export type DeleteEventInput = RouterInput["deleteEvent"];
 export type DeleteEventOutput = RouterOutput["deleteEvent"];
 
