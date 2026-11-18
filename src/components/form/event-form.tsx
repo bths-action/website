@@ -15,6 +15,7 @@ import { createEventSchema } from "@/schema/events";
 import { z, ZodError } from "zod";
 import { BiXCircle } from "react-icons/bi";
 import { useRouter } from "next/navigation";
+import { UNSUBSCRIBED_SIGNUP_CUTOFF_LABEL } from "@/utils/constants";
 
 type Props = (
   | {
@@ -326,7 +327,7 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
                     type="checkbox"
                   />
                   Send email to all current members, including unsubscribed
-                  members
+                  members who signed up after {UNSUBSCRIBED_SIGNUP_CUTOFF_LABEL}
                 </label>
               </FormQuestion>
               <br />

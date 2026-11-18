@@ -1,6 +1,10 @@
 import { prisma } from "@/utils/prisma";
 import { Converter } from "showdown";
-import { OLDEST_GRAD_YEAR, YOUNGEST_GRAD_YEAR } from "@/utils/constants";
+import {
+  OLDEST_GRAD_YEAR,
+  UNSUBSCRIBED_SIGNUP_CUTOFF,
+  YOUNGEST_GRAD_YEAR,
+} from "@/utils/constants";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://bthsaction.org";
 
@@ -45,6 +49,7 @@ export async function getEventEmailRecipients(
       email: true,
       position: true,
       eventAlerts: true,
+      registeredAt: true,
     },
   });
 
@@ -54,13 +59,16 @@ export async function getEventEmailRecipients(
       .map((user) => user.email)
   );
 
+  // "Email everyone" overrides an unsubscribe, but only for accounts created
+  // after the cutoff: older opt-outs are alumni and stay unsubscribed.
+  const wantsEventEmail = (user: (typeof users)[number]) =>
+    user.eventAlerts ||
+    (emailEveryone && user.registeredAt >= UNSUBSCRIBED_SIGNUP_CUTOFF);
+
   const execEmails = new Set(execs.map((email) => email.toLowerCase()));
   const eligibleMembers = uniqueEmails(
     users
-      .filter(
-        (user) =>
-          user.position === "MEMBER" && (emailEveryone || user.eventAlerts)
-      )
+      .filter((user) => user.position === "MEMBER" && wantsEventEmail(user))
       .map((user) => user.email)
   ).filter((email) => !execEmails.has(email.toLowerCase()));
 

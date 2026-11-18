@@ -37,3 +37,8 @@ this route has to be created in the dashboard.
 Each successful batch is recorded in `EventEmailRecipient` for that event. The
 "Skip people who already received this event" toggle in Edit Event uses that
 list, so a repeated or interrupted resend only emails whoever is left.
+
+Unsubscribed members are only included when "send email to all current members"
+is checked **and** their account was created on or after January 1, 2024
+(`UNSUBSCRIBED_SIGNUP_CUTOFF` in `src/utils/constants.ts`). Older opt-outs
+belong to alumni, so they are never emailed by the event form.

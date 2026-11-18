@@ -7,6 +7,14 @@ export const GRAD_YEARS = Array.from(
   { length: YOUNGEST_GRAD_YEAR - OLDEST_GRAD_YEAR + 1 },
   (_, i) => OLDEST_GRAD_YEAR + i
 );
+
+/**
+ * Unsubscribed accounts created before this date are not emailed, even with
+ * "send email to all current members" checked. Older accounts belong to
+ * people who have moved on, so their opt-out is treated as final.
+ */
+export const UNSUBSCRIBED_SIGNUP_CUTOFF = new Date("2024-01-01T00:00:00-05:00");
+export const UNSUBSCRIBED_SIGNUP_CUTOFF_LABEL = "January 1, 2024";
 export const POSITIONS = [
   "PRESIDENT",
   "VICE_PRESIDENT",
