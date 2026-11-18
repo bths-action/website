@@ -57,6 +57,17 @@ export type SendEmailOptions = {
    * later resend can skip them.
    */
   onChunkSent?: (emails: string[]) => Promise<void> | void;
+  /**
+   * Stop after this many Mailgun requests and report what is left. Lets a
+   * caller drive a long send from short requests instead of one that can time
+   * out.
+   */
+  maxMessages?: number;
+  /**
+   * Refuse to wait longer than this for a rate limit, throwing instead. Used
+   * with maxMessages so a request cannot hang for minutes.
+   */
+  maxRetryWaitMs?: number;
 };
 
 export type SendEmailResult = {
@@ -64,6 +75,8 @@ export type SendEmailResult = {
   ids: string[];
   messages: number;
   recipientCount: number;
+  /** Recipients not attempted yet because maxMessages was reached. */
+  remaining: number;
 };
 
 /** Module-level so concurrent sends in one process share the same budget. */
@@ -91,8 +104,11 @@ export async function sendEmail(
   let sentCount = 0;
   let messages = 0;
   let maxPerMessage = MAX_RECIPIENTS_PER_MESSAGE;
+  const maxMessages = options?.maxMessages ?? Number.POSITIVE_INFINITY;
 
   sendLoop: while (cursor < queue.length) {
+    if (messages >= maxMessages) break;
+
     const inExecRegion = cursor < execs.length;
 
     // Execs go out together (they are already listed publicly on /executives).
@@ -159,6 +175,15 @@ export async function sendEmail(
             Math.max(retryAt - Date.now() + 500, 1_000),
             MAX_RETRY_WAIT_MS
           );
+          if (options?.maxRetryWaitMs && wait > options.maxRetryWaitMs) {
+            throw new Error(
+              `Mailgun is rate limiting this domain and wants a ${Math.ceil(
+                wait / 1000
+              )} second pause. Wait a minute, then press Resend to continue with the ${
+                queue.length - cursor
+              } recipients still waiting.`
+            );
+          }
           await sleep(wait);
           continue;
         }
@@ -179,6 +204,7 @@ export async function sendEmail(
     ids,
     messages,
     recipientCount: sentCount,
+    remaining: queue.length - cursor,
   };
 }
 
@@ -238,6 +264,28 @@ function pruneWindow(now: number) {
   ) {
     recentSends.shift();
   }
+}
+
+/**
+ * How many recipients can be sent right now without waiting. Lets a caller pace
+ * itself over short requests instead of sleeping inside one. Pass the minimum
+ * a request needs (a member batch needs 2: `noreply@` plus a member).
+ */
+export function recipientCapacityNow(minAvailable = 1) {
+  const now = Date.now();
+  pruneWindow(now);
+
+  const used = recentSends.reduce((sum, entry) => sum + entry.recipients, 0);
+  const available = RECIPIENT_WINDOW_LIMIT - used;
+
+  if (available >= minAvailable) return { available, waitMs: 0 };
+
+  return {
+    available: Math.max(available, 0),
+    waitMs: recentSends.length
+      ? recentSends[0].at + RECIPIENT_WINDOW_MS - now + 250
+      : RECIPIENT_WINDOW_MS,
+  };
 }
 
 /**

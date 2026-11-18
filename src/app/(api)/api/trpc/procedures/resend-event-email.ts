@@ -2,7 +2,7 @@ import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { adminProcedure } from "../trpc";
 import { prisma } from "@/utils/prisma";
-import { sendEmail } from "@/utils/mail";
+import { recipientCapacityNow, sendEmail } from "@/utils/mail";
 import {
   emailGenerator,
   eventEmailSubject,
@@ -10,6 +10,11 @@ import {
   recordEventEmailRecipients,
 } from "@/utils/event-email";
 
+/**
+ * Sends one Mailgun message worth of an event email and reports what is left.
+ * The edit modal calls this in a loop while it is open, so no single request
+ * has to stay alive for the whole (several minute) send.
+ */
 export const resendEventEmail = adminProcedure
   .input(
     z.object({
@@ -50,55 +55,73 @@ export const resendEventEmail = adminProcedure
       });
     }
 
-    // Testing sends always go to the configured test addresses, and are never
-    // recorded (otherwise a second test resend would be skipped entirely).
-    let recipients: { recipient: string[]; bcc: string[] };
-    let skipped = 0;
-    let onChunkSent: ((emails: string[]) => Promise<void>) | undefined;
+    const email = {
+      subject: eventEmailSubject(event.name),
+      html: emailGenerator(event, event.id),
+    };
 
+    // Testing sends always go to the configured test addresses in a single
+    // message, and are never recorded (so a second test still delivers).
     if (event.testing) {
-      recipients = {
+      const response = await sendEmail(email, {
         recipient: [testingEmail!],
         bcc: [testingBccEmail!],
-      };
-    } else {
-      const eligible = await getEventEmailRecipients(event.emailEveryone, {
-        eventId: event.id,
-        skipAlreadySent: input.skipAlreadySent,
       });
 
-      recipients = { recipient: eligible.recipient, bcc: eligible.bcc };
-      skipped = eligible.skipped;
-      onChunkSent = (emails) => recordEventEmailRecipients(event.id, emails);
-    }
-
-    const recipientCount = recipients.recipient.length + recipients.bcc.length;
-
-    if (recipientCount === 0) {
       return {
-        messageID: null,
-        recipientCount: 0,
-        skippedCount: skipped,
-        messages: 0,
+        pending: response.recipientCount,
+        sent: response.recipientCount,
+        remaining: 0,
+        skipped: 0,
+        waitMs: 0,
       };
     }
 
-    const response = await sendEmail(
-      {
-        subject: eventEmailSubject(event.name),
-        html: emailGenerator(event, event.id),
-      },
-      {
-        recipient: recipients.recipient,
-        bcc: recipients.bcc,
-        onChunkSent,
-      }
+    const eligible = await getEventEmailRecipients(event.emailEveryone, {
+      eventId: event.id,
+      skipAlreadySent: input.skipAlreadySent,
+    });
+
+    const pending = eligible.recipient.length + eligible.bcc.length;
+    if (pending === 0) {
+      return {
+        pending: 0,
+        sent: 0,
+        remaining: 0,
+        skipped: eligible.skipped,
+        waitMs: 0,
+      };
+    }
+
+    // Mailgun allows 26 recipients per rolling 30 seconds. Rather than sleeping
+    // here (which risks a request timeout), tell the client how long to wait.
+    // A member batch needs two slots: the member and the `noreply@` To.
+    const capacity = recipientCapacityNow(
+      eligible.recipient.length > 0 ? 1 : 2
     );
+    if (capacity.waitMs > 0) {
+      return {
+        pending,
+        sent: 0,
+        remaining: pending,
+        skipped: eligible.skipped,
+        waitMs: capacity.waitMs,
+      };
+    }
+
+    const response = await sendEmail(email, {
+      recipient: eligible.recipient,
+      bcc: eligible.bcc,
+      onChunkSent: (emails) => recordEventEmailRecipients(event.id, emails),
+      maxMessages: 1,
+      maxRetryWaitMs: 25_000,
+    });
 
     return {
-      messageID: response.id,
-      recipientCount: response.recipientCount,
-      skippedCount: skipped,
-      messages: response.messages,
+      pending,
+      sent: response.recipientCount,
+      remaining: response.remaining,
+      skipped: eligible.skipped,
+      waitMs: 0,
     };
   });

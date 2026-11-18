@@ -56,6 +56,10 @@ const FormContent: FC<
   const [uploading, setUploading] = useState(false);
   const [shownTemplates, setShownTemplates] = useState(false);
   const [resendStatus, setResendStatus] = useState<string | null>(null);
+  const [progress, setProgress] = useState<{
+    sent: number;
+    total: number;
+  } | null>(null);
   const [skipAlreadySent, setSkipAlreadySent] = useState(true);
 
   const initialValues = {
@@ -507,25 +511,75 @@ const FormContent: FC<
 
                       setError(null);
                       setResendStatus(null);
+                      setProgress(null);
                       setSending(true);
-                      await resendEmail
-                        .mutateAsync({ id: event.id, skipAlreadySent })
-                        .then(({ recipientCount, skippedCount }) => {
-                          const recipients = `${recipientCount} recipient${
-                            recipientCount === 1 ? "" : "s"
-                          }`;
 
-                          setResendStatus(
-                            recipientCount === 0
-                              ? "Everyone eligible has already received this email."
-                              : `Email sent to ${recipients}.` +
-                                  (skippedCount > 0
-                                    ? ` Skipped ${skippedCount} who already received it.`
-                                    : "")
+                      let total = 0;
+                      let skipped = 0;
+                      let completed = false;
+
+                      try {
+                        // Each request sends one Mailgun message, so no request
+                        // lives long enough to hit a proxy/function timeout.
+                        for (let step = 0; step < 500; step += 1) {
+                          const chunk = await resendEmail.mutateAsync({
+                            id: event.id,
+                            skipAlreadySent,
+                          });
+
+                          if (total === 0) {
+                            total = chunk.pending;
+                            skipped = chunk.skipped;
+                          }
+
+                          // Mailgun's rolling recipient window is full; wait it
+                          // out here rather than sleeping inside the request.
+                          if (chunk.waitMs > 0) {
+                            await new Promise((resolve) =>
+                              setTimeout(resolve, chunk.waitMs)
+                            );
+                            continue;
+                          }
+
+                          setProgress({
+                            sent: total - chunk.remaining,
+                            total,
+                          });
+
+                          if (chunk.remaining <= 0) {
+                            completed = true;
+                            break;
+                          }
+
+                          if (chunk.sent === 0) {
+                            throw new Error(
+                              "The last batch did not send. Press Resend to try again."
+                            );
+                          }
+                        }
+
+                        if (!completed) {
+                          throw new Error(
+                            "The send stopped before finishing. Press Resend to continue with whoever is left."
                           );
-                        })
-                        .catch((err: TRPCError) => setError(err))
-                        .finally(() => setSending(false));
+                        }
+
+                        setResendStatus(
+                          total === 0
+                            ? "Everyone eligible has already received this email."
+                            : `Email sent to ${total} recipient${
+                                total === 1 ? "" : "s"
+                              }.` +
+                                (skipped > 0
+                                  ? ` Skipped ${skipped} who already received it.`
+                                  : "")
+                        );
+                      } catch (err) {
+                        setError(err as TRPCError);
+                      } finally {
+                        setSending(false);
+                        setProgress(null);
+                      }
                     }}
                   >
                     Resend Email{sending && "ing"}
@@ -535,12 +589,44 @@ const FormContent: FC<
               {error && <RequestError error={error} />}
               {sending && (
                 <div className="mt-2">
-                  <div className="h-2 w-full overflow-hidden rounded bg-neutral-300">
-                    <div className="h-full w-1/3 animate-pulse rounded bg-green-500" />
+                  <div
+                    className="h-2 w-full overflow-hidden rounded bg-neutral-300"
+                    role="progressbar"
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    aria-valuenow={
+                      progress && progress.total > 0
+                        ? Math.round((progress.sent / progress.total) * 100)
+                        : undefined
+                    }
+                  >
+                    <div
+                      className={`h-full rounded bg-green-500 ${
+                        progress && progress.total > 0
+                          ? "transition-all duration-500"
+                          : "w-1/3 animate-pulse"
+                      }`}
+                      style={
+                        progress && progress.total > 0
+                          ? {
+                              width: `${Math.min(
+                                100,
+                                Math.round((progress.sent / progress.total) * 100)
+                              )}%`,
+                            }
+                          : undefined
+                      }
+                    />
                   </div>
                   <p className="text-sm opacity-70">
-                    Sending in batches — this can take a few minutes. Keep this
-                    window open; closing it stops the send.
+                    {progress && progress.total > 0
+                      ? `Sending ${progress.sent} of ${
+                          progress.total
+                        } recipients (${Math.round(
+                          (progress.sent / progress.total) * 100
+                        )}%).`
+                      : "Preparing recipients…"}{" "}
+                    Keep this window open; closing it stops the send.
                   </p>
                 </div>
               )}

@@ -38,6 +38,14 @@ Each successful batch is recorded in `EventEmailRecipient` for that event. The
 "Skip people who already received this event" toggle in Edit Event uses that
 list, so a repeated or interrupted resend only emails whoever is left.
 
+Resend sends **one Mailgun message per request**. The edit modal calls
+`resendEventEmail` in a loop while it is open and shows how many recipients have
+gone out, waiting out Mailgun's rolling window in the browser (the server
+returns `waitMs` instead of sleeping). Keeping every request short means no
+proxy or function timeout can cut a send in half with a `JSON.parse` error; if
+the modal is closed the loop stops, and pressing Resend later continues from the
+skip list.
+
 Unsubscribed members are only included when "send email to all current members"
 is checked **and** their account was created on or after June 1, 2024
 (`UNSUBSCRIBED_SIGNUP_CUTOFF` in `src/utils/constants.ts`). Older opt-outs
