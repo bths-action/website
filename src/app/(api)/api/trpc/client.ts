@@ -48,6 +48,9 @@ export type CreateEventOutput = RouterOutput["createEvent"];
 export type EditEventInput = RouterInput["editEvent"];
 export type EditEventOutput = RouterOutput["editEvent"];
 
+export type ResendEventEmailInput = RouterInput["resendEventEmail"];
+export type ResendEventEmailOutput = RouterOutput["resendEventEmail"];
+
 export type DeleteEventInput = RouterInput["deleteEvent"];
 export type DeleteEventOutput = RouterOutput["deleteEvent"];
 

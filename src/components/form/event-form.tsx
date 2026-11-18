@@ -44,9 +44,12 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
   const utils = trpc.useUtils();
   const createEvent = trpc.createEvent.useMutation();
   const editEvent = trpc.editEvent.useMutation();
+  const resendEmail = trpc.resendEventEmail.useMutation();
   const [error, setError] = useState<TRPCError | null>(null);
   const [uploading, setUploading] = useState(false);
   const [shownTemplates, setShownTemplates] = useState(false);
+  const [resending, setResending] = useState(false);
+  const [resendStatus, setResendStatus] = useState<string | null>(null);
 
   const initialValues = {
     name: mode == "edit" ? event.name : "",
@@ -424,9 +427,62 @@ const FormContent: FC<Props> = ({ mode, setOpen, event, setEvent }) => {
                 <FormError name="imageURL" disabled={uploading} />
               </FormQuestion>
               <br />
-              <RoundButton disabled={isSubmitting} type="submit">
-                Submit{isSubmitting && "ting"} Event
-              </RoundButton>
+              <div className="flex flex-wrap gap-2 items-center">
+                <RoundButton disabled={isSubmitting} type="submit">
+                  Submit{isSubmitting && "ting"} Event
+                </RoundButton>
+                {mode === "edit" && (
+                  <RoundButton
+                    type="button"
+                    disabled={resending || isSubmitting}
+                    onClick={async () => {
+                      if (
+                        !(await confirm({
+                          title: "Resend Event Email",
+                          children: (
+                            <>
+                              This sends the event email again using the saved
+                              event details. Save your changes first if you
+                              edited anything.
+                              {event.testing && (
+                                <>
+                                  <br />
+                                  <br />
+                                  This is a testing event, so it will only be
+                                  sent to the testing addresses.
+                                </>
+                              )}
+                              <br />
+                              <br />
+                              Resend to everyone it originally went to?
+                            </>
+                          ),
+                        }))
+                      )
+                        return;
+
+                      setError(null);
+                      setResendStatus(null);
+                      setResending(true);
+                      await resendEmail
+                        .mutateAsync({ id: event.id })
+                        .then(({ recipientCount }) =>
+                          setResendStatus(
+                            `Email sent to ${recipientCount} recipient${
+                              recipientCount === 1 ? "" : "s"
+                            }.`
+                          )
+                        )
+                        .catch((err: TRPCError) => setError(err))
+                        .finally(() => setResending(false));
+                    }}
+                  >
+                    Resend Email{resending && "ing"}
+                  </RoundButton>
+                )}
+              </div>
+              {error && <RequestError error={error} />}
+              {resendStatus && <p className="text-green-500">{resendStatus}</p>}
             </Form>
           </>
         );
