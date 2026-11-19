@@ -277,7 +277,6 @@ const FormContent: FC<Props> = ({ mode, setOpen }) => {
                 name="referredBy"
                 type="text"
                 placeholder="johndoe1@nycstudents.net"
-                value=""
               />
               <FormError name="referredBy" />
             </FormQuestion>
